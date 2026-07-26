@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Standoff 2 Clicker Ultimate • Firebase Cloud</title>
 
-    <!-- Firebase SDK (compat версии) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
@@ -586,10 +586,9 @@
                 box-shadow: 0 15px 50px rgba(233, 69, 96, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             }
 
-        /* Показатель множителя теперь смещён ниже, чтобы не перекрывать панель пользователя */
         .multiplier-badge {
             position: fixed;
-            top: 80px; /* было 20px – теперь ниже */
+            top: 80px;
             right: 20px;
             background: linear-gradient(135deg, #ffd700 0%, #ffb800 100%);
             color: #000;
@@ -820,7 +819,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 400px;
+            width: 420px;
             background: rgba(10, 20, 30, 0.95);
             border: 2px solid #ffd700;
             padding: 30px;
@@ -844,6 +843,31 @@
             padding-bottom: 10px;
         }
 
+        .admin-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+            .admin-row label {
+                width: 120px;
+                font-size: 0.9rem;
+                color: #ddd;
+                text-align: right;
+            }
+
+            .admin-row input {
+                flex: 1;
+                padding: 10px;
+                background: rgba(0, 0, 0, 0.4);
+                border: 1px solid #ffd700;
+                color: white;
+                border-radius: 8px;
+                outline: none;
+                font-size: 0.95rem;
+            }
+
         .admin-controls {
             display: flex;
             gap: 10px;
@@ -856,13 +880,13 @@
             background: #ffd700;
             color: black;
             border: none;
-            padding: 15px;
+            padding: 12px 18px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 8px;
-            flex: 1;
-            min-width: 120px;
+            font-size: 0.9rem;
             transition: 0.3s;
+            white-space: nowrap;
         }
 
             .admin-btn:hover {
@@ -900,6 +924,7 @@
             color: #ffd700;
             font-size: 1.1rem;
             animation: pulseText 1.5s ease-in-out infinite;
+            display: none;
         }
 
         @keyframes pulseText {
@@ -950,13 +975,11 @@
     </style>
 </head>
 <body>
-    <!-- Статус синхронизации -->
     <div class="sync-status" id="syncStatus">
         <div class="sync-dot" id="syncDot"></div>
         <span id="syncText">Инициализация...</span>
     </div>
 
-    <!-- Login Overlay -->
     <div class="login-overlay" id="loginOverlay">
         <div class="login-box">
             <h2>Вход в игру</h2>
@@ -971,26 +994,34 @@
         </div>
     </div>
 
-    <!-- Панель пользователя (добавлена кнопка админа) -->
     <div class="user-panel" id="userPanel" style="display:none;">
         <span class="user-nick" id="userNickDisplay"></span>
         <button class="admin-panel-btn" id="adminToggleBtn" style="display:none;" onclick="toggleAdminPanel()">🔧 Админ</button>
         <button class="logout-btn" onclick="logout()">Сменить аккаунт</button>
     </div>
 
-    <!-- Secret Admin Panel -->
+    <!-- Админ-панель (без выдачи перерождений) -->
     <div class="admin-panel-container" id="adminPanel">
         <span class="close-admin" onclick="toggleAdminPanel()">&times;</span>
         <h3 class="admin-header">⚠️ АДМИН ПАНЕЛЬ</h3>
-        <p style="text-align:center; color:#aaa; margin-bottom:15px;">Выдача ресурсов любому игроку</p>
-        <div class="input-group" style="margin-bottom:15px;">
-            <input type="text" id="adminTargetNick" placeholder="Ник игрока (пусто = себе)" style="width:100%; padding:12px; background:rgba(0,0,0,0.3); border:1px solid #ffd700; color:white; border-radius:8px; outline:none;">
+        <p style="text-align:center; color:#aaa; margin-bottom:20px;">Выдача ресурсов любому игроку</p>
+        <div class="admin-row">
+            <label>Ник:</label>
+            <input type="text" id="adminTargetNick" placeholder="Оставьте пустым для себя">
+        </div>
+        <div class="admin-row">
+            <label>💰 Деньги:</label>
+            <input type="number" id="adminMoneyAmount" value="1000000" step="1" min="0">
+        </div>
+        <div class="admin-row">
+            <label>👆 Сила клика:</label>
+            <input type="number" id="adminClickPowerAmount" value="50" step="1" min="0">
         </div>
         <div class="admin-controls">
-            <button class="admin-btn" onclick="adminGiveMoneyToTarget()">💰 Дать $1,000,000</button>
-            <button class="admin-btn" onclick="adminGiveClickPowerToTarget()">👆 +50 силы клика</button>
+            <button class="admin-btn" onclick="adminSetMoney()">💰 Выдать деньги</button>
+            <button class="admin-btn" onclick="adminSetClickPower()">👆 Установить силу</button>
         </div>
-        <p style="font-size:0.75rem; color:#aaa; margin-top:15px; text-align:center;">Работает для любого существующего аккаунта</p>
+        <p style="font-size:0.75rem; color:#aaa; margin-top:15px; text-align:center;">Значения применяются к указанному нику (или к вам, если поле пустое)</p>
     </div>
 
     <div class="container">
@@ -1011,7 +1042,6 @@
 
         <div class="multiplier-badge" id="multiplierBadge">x1.0</div>
 
-        <!-- Shop Section -->
         <div class="shop-section" id="shopSection">
             <h2 class="section-title">🛒 Магазин улучшений</h2>
             <div class="shop-grid" id="shopGrid"></div>
@@ -1029,6 +1059,7 @@
                 <div class="progress-text" id="progressText">0%</div>
             </div>
             <div class="stat-row"><span>Множитель:</span><span id="multiplierDisplay">x1.0</span></div>
+            <div class="stat-row"><span>🔄 Перерождений:</span><span id="rebirthCountDisplay">0</span></div>
             <div style="text-align: center; margin-top: 30px;">
                 <h3 style="color:#fff; text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">🏆 Достижения</h3>
                 <div id="achievementsList"></div>
@@ -1036,7 +1067,6 @@
         </div>
     </div>
 
-    <!-- Rebirth Modal -->
     <div class="rebirth-modal" id="rebirthModal">
         <div class="rebirth-title">⚠️ Перерождение</div>
         <div class="rebirth-desc">
@@ -1047,7 +1077,6 @@
         <button class="rebirth-btn cancel" onclick="cancelRebirth()">❌ Отмена</button>
     </div>
 
-    <!-- Level Up Modal -->
     <div class="level-up-modal hidden" id="levelUpModal">
         <div class="modal-content">
             <div class="level-up-title">🎉 Уровень повышен!</div>
@@ -1099,8 +1128,11 @@
         const loginBtnSpinner = document.getElementById('loginBtnSpinner');
         const syncDot = document.getElementById('syncDot');
         const syncText = document.getElementById('syncText');
-        const adminTargetNick = document.getElementById('adminTargetNick');
         const adminToggleBtn = document.getElementById('adminToggleBtn');
+        const adminTargetNick = document.getElementById('adminTargetNick');
+        const adminMoneyAmount = document.getElementById('adminMoneyAmount');
+        const adminClickPowerAmount = document.getElementById('adminClickPowerAmount');
+        const rebirthCountDisplay = document.getElementById('rebirthCountDisplay');
 
         // ==================== SYNC STATUS ====================
         function updateSyncStatus(status, text) {
@@ -1109,11 +1141,7 @@
         }
 
         // ==================== FIREBASE INIT ====================
-        let firebaseApp;
-        let firebaseDb;
-        let firebaseAnalytics = null;
-        let firebaseReady = false;
-
+        let firebaseApp, firebaseDb, firebaseAnalytics = null, firebaseReady = false;
         try {
             firebaseApp = firebase.initializeApp(firebaseConfig);
             firebaseDb = firebase.database();
@@ -1238,15 +1266,8 @@
                 loginOverlay.style.display = 'none';
                 userPanel.style.display = 'flex';
                 userNickDisplay.textContent = nick;
-                if (gameState.shopHiddenUntilLevel > 0 && gameState.level >= gameState.shopHiddenUntilLevel) {
-                    reopenShop();
-                } else if (gameState.shopHiddenUntilLevel > 0) {
-                    shopSection.classList.add('hidden');
-                    shopReopenNotify.style.display = 'block';
-                } else {
-                    shopSection.classList.remove('hidden');
-                    shopReopenNotify.style.display = 'none';
-                }
+                shopSection.classList.remove('hidden');
+                shopReopenNotify.style.display = 'none';
                 saveToCloud();
                 localStorage.setItem('lastUsername', nick);
                 loginBtn.disabled = false;
@@ -1290,12 +1311,8 @@
                     loginOverlay.style.display = 'none';
                     userPanel.style.display = 'flex';
                     userNickDisplay.textContent = lastUser;
-                    if (gameState.shopHiddenUntilLevel > 0 && gameState.level >= gameState.shopHiddenUntilLevel) {
-                        reopenShop();
-                    } else if (gameState.shopHiddenUntilLevel > 0) {
-                        shopSection.classList.add('hidden');
-                        shopReopenNotify.style.display = 'block';
-                    }
+                    shopSection.classList.remove('hidden');
+                    shopReopenNotify.style.display = 'none';
                     updateSyncStatus('online', 'Облако ✓');
                     updateUI();
                     initAchievementsDisplay();
@@ -1310,7 +1327,6 @@
         function checkAdminAccess() {
             if (currentUser.toLowerCase() === 'mikhaigr') {
                 adminToggleBtn.style.display = 'inline-block';
-                setTimeout(() => { document.getElementById('adminPanel').classList.add('active'); }, 1000);
             } else {
                 adminToggleBtn.style.display = 'none';
             }
@@ -1342,7 +1358,6 @@
             else if (gameState.level % 5 === 0) { rewardClickPower += 10; bonusText = '✨ Бонус за 5 уровней: +10 силы клика!'; }
             gameState.clickPower += rewardClickPower;
             levelUpQueue.push({ level: gameState.level, reward: rewardClickPower, bonus: bonusText });
-            if (gameState.shopHiddenUntilLevel > 0 && gameState.level >= gameState.shopHiddenUntilLevel) { reopenShop(); }
             if (levelUpQueue.length === 1) showNextLevelUp();
         }
 
@@ -1363,13 +1378,6 @@
             debouncedSaveToCloud();
         }
 
-        function reopenShop() {
-            gameState.shopHiddenUntilLevel = 0;
-            shopSection.classList.remove('hidden');
-            shopReopenNotify.style.display = 'none';
-            updateUI();
-        }
-
         // ==================== CLICK ====================
         document.getElementById('clickBtn').addEventListener('click', (e) => {
             if (!currentUser) return;
@@ -1385,7 +1393,7 @@
 
         // ==================== SHOP ====================
         function renderShop() {
-            if (shopSection.classList.contains('hidden')) { shopReopenNotify.style.display = 'block'; shopGrid.innerHTML = ''; return; }
+            shopSection.classList.remove('hidden');
             shopReopenNotify.style.display = 'none';
             shopGrid.innerHTML = '';
             shopItems.forEach(item => {
@@ -1443,16 +1451,13 @@
             gameState.incomePerSec = 0;
             gameState.balance = 0;
             gameState.unlockedItems = [];
-            gameState.shopHiddenUntilLevel = 3;
-            shopSection.classList.add('hidden');
-            shopReopenNotify.style.display = 'block';
             levelUpQueue = [];
             levelUpModal.classList.add('hidden');
             pendingRebirthItem = null;
             rebirthModal.classList.remove('active');
             updateUI();
             saveToCloud();
-            alert(`🔄 Перерождение успешно!\n\n📊 Новый множитель: x${gameState.multiplier.toFixed(1)}\n🔒 Магазин откроется на уровне 3`);
+            alert(`🔄 Перерождение успешно!\n\n📊 Новый множитель: x${gameState.multiplier.toFixed(1)}`);
         }
 
         function cancelRebirth() { pendingRebirthItem = null; rebirthModal.classList.remove('active'); }
@@ -1466,6 +1471,7 @@
             levelEl.textContent = gameState.level;
             multiplierBadge.textContent = 'x' + gameState.multiplier.toFixed(1);
             multiplierDisplay.textContent = 'x' + gameState.multiplier.toFixed(1);
+            rebirthCountDisplay.textContent = gameState.rebirthCount;
             const progressPercent = Math.min(100, (gameState.experience / gameState.experienceToNextLevel) * 100);
             levelProgressEl.style.width = progressPercent + '%';
             progressTextEl.textContent = Math.floor(progressPercent) + '%';
@@ -1475,10 +1481,22 @@
         }
 
         function formatNumber(num) {
-            if (num >= 1000000000) return (num / 1000000000).toFixed(2) + 'B';
-            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
-            return Math.floor(num).toLocaleString();
+            if (num < 1000) return Math.floor(num).toLocaleString();
+            const suffixes = [
+                '', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc',
+                'UDc', 'DDc', 'TDc', 'QaDc', 'QiDc', 'SxDc', 'SpDc', 'OcDc', 'NoDc', 'Vg'
+            ];
+            let tier = 0;
+            let n = num;
+            while (n >= 1000 && tier < suffixes.length - 1) {
+                n /= 1000;
+                tier++;
+            }
+            if (tier < suffixes.length) {
+                return n.toFixed(2) + suffixes[tier];
+            } else {
+                return n.toExponential(2);
+            }
         }
 
         function createParticle(x, y, text) {
@@ -1518,75 +1536,72 @@
             });
         }
 
-        // ==================== ADMIN (УЛУЧШЕННАЯ) ====================
-        function toggleAdminPanel() { document.getElementById('adminPanel').classList.toggle('active'); }
+        // ==================== АДМИН-ФУНКЦИИ ====================
+        function toggleAdminPanel() {
+            document.getElementById('adminPanel').classList.toggle('active');
+        }
 
-        function adminGiveMoneyToTarget() {
-            if (currentUser.toLowerCase() !== 'mikhaigr') return;
-            const targetNick = adminTargetNick.value.trim();
-            if (!targetNick) {
-                adminGiveMoney();
+        function getTargetUserAndUpdate(updateCallback) {
+            if (currentUser.toLowerCase() !== 'mikhaigr') {
+                alert('Недостаточно прав');
                 return;
             }
-            if (!firebaseReady || !firebaseDb) { alert('Firebase не готов'); return; }
-            const key = sanitizeKey(targetNick);
-            firebaseDb.ref('users/' + key).once('value').then(snapshot => {
-                if (!snapshot.exists()) {
-                    alert('Игрок с ником "' + targetNick + '" не найден.');
-                    return;
-                }
-                const data = snapshot.val();
-                data.balance = (data.balance || 0) + 1000000;
-                firebaseDb.ref('users/' + key).set(data).then(() => {
-                    alert('Игроку ' + targetNick + ' выдано $1,000,000!');
-                    if (targetNick === currentUser) {
-                        gameState.balance = data.balance;
-                        updateUI();
-                    }
-                }).catch(err => { console.error(err); alert('Ошибка при выдаче денег.'); });
-            }).catch(err => { console.error(err); alert('Ошибка доступа к базе.'); });
-        }
-
-        function adminGiveClickPowerToTarget() {
-            if (currentUser.toLowerCase() !== 'mikhaigr') return;
             const targetNick = adminTargetNick.value.trim();
-            if (!targetNick) {
-                adminGiveClickPower();
+            const target = targetNick || currentUser;
+
+            if (!firebaseReady || !firebaseDb) {
+                alert('Firebase не готов');
                 return;
             }
-            if (!firebaseReady || !firebaseDb) { alert('Firebase не готов'); return; }
-            const key = sanitizeKey(targetNick);
-            firebaseDb.ref('users/' + key).once('value').then(snapshot => {
-                if (!snapshot.exists()) {
-                    alert('Игрок с ником "' + targetNick + '" не найден.');
-                    return;
-                }
-                const data = snapshot.val();
-                data.clickPower = (data.clickPower || 1) + 50;
-                firebaseDb.ref('users/' + key).set(data).then(() => {
-                    alert('Игроку ' + targetNick + ' добавлено +50 силы клика!');
-                    if (targetNick === currentUser) {
-                        gameState.clickPower = data.clickPower;
-                        updateUI();
+
+            const key = sanitizeKey(target);
+            firebaseDb.ref('users/' + key).once('value')
+                .then(snapshot => {
+                    if (!snapshot.exists()) {
+                        alert(`Игрок "${target}" не найден.`);
+                        return;
                     }
-                }).catch(err => { console.error(err); alert('Ошибка при выдаче усиления.'); });
-            }).catch(err => { console.error(err); alert('Ошибка доступа к базе.'); });
+                    const data = snapshot.val();
+                    updateCallback(data);
+                    firebaseDb.ref('users/' + key).set(data)
+                        .then(() => {
+                            alert(`Данные игрока "${target}" обновлены.`);
+                            if (target === currentUser) {
+                                gameState = { ...gameState, ...data };
+                                updateUI();
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            alert('Ошибка сохранения.');
+                        });
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Ошибка доступа к базе.');
+                });
         }
 
-        function adminGiveMoney() {
-            if (currentUser.toLowerCase() !== 'mikhaigr') return;
-            gameState.balance += 1000000;
-            updateUI();
-            saveToCloud();
-            alert('Вы дали себе $1,000,000');
+        function adminSetMoney() {
+            const amount = parseInt(adminMoneyAmount.value, 10);
+            if (isNaN(amount) || amount < 0) {
+                alert('Введите корректную сумму (целое неотрицательное число).');
+                return;
+            }
+            getTargetUserAndUpdate(data => {
+                data.balance = (data.balance || 0) + amount;
+            });
         }
 
-        function adminGiveClickPower() {
-            if (currentUser.toLowerCase() !== 'mikhaigr') return;
-            gameState.clickPower += 50;
-            updateUI();
-            saveToCloud();
-            alert('Вы увеличили силу клика на +50');
+        function adminSetClickPower() {
+            const amount = parseInt(adminClickPowerAmount.value, 10);
+            if (isNaN(amount) || amount < 0) {
+                alert('Введите корректное значение силы клика.');
+                return;
+            }
+            getTargetUserAndUpdate(data => {
+                data.clickPower = amount;
+            });
         }
 
         // ==================== RESET ====================
