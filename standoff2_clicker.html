@@ -867,6 +867,7 @@
         };
 
         let currentUser = ""; // Will store the registered username
+        let pendingRebirthItem = null; // To track which item was clicked for rebirth
 
         // Shop items - UPDATED WITH MORE ITEMS AND REBIRTHS
         const shopItems = [
@@ -1032,7 +1033,7 @@
                     `;
 
                 if (item.type === 'rebirth') {
-                    content += `<button onclick="buyRebirth('${item.id}')" style="width:100%; margin-top:15px; padding:10px; background:#e94560; border:none; color:white; border-radius:8px; cursor:pointer;">Купить</button>`;
+                    content += `<button onclick="openRebirthModal('${item.id}')" style="width:100%; margin-top:15px; padding:10px; background:#e94560; border:none; color:white; border-radius:8px; cursor:pointer;">Купить</button>`;
                 } else {
                     content += `<button onclick="buyItem('${item.id}')" style="width:100%; margin-top:15px; padding:10px; background:#4ade80; border:none; color:black; font-weight:bold; border-radius:8px; cursor:pointer;">Купить</button>`;
                 }
@@ -1072,28 +1073,37 @@
             updateUI();
         }
 
-        function buyRebirth(id) {
-            const item = shopItems.find(i => i.id === id);
+        function openRebirthModal(itemId) {
+            pendingRebirthItem = itemId; // Store the ID to use later
 
-            // Check affordability first
-            if (gameState.balance < item.cost) return;
+            const item = shopItems.find(i => i.id === itemId);
 
-            // --- FIX: LIMIT REBIRTH MULTIPLIER TO 1,000,000 ---
+            if (!item || gameState.balance < item.cost) return;
+
+            // --- FIX: Calculate new multiplier based on THIS specific item ---
             const newMultiplier = gameState.multiplier * item.value;
+
+            // Limit check (optional, but good for game balance)
             if (newMultiplier > 1000000) {
-                alert("Максимальный лимит множителя достигнут! Вы не можете переродиться дальше.");
+                alert("Максимальный лимит множителя достигнут!");
                 return;
             }
 
-            // Show confirmation modal with the calculated multiplier
             document.getElementById('rebirthMultiplier').innerText = newMultiplier.toLocaleString();
             rebirthModal.classList.add('active');
         }
 
         function confirmRebirth() {
-            const item = shopItems.find(i => i.id === 'rebirth_1'); // Default to first rebirth for simplicity in logic, or calculate based on clicked ID
+            // --- FIX: Use the ID stored in pendingRebirthItem instead of hardcoded 'rebirth_1' ---
+            if (!pendingRebirthItem) return;
 
-            if (gameState.balance < item.cost) return;
+            const item = shopItems.find(i => i.id === pendingRebirthItem);
+
+            if (gameState.balance < item.cost) {
+                alert("Недостаточно средств!");
+                rebirthModal.classList.remove('active');
+                return;
+            }
 
             gameState.balance -= item.cost;
 
@@ -1149,30 +1159,48 @@
         }
 
         function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M'; // Millions
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'k'; // Thousands
-            return num;
+            if (num >= 1000000000) return (num / 1000000000).toFixed(2) + 'B';
+            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+            return num.toLocaleString();
         }
 
-        // --- Visual Effects ---
         function createParticle(x, y, text) {
             const particle = document.createElement('div');
             particle.className = 'click-effect';
             particle.innerText = text;
-
-            // Randomize position slightly around click
-            const offsetX = (Math.random() - 0.5) * 40;
-            const offsetY = (Math.random() - 0.5) * 40;
-
-            particle.style.left = `${x + offsetX}px`;
-            particle.style.top = `${y + offsetY}px`;
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y - 50}px`; // Slightly above click
 
             document.body.appendChild(particle);
 
-            // Remove after animation finishes
             setTimeout(() => {
                 particle.remove();
             }, 1000);
+        }
+
+        function checkAchievements() {
+            achievements.forEach(ach => {
+                if (!gameState.achievements.includes(ach.id) && ach.condition()) {
+                    gameState.achievements.push(ach.id);
+
+                    // Create achievement element
+                    const div = document.createElement('div');
+                    div.className = 'achievement-item unlocked';
+                    div.innerHTML = `
+                            <div class="achievement-icon">${ach.icon}</div>
+                            <div class="achievement-info">
+                                <h4>${ach.name}</h4>
+                                <p>${ach.desc || ''}</p>
+                            </div>
+                        `;
+
+                    achievementsList.prepend(div); // Add to top
+
+                    // Play sound effect (optional, browser might block auto-audio)
+                    // new Audio('achievement.mp3').play().catch(e => {});
+                }
+            });
         }
 
         function showLevelUpModal() {
@@ -1183,29 +1211,7 @@
             levelUpModal.classList.add('hidden');
         }
 
-        // --- Achievements System ---
-        function checkAchievements() {
-            achievements.forEach(ach => {
-                if (!gameState.achievements.includes(ach.id) && ach.condition()) {
-                    gameState.achievements.push(ach.id);
-
-                    const el = document.createElement('div');
-                    el.className = 'achievement-item unlocked'; // Add unlocked class for styling
-                    el.innerHTML = `
-                            <div class="achievement-icon">${ach.icon}</div>
-                            <div class="achievement-info">
-                                <h4>${ach.name}</h4>
-                                <p>Достижение разблокировано!</p>
-                            </div>
-                        `;
-
-                    const container = document.getElementById('achievementsList');
-                    if (container) container.appendChild(el);
-                }
-            });
-        }
-
-        // --- Save/Load System ---
+        // Save/Load System
         function saveGame() {
             localStorage.setItem('standoffClickerSave', JSON.stringify(gameState));
         }
@@ -1215,19 +1221,25 @@
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    // Merge saved state with default to prevent errors on updates
+                    // Merge saved data with default structure to prevent errors on updates
                     gameState = { ...gameState, ...parsed };
+
+                    // Check for username in save
+                    if (parsed.username) {
+                        currentUser = parsed.username;
+                        document.getElementById('usernameInput').value = currentUser;
+                        document.getElementById('loginOverlay').style.display = 'none';
+                        checkAdminAccess();
+                    }
                 } catch (e) {
                     console.error("Save file corrupted");
                 }
             }
         }
 
-        // Auto-save every 30 seconds
-        setInterval(saveGame, 30000);
-
-        // --- Initialization ---
+        // Start the game
         init();
+
     </script>
 </body>
 </html>
