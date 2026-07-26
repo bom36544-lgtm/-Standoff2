@@ -614,12 +614,182 @@
                 transform: scale(1.05);
                 box-shadow: 0 15px 40px rgba(233,69,96,0.7);
             }
+
+        /* --- NEW LOGIN & ADMIN PANEL STYLES --- */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #ffd700;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 0 50px rgba(255,215,0,0.3);
+        }
+
+            .login-box h2 {
+                color: #fff;
+                margin-bottom: 20px;
+                font-size: 1.8rem;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+            .input-group input {
+                width: 100%;
+                padding: 15px;
+                background: rgba(0,0,0,0.3);
+                border: 1px solid #4ade80;
+                color: white;
+                border-radius: 10px;
+                font-size: 1rem;
+                outline: none;
+            }
+
+                .input-group input:focus {
+                    box-shadow: 0 0 15px rgba(74,222,128,0.5);
+                }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+            .login-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px rgba(233,69,96,0.6);
+            }
+
+        /* Secret Admin Panel */
+        .admin-panel-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background: rgba(10, 20, 30, 0.95);
+            border: 2px solid #ffd700;
+            padding: 30px;
+            z-index: 3000;
+            display: none;
+            box-shadow: 0 0 100px rgba(255, 215, 0, 0.4);
+        }
+
+            .admin-panel-container.active {
+                display: block;
+                animation: fadeIn 0.3s ease;
+            }
+
+        .admin-header {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,215,0,0.3);
+            padding-bottom: 10px;
+        }
+
+        .admin-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .admin-btn {
+            background: #ffd700;
+            color: black;
+            border: none;
+            padding: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            flex: 1;
+            transition: 0.3s;
+        }
+
+            .admin-btn:hover {
+                background: white;
+                box-shadow: 0 0 20px rgba(255,215,0,0.6);
+            }
+
+        .close-admin {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Reset Button */
+        .reset-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: rgba(233,69,96,0.7);
+            text-decoration: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .reset-link:hover {
+                color: #e94560;
+                text-shadow: 0 0 10px rgba(233,69,96,0.5);
+            }
     </style>
 </head>
 <body>
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <h2>Вход в игру</h2>
+            <div class="input-group">
+                <input type="text" id="usernameInput" placeholder="Введите никнейм (Mikhaigr)">
+            </div>
+            <button class="login-btn" onclick="registerUser()">ВОЙТИ В ИГРУ</button>
+        </div>
+    </div>
+
+    <!-- Secret Admin Panel -->
+    <div class="admin-panel-container" id="adminPanel">
+        <span class="close-admin" onclick="toggleAdminPanel()">&times;</span>
+        <h3 class="admin-header">⚠️ АДМИН ПАНЕЛЬ</h3>
+        <p style="text-align:center; color:#aaa;">Выберите действие для текущего игрока:</p>
+        <div class="admin-controls">
+            <button class="admin-btn" onclick="adminGiveMoney()">+ Дать $1,000,000</button>
+            <button class="admin-btn" onclick="adminGiveClickPower()">+ Сила клика x50</button>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <h1>🔫 Standoff 2 Clicker 🔫</h1>
+            <!-- Reset Button -->
+            <a href="#" onclick="resetGame()" class="reset-link" style="color: #e94560; text-decoration: none;">Сбросить прогресс</a>
         </header>
 
         <div class="stats-bar">
@@ -696,6 +866,8 @@
             achievements: []
         };
 
+        let currentUser = ""; // Will store the registered username
+
         // Shop items - UPDATED WITH MORE ITEMS AND REBIRTHS
         const shopItems = [
             { id: 'click_upgrade_1', name: 'Усиленный палец', icon: '👆', cost: 50, type: 'click', value: 2, desc: '+2 к силе клика' },
@@ -754,6 +926,63 @@
         const multiplierBadge = document.getElementById('multiplierBadge');
         const levelUpModal = document.getElementById('levelUpModal');
         const rebirthModal = document.getElementById('rebirthModal');
+
+        // --- NEW: LOGIN SYSTEM ---
+        function registerUser() {
+            const inputName = document.getElementById('usernameInput').value.trim();
+            if (inputName) {
+                currentUser = inputName;
+                document.getElementById('loginOverlay').style.display = 'none';
+
+                // Check for secret admin
+                checkAdminAccess();
+
+                saveGame(); // Save the username too
+            } else {
+                alert("Введите имя!");
+            }
+        }
+
+        function checkAdminAccess() {
+            if (currentUser.toLowerCase() === "mikhaigr") {
+                console.log("Admin Access Granted");
+                // Admin panel will be toggled on load or via a secret key,
+                // but for simplicity we'll make it visible after login.
+                setTimeout(() => {
+                    document.getElementById('adminPanel').classList.add('active');
+                }, 1000);
+            }
+        }
+
+        function toggleAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('active');
+        }
+
+        // --- NEW: ADMIN FUNCTIONS ---
+        function adminGiveMoney() {
+            if (currentUser.toLowerCase() !== "mikhaigr") return;
+
+            gameState.balance += 1000000;
+            updateUI();
+            alert("Вы дали себе $1,000,000");
+        }
+
+        function adminGiveClickPower() {
+            if (currentUser.toLowerCase() !== "mikhaigr") return;
+
+            gameState.clickPower += 50;
+            updateUI();
+            alert("Вы увеличили силу клика на +50");
+        }
+
+        // --- NEW: RESET GAME FUNCTION ---
+        function resetGame() {
+            if (confirm("Вы уверены? Весь прогресс будет удален!")) {
+                localStorage.removeItem('standoffClickerSave');
+                location.reload();
+            }
+        }
 
         // Initialize game
         function init() {
