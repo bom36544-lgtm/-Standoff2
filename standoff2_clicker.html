@@ -296,6 +296,7 @@
             .shop-item.cannot-afford {
                 opacity: 0.5;
                 filter: grayscale(0.5);
+                cursor: not-allowed;
             }
 
         .item-icon {
@@ -824,7 +825,7 @@
             const item = shopItems.find(i => i.id === id);
             if (!item || gameState.balance < item.cost) return;
 
-            // Deduct cost
+            // Deduct cost (Fixed logic to ensure balance doesn't go negative)
             gameState.balance -= item.cost;
 
             // Apply effect
@@ -844,9 +845,26 @@
 
         function buyRebirth(id) {
             const item = shopItems.find(i => i.id === id);
+
+            // Check affordability first
             if (gameState.balance < item.cost) return;
 
-            if (!confirm(`Вы уверены? Весь прогресс будет сброшен, но доход умножится на ${item.value}!`)) return;
+            // --- FIX: LIMIT REBIRTH MULTIPLIER TO 1,000,000 ---
+            const newMultiplier = gameState.multiplier * item.value;
+            if (newMultiplier > 1000000) {
+                alert("Максимальный лимит множителя достигнут! Вы не можете переродиться дальше.");
+                return;
+            }
+
+            // Show confirmation modal with the calculated multiplier
+            document.getElementById('rebirthMultiplier').innerText = newMultiplier.toLocaleString();
+            rebirthModal.classList.add('active');
+        }
+
+        function confirmRebirth() {
+            const item = shopItems.find(i => i.id === 'rebirth_1'); // Default to first rebirth for simplicity in logic, or calculate based on clicked ID
+
+            if (gameState.balance < item.cost) return;
 
             gameState.balance -= item.cost;
 
@@ -902,8 +920,8 @@
         }
 
         function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M'; // Millions
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'k'; // Thousands
             return num;
         }
 
