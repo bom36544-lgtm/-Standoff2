@@ -6,9 +6,12 @@
     <title>Standoff 2 Clicker • Мир 2 (Minecraft)</title>
 
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js">
+    </script>
 
     <!-- Пиксельный шрифт Minecraft -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -29,12 +32,13 @@
             overflow-x: hidden;
             transition: background 0.8s ease, font-family 0.8s ease;
             cursor: default;
+            user-select: none;
         }
 
             body.world-2 {
                 font-family: 'Press Start 2P', monospace;
                 background: #7c9c6e;
-                background-image: linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%), linear-gradient(-45deg, rgba(0,0,0,0.1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.1) 75%), linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.1) 75%);
+                background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%), linear-gradient(-45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.1) 75%), linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.1) 75%);
                 background-size: 60px 60px;
                 background-color: #7c9c6e;
                 color: #2d1b0e;
@@ -48,6 +52,437 @@
 
             body:not(.world-2) .coin-btn {
                 cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23ffd700" stroke="%23b8860b" stroke-width="2"/><text x="16" y="22" font-size="18" text-anchor="middle" fill="%23b8860b">💰</text></svg>') 16 16, pointer;
+            }
+
+        /* ===== НОВЫЕ СТИЛИ ДЛЯ УНИКАЛЬНЫХ ФИЧ ===== */
+
+        /* Уведомления о событиях */
+        .event-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px 40px;
+            border-radius: 20px;
+            border: 3px solid #ffd700;
+            z-index: 9999;
+            text-align: center;
+            animation: eventPop 0.5s ease-out;
+            pointer-events: none;
+            max-width: 90vw;
+        }
+
+            .event-notification .event-icon {
+                font-size: 4rem;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .event-notification .event-title {
+                font-size: 1.5rem;
+                color: #ffd700;
+                font-weight: bold;
+            }
+
+            .event-notification .event-desc {
+                font-size: 1rem;
+                color: #ddd;
+                margin-top: 5px;
+            }
+
+        @keyframes eventPop {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(2deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Счётчик комбо */
+        .combo-display {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+            .combo-display.active {
+                opacity: 1;
+            }
+
+            .combo-display .combo-count {
+                color: #ffd700;
+                font-size: 2.5rem;
+            }
+
+        /* Бонусный сундук */
+        .chest-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
+            border: 3px solid #fff;
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 60;
+            box-shadow: 0 5px 30px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: chestPulse 2s ease-in-out infinite;
+        }
+
+            .chest-btn:hover {
+                transform: scale(1.1);
+                box-shadow: 0 5px 50px rgba(255, 215, 0, 0.8);
+            }
+
+            .chest-btn:active {
+                transform: scale(0.9);
+            }
+
+            .chest-btn .cooldown-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: #fff;
+                font-weight: bold;
+            }
+
+        @keyframes chestPulse {
+            0%, 100% {
+                box-shadow: 0 5px 30px rgba(255, 215, 0, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 5px 60px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        /* Мини-игра "Угадай число" */
+        .mini-game-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 20, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #4ade80;
+            z-index: 8000;
+            text-align: center;
+            min-width: 300px;
+            max-width: 95vw;
+            display: none;
+            box-shadow: 0 0 100px rgba(74, 222, 128, 0.3);
+        }
+
+            .mini-game-modal.active {
+                display: block;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .mini-game-modal .game-title {
+                font-size: 1.5rem;
+                color: #4ade80;
+                margin-bottom: 15px;
+            }
+
+            .mini-game-modal .game-hint {
+                font-size: 1rem;
+                color: #aaa;
+                margin-bottom: 10px;
+            }
+
+            .mini-game-modal .game-input {
+                padding: 12px 20px;
+                font-size: 1.2rem;
+                border-radius: 10px;
+                border: 2px solid #4ade80;
+                background: rgba(0, 0, 0, 0.5);
+                color: #fff;
+                width: 80%;
+                max-width: 200px;
+                text-align: center;
+                outline: none;
+            }
+
+                .mini-game-modal .game-input:focus {
+                    border-color: #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+                }
+
+            .mini-game-modal .game-btn {
+                padding: 12px 30px;
+                margin: 10px 5px;
+                border: none;
+                border-radius: 10px;
+                font-size: 1rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+                .mini-game-modal .game-btn:hover {
+                    transform: scale(1.05);
+                }
+
+                .mini-game-modal .game-btn.primary {
+                    background: #4ade80;
+                    color: #000;
+                }
+
+                .mini-game-modal .game-btn.danger {
+                    background: #e94560;
+                    color: #fff;
+                }
+
+            .mini-game-modal .game-feedback {
+                margin-top: 10px;
+                font-size: 1.1rem;
+                min-height: 30px;
+            }
+
+            .mini-game-modal .game-attempts {
+                font-size: 0.9rem;
+                color: #888;
+            }
+
+        /* Событие "Удача дня" */
+        .luck-timer {
+            position: fixed;
+            bottom: 160px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 18px;
+            border-radius: 15px;
+            border: 2px solid #ff6b6b;
+            z-index: 55;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+            .luck-timer .luck-time {
+                font-size: 1.2rem;
+                color: #ff6b6b;
+                font-weight: bold;
+            }
+
+            .luck-timer .luck-bonus {
+                color: #ffd700;
+                font-size: 0.9rem;
+            }
+
+        /* Инвестиции */
+        .investment-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(74, 222, 128, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+
+        .investment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+            .investment-item .inv-info {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .investment-item .inv-name {
+                font-weight: bold;
+                font-size: 0.95rem;
+            }
+
+            .investment-item .inv-desc {
+                font-size: 0.8rem;
+                color: #aaa;
+            }
+
+            .investment-item .inv-btn {
+                padding: 6px 16px;
+                border: none;
+                border-radius: 8px;
+                background: #4ade80;
+                color: #000;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.3s;
+                font-size: 0.85rem;
+            }
+
+                .investment-item .inv-btn:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+                }
+
+                .investment-item .inv-btn:disabled {
+                    opacity: 0.4;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+
+            .investment-item .inv-level {
+                font-size: 0.8rem;
+                color: #ffd700;
+                min-width: 60px;
+                text-align: right;
+            }
+
+        /* Престиж */
+        .prestige-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(233, 69, 96, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .prestige-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #e94560, #b8304f);
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.3);
+        }
+
+            .prestige-btn:hover:not(:disabled) {
+                transform: scale(1.02);
+                box-shadow: 0 5px 40px rgba(233, 69, 96, 0.6);
+            }
+
+            .prestige-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .prestige-info {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+            .prestige-info .prestige-bonus {
+                color: #ffd700;
+                font-weight: bold;
+            }
+
+        /* Рейтинг игроков */
+        .leaderboard-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+            .leaderboard-item .lb-rank {
+                color: #ffd700;
+                font-weight: bold;
+                min-width: 30px;
+            }
+
+            .leaderboard-item .lb-name {
+                flex: 1;
+                margin-left: 10px;
+            }
+
+            .leaderboard-item .lb-score {
+                color: #4ade80;
+            }
+
+        /* Косметические скины для клика */
+        .skin-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .skin-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(30, 30, 40, 0.6);
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .skin-option:hover {
+                transform: scale(1.1);
+                border-color: #4ade80;
+            }
+
+            .skin-option.active {
+                border-color: #ffd700;
+                background: rgba(255, 215, 0, 0.2);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            }
+
+            .skin-option.locked {
+                opacity: 0.3;
+                cursor: not-allowed;
+                filter: grayscale(1);
             }
 
         /* ===== АДАПТИВНОСТЬ ===== */
@@ -135,7 +570,8 @@
                 padding: 4px 10px;
             }
 
-            .logout-btn, .admin-panel-btn {
+            .logout-btn,
+            .admin-panel-btn {
                 font-size: 0.7rem;
                 padding: 4px 10px;
             }
@@ -166,6 +602,10 @@
                 right: 10px;
                 font-size: 0.7rem;
                 padding: 8px 14px;
+                max-width: 90vw;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .level-up-modal .modal-content {
@@ -278,6 +718,53 @@
             .skills-grid {
                 grid-template-columns: 1fr;
             }
+
+            .chest-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 2rem;
+                bottom: 70px;
+                right: 10px;
+            }
+
+            .luck-timer {
+                bottom: 140px;
+                right: 10px;
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+
+            .combo-display {
+                font-size: 1.5rem;
+                bottom: 80px;
+            }
+
+                .combo-display .combo-count {
+                    font-size: 2rem;
+                }
+
+            .mini-game-modal {
+                padding: 20px;
+                min-width: auto;
+                width: 95%;
+            }
+
+            .event-notification {
+                padding: 20px;
+                width: 90%;
+            }
+
+                .event-notification .event-icon {
+                    font-size: 3rem;
+                }
+
+                .event-notification .event-title {
+                    font-size: 1.2rem;
+                }
+
+                .event-notification .event-desc {
+                    font-size: 0.9rem;
+                }
         }
 
         @media (max-width: 400px) {
@@ -317,7 +804,8 @@
                 padding: 3px 8px;
             }
 
-            .logout-btn, .admin-panel-btn {
+            .logout-btn,
+            .admin-panel-btn {
                 font-size: 0.6rem;
                 padding: 3px 8px;
             }
@@ -350,6 +838,7 @@
                 padding: 5px 10px;
                 bottom: 5px;
                 right: 5px;
+                max-width: 85vw;
             }
 
             .login-box {
@@ -383,207 +872,33 @@
                 padding: 6px 10px;
                 font-size: 0.6rem;
             }
-        }
 
-        /* ===== ВКЛАДКИ МАГАЗИНА ===== */
-        .shop-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .shop-tab {
-            padding: 10px 20px;
-            background: rgba(30,30,40,0.6);
-            border: 2px solid rgba(74,222,128,0.3);
-            border-radius: 12px;
-            color: #aaa;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
-            .shop-tab:hover {
-                background: rgba(74,222,128,0.2);
-                color: #fff;
+            .chest-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+                bottom: 60px;
+                right: 8px;
             }
 
-            .shop-tab.active {
-                background: rgba(74,222,128,0.3);
-                border-color: #4ade80;
-                color: #4ade80;
-                box-shadow: 0 0 20px rgba(74,222,128,0.2);
-            }
-
-        body.world-2 .shop-tab {
-            background: rgba(100,70,40,0.6);
-            border-color: #5d3a1a;
-            color: #8b6d4c;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.7rem;
-        }
-
-            body.world-2 .shop-tab.active {
-                background: rgba(245,229,107,0.3);
-                border-color: #f5e56b;
-                color: #f5e56b;
-            }
-
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .shop-item.hidden-tab {
-            display: none;
-        }
-
-        /* ===== СТАТИСТИКА ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-            .stats-grid .stat-row {
-                border-bottom: none;
-                padding: 8px 0;
-            }
-
-        /* ===== НАСТРОЙКИ ===== */
-        .settings-panel {
-            background: rgba(30,30,40,0.6);
-            border-radius: 15px;
-            padding: 15px 20px;
-            margin-top: 15px;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-            border: 2px solid rgba(74,222,128,0.2);
-        }
-
-            .settings-panel label {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                cursor: pointer;
-                font-size: 0.9rem;
-                color: #aaa;
-            }
-
-            .settings-panel input[type="checkbox"] {
-                width: 18px;
-                height: 18px;
-                accent-color: #4ade80;
-                cursor: pointer;
-            }
-
-        body.world-2 .settings-panel {
-            background: rgba(100,70,40,0.6);
-            border-color: #5d3a1a;
-        }
-
-            body.world-2 .settings-panel label {
-                color: #2d1b0e;
-                font-family: 'Press Start 2P', monospace;
+            .luck-timer {
+                bottom: 120px;
+                right: 8px;
+                padding: 5px 10px;
                 font-size: 0.6rem;
             }
 
-        /* ===== АКТИВНЫЕ НАВЫКИ ===== */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .skill-card {
-            background: rgba(30,30,40,0.8);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            border: 2px solid rgba(74,222,128,0.2);
-            transition: all 0.3s ease;
-        }
-
-            .skill-card.available {
-                border-color: #4ade80;
-                box-shadow: 0 0 20px rgba(74,222,128,0.2);
+            .combo-display {
+                font-size: 1.2rem;
+                bottom: 70px;
             }
 
-            .skill-card.cooldown {
-                opacity: 0.5;
-                border-color: #ff6b6b;
-            }
-
-        .skill-icon {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
+                .combo-display .combo-count {
+                    font-size: 1.6rem;
+                }
         }
 
-        .skill-name {
-            font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .skill-desc {
-            font-size: 0.8rem;
-            color: #aaa;
-            margin-bottom: 10px;
-        }
-
-        .skill-btn {
-            padding: 8px 20px;
-            background: linear-gradient(135deg, #4ade80, #2d9e5a);
-            border: none;
-            color: #000;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.9rem;
-        }
-
-            .skill-btn:hover:not(:disabled) {
-                transform: scale(1.05);
-                box-shadow: 0 5px 20px rgba(74,222,128,0.4);
-            }
-
-            .skill-btn:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-                transform: none;
-            }
-
-        .skill-cooldown {
-            font-size: 0.8rem;
-            color: #ff6b6b;
-            margin-top: 5px;
-        }
-
-        body.world-2 .skill-card {
-            background: rgba(100,70,40,0.8);
-            border-color: #5d3a1a;
-        }
-
-        body.world-2 .skill-name {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.7rem;
-        }
-
-        body.world-2 .skill-desc {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.6rem;
-        }
-
-        /* ===== ОСТАЛЬНЫЕ СТИЛИ ===== */
+        /* ===== ОСТАЛЬНЫЕ СТИЛИ (сохранены из оригинала) ===== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -640,7 +955,7 @@
             gap: 8px;
             z-index: 110;
             font-size: 0.85rem;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             padding: 8px 16px;
             border-radius: 30px;
             backdrop-filter: blur(10px);
@@ -687,17 +1002,18 @@
         }
 
         .user-nick {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             padding: 8px 18px;
             border-radius: 30px;
             font-weight: bold;
             color: #ffd700;
-            border: 1px solid rgba(255,215,0,0.5);
+            border: 1px solid rgba(255, 215, 0, 0.5);
             backdrop-filter: blur(10px);
             font-size: 1rem;
         }
 
-        .logout-btn, .admin-panel-btn {
+        .logout-btn,
+        .admin-panel-btn {
             background: linear-gradient(135deg, #e94560, #b8304f);
             border: none;
             color: white;
@@ -707,18 +1023,19 @@
             cursor: pointer;
             transition: 0.3s;
             font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(233,69,96,0.4);
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
         }
 
-            .logout-btn:hover, .admin-panel-btn:hover {
+            .logout-btn:hover,
+            .admin-panel-btn:hover {
                 transform: scale(1.05);
-                box-shadow: 0 6px 25px rgba(233,69,96,0.6);
+                box-shadow: 0 6px 25px rgba(233, 69, 96, 0.6);
             }
 
         .admin-panel-btn {
             background: linear-gradient(135deg, #ffd700, #b8860b);
             color: #000;
-            box-shadow: 0 4px 15px rgba(255,215,0,0.5);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
         }
 
         .stats-bar {
@@ -731,7 +1048,7 @@
             border-radius: 20px;
             backdrop-filter: blur(20px);
             border: 2px solid rgba(233, 69, 96, 0.3);
-            box-shadow: 0 10px 40px rgba(233, 69, 96, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 10px 40px rgba(233, 69, 96, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             flex-wrap: wrap;
         }
 
@@ -805,7 +1122,7 @@
             height: 100%;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #fffacd 0%, transparent 20%), conic-gradient(from 0deg, #ffd700, #ffb800, #ffaa00, #ffd700);
-            box-shadow: 0 25px 60px rgba(233, 69, 96, 0.4), inset 0 -15px 40px rgba(0,0,0,0.3), inset 0 15px 40px rgba(255,255,255,0.3);
+            box-shadow: 0 25px 60px rgba(233, 69, 96, 0.4), inset 0 -15px 40px rgba(0, 0, 0, 0.3), inset 0 15px 40px rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
             transition: box-shadow 0.3s ease, transform 0.15s ease;
@@ -815,7 +1132,7 @@
             content: '💰';
             font-size: 6rem;
             position: absolute;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3), 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 2px 2px 4px rgba(0, 0, 0, 0.5);
             pointer-events: none;
             z-index: 2;
         }
@@ -856,12 +1173,12 @@
         }
 
         .coin-btn:hover .coin-btn-inner {
-            box-shadow: 0 35px 80px rgba(233, 69, 96, 0.6), inset 0 -15px 40px rgba(0,0,0,0.3), inset 0 15px 40px rgba(255,255,255,0.3);
+            box-shadow: 0 35px 80px rgba(233, 69, 96, 0.6), inset 0 -15px 40px rgba(0, 0, 0, 0.3), inset 0 15px 40px rgba(255, 255, 255, 0.3);
         }
 
         .coin-btn:active .coin-btn-inner {
             transform: scale(0.95) rotateY(180deg);
-            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.4), inset 0 -15px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.4), inset 0 -15px 40px rgba(0, 0, 0, 0.3);
         }
 
         .click-effect {
@@ -870,7 +1187,7 @@
             color: #ffd700;
             pointer-events: none;
             animation: floatUp 1s ease-out forwards;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.5), 2px 2px 4px rgba(233,69,96,0.5);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 2px 2px 4px rgba(233, 69, 96, 0.5);
             z-index: 999;
         }
 
@@ -892,7 +1209,7 @@
             padding: 30px;
             margin-top: 40px;
             border: 2px solid rgba(74, 222, 128, 0.3);
-            box-shadow: 0 10px 40px rgba(74, 222, 128, 0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 10px 40px rgba(74, 222, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
             .shop-section.hidden {
@@ -913,7 +1230,7 @@
         }
 
         .shop-item {
-            background: linear-gradient(145deg, rgba(30,30,40,0.9) 0%, rgba(20,20,30,0.95) 100%);
+            background: linear-gradient(145deg, rgba(30, 30, 40, 0.9) 0%, rgba(20, 20, 30, 0.95) 100%);
             border-radius: 20px;
             padding: 25px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -929,7 +1246,7 @@
                 left: -50%;
                 width: 200%;
                 height: 200%;
-                background: linear-gradient(45deg, transparent, rgba(74,222,128,0.1), transparent);
+                background: linear-gradient(45deg, transparent, rgba(74, 222, 128, 0.1), transparent);
                 transform: rotate(45deg);
                 transition: all 0.6s ease;
             }
@@ -940,7 +1257,7 @@
 
             .shop-item.can-afford {
                 border-color: #4ade80;
-                box-shadow: 0 0 30px rgba(74,222,128,0.2), inset 0 1px 0 rgba(74,222,128,0.2);
+                box-shadow: 0 0 30px rgba(74, 222, 128, 0.2), inset 0 1px 0 rgba(74, 222, 128, 0.2);
             }
 
             .shop-item.cannot-afford {
@@ -952,7 +1269,7 @@
             font-size: 4rem;
             text-align: center;
             margin-bottom: 15px;
-            filter: drop-shadow(0 4px 8px rgba(233,69,96,0.3));
+            filter: drop-shadow(0 4px 8px rgba(233, 69, 96, 0.3));
         }
 
         .item-name {
@@ -971,7 +1288,7 @@
             text-align: center;
             margin-bottom: 12px;
             font-weight: bold;
-            filter: drop-shadow(0 0 10px rgba(255,215,0,0.3));
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
         }
 
         .item-desc {
@@ -1010,16 +1327,16 @@
 
                 .item-btn.buy-max-btn:hover {
                     background: linear-gradient(135deg, #5aa0e9, #458bcb);
-                    box-shadow: 0 5px 20px rgba(74,144,217,0.5);
+                    box-shadow: 0 5px 20px rgba(74, 144, 217, 0.5);
                 }
 
             .item-btn:hover {
                 transform: scale(1.03);
-                box-shadow: 0 5px 20px rgba(74,222,128,0.4);
+                box-shadow: 0 5px 20px rgba(74, 222, 128, 0.4);
             }
 
             .item-btn.rebirth-btn-type:hover {
-                box-shadow: 0 5px 20px rgba(233,69,96,0.5);
+                box-shadow: 0 5px 20px rgba(233, 69, 96, 0.5);
             }
 
             .item-btn:disabled {
@@ -1030,28 +1347,28 @@
             }
 
         .stats-section {
-            background: linear-gradient(145deg, rgba(30,30,40,0.8) 0%, rgba(20,20,30,0.9) 100%);
+            background: linear-gradient(145deg, rgba(30, 30, 40, 0.8) 0%, rgba(20, 20, 30, 0.9) 100%);
             border-radius: 25px;
             padding: 30px;
             margin-top: 40px;
-            border: 2px solid rgba(74,222,128,0.3);
+            border: 2px solid rgba(74, 222, 128, 0.3);
         }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
             padding: 15px 0;
-            border-bottom: 1px solid rgba(74,222,128,0.2);
+            border-bottom: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .progress-bar {
             width: 100%;
             height: 30px;
-            background: linear-gradient(90deg, rgba(74,222,128,0.2), rgba(233,69,96,0.2));
+            background: linear-gradient(90deg, rgba(74, 222, 128, 0.2), rgba(233, 69, 96, 0.2));
             border-radius: 15px;
             overflow: hidden;
             margin-top: 15px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
             position: relative;
         }
 
@@ -1060,7 +1377,7 @@
             background: linear-gradient(90deg, #4ade80 0%, #e94560 100%);
             border-radius: 15px;
             transition: width 0.5s ease;
-            box-shadow: 0 0 20px rgba(74,222,128,0.5), inset 0 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.5), inset 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         .progress-text {
@@ -1071,7 +1388,7 @@
             font-size: 0.85rem;
             font-weight: bold;
             color: #fff;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
             pointer-events: none;
             z-index: 1;
         }
@@ -1082,7 +1399,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at center, rgba(233,69,96,0.8) 0%, rgba(0,0,0,0.95) 100%);
+            background: radial-gradient(circle at center, rgba(233, 69, 96, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1099,7 +1416,7 @@
             border-radius: 30px;
             text-align: center;
             border: 4px solid #ffd700;
-            box-shadow: 0 0 80px rgba(255,215,0,0.5), inset 0 0 50px rgba(233,69,96,0.3);
+            box-shadow: 0 0 80px rgba(255, 215, 0, 0.5), inset 0 0 50px rgba(233, 69, 96, 0.3);
             animation: pulse 0.5s ease-in-out;
             max-width: 90vw;
         }
@@ -1107,12 +1424,12 @@
         @keyframes pulse {
             0%, 100% {
                 transform: scale(1);
-                box-shadow: 0 0 80px rgba(255,215,0,0.5);
+                box-shadow: 0 0 80px rgba(255, 215, 0, 0.5);
             }
 
             50% {
                 transform: scale(1.05);
-                box-shadow: 0 0 120px rgba(255,215,0,0.7);
+                box-shadow: 0 0 120px rgba(255, 215, 0, 0.7);
             }
         }
 
@@ -1120,14 +1437,14 @@
             font-size: 3rem;
             color: #ffd700;
             margin-bottom: 20px;
-            text-shadow: 0 0 30px rgba(255,215,0,0.8), 4px 4px 8px rgba(0,0,0,0.5);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 4px 4px 8px rgba(0, 0, 0, 0.5);
         }
 
         .level-up-reward {
             font-size: 1.3rem;
             color: #4ade80;
             margin-bottom: 10px;
-            text-shadow: 0 0 15px rgba(74,222,128,0.6);
+            text-shadow: 0 0 15px rgba(74, 222, 128, 0.6);
         }
 
         .level-up-bonus {
@@ -1159,13 +1476,13 @@
             border-radius: 15px;
             cursor: pointer;
             margin-top: 20px;
-            box-shadow: 0 10px 40px rgba(233,69,96,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+            box-shadow: 0 10px 40px rgba(233, 69, 96, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
         }
 
             .level-up-btn:hover {
                 transform: scale(1.05) translateY(-5px);
-                box-shadow: 0 15px 50px rgba(233,69,96,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+                box-shadow: 0 15px 50px rgba(233, 69, 96, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             }
 
         .multiplier-badge {
@@ -1177,18 +1494,22 @@
             padding: 15px 30px;
             border-radius: 15px;
             font-weight: bold;
-            box-shadow: 0 10px 40px rgba(255,215,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             z-index: 99;
             transition: all 0.3s ease;
+            max-width: 90vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
             .multiplier-badge.active-skill {
                 transform: scale(1.2);
-                box-shadow: 0 10px 60px rgba(255,215,0,0.8);
+                box-shadow: 0 10px 60px rgba(255, 215, 0, 0.8);
             }
 
         .achievement-item {
-            background: linear-gradient(145deg, rgba(30,30,40,0.8) 0%, rgba(20,20,30,0.9) 100%);
+            background: linear-gradient(145deg, rgba(30, 30, 40, 0.8) 0%, rgba(20, 20, 30, 0.9) 100%);
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 15px;
@@ -1202,14 +1523,14 @@
 
             .achievement-item.unlocked {
                 opacity: 1;
-                background: linear-gradient(145deg, rgba(74,222,128,0.1) 0%, rgba(30,30,40,0.9) 100%);
+                background: linear-gradient(145deg, rgba(74, 222, 128, 0.1) 0%, rgba(30, 30, 40, 0.9) 100%);
                 border-left: 4px solid #4ade80;
-                box-shadow: 0 5px 15px rgba(74,222,128,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+                box-shadow: 0 5px 15px rgba(74, 222, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             }
 
         .achievement-icon {
             font-size: 3rem;
-            filter: drop-shadow(0 4px 8px rgba(255,215,0,0.3));
+            filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.3));
             animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -1239,13 +1560,13 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(20,20,30,0.98);
+            background: rgba(20, 20, 30, 0.98);
             padding: 40px;
             border-radius: 20px;
             text-align: center;
             z-index: 1001;
             display: none;
-            box-shadow: 0 0 100px rgba(233,69,96,0.8);
+            box-shadow: 0 0 100px rgba(233, 69, 96, 0.8);
             border: 3px solid #e94560;
             min-width: 350px;
         }
@@ -1271,7 +1592,7 @@
             font-size: 2rem;
             color: #fff;
             margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(233,69,96,0.8);
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
         }
 
         .rebirth-desc {
@@ -1288,30 +1609,30 @@
             font-size: 1.2rem;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(233,69,96,0.5);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.5);
             transition: all 0.3s ease;
             margin: 5px;
         }
 
             .rebirth-btn:hover {
                 transform: scale(1.05);
-                box-shadow: 0 15px 40px rgba(233,69,96,0.7);
+                box-shadow: 0 15px 40px rgba(233, 69, 96, 0.7);
             }
 
             .rebirth-btn.cancel {
                 background: linear-gradient(135deg, #555 0%, #777 100%);
-                box-shadow: 0 10px 30px rgba(100,100,100,0.5);
+                box-shadow: 0 10px 30px rgba(100, 100, 100, 0.5);
             }
 
                 .rebirth-btn.cancel:hover {
-                    box-shadow: 0 15px 40px rgba(100,100,100,0.7);
+                    box-shadow: 0 15px 40px rgba(100, 100, 100, 0.7);
                 }
 
         .loading-spinner {
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: #ffd700;
             animation: spin 1s linear infinite;
@@ -1330,12 +1651,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 420px;
-            background: rgba(10,20,30,0.95);
+            background: rgba(10, 20, 30, 0.95);
             border: 2px solid #ffd700;
             padding: 30px;
             z-index: 3000;
             display: none;
-            box-shadow: 0 0 100px rgba(255,215,0,0.4);
+            box-shadow: 0 0 100px rgba(255, 215, 0, 0.4);
             border-radius: 15px;
             max-height: 90vh;
             overflow-y: auto;
@@ -1351,7 +1672,7 @@
             font-size: 1.5rem;
             margin-bottom: 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(255,215,0,0.3);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
             padding-bottom: 10px;
         }
 
@@ -1372,7 +1693,7 @@
             .admin-row input {
                 flex: 1;
                 padding: 10px;
-                background: rgba(0,0,0,0.4);
+                background: rgba(0, 0, 0, 0.4);
                 border: 1px solid #ffd700;
                 color: white;
                 border-radius: 8px;
@@ -1403,7 +1724,7 @@
 
             .admin-btn:hover {
                 background: white;
-                box-shadow: 0 0 20px rgba(255,215,0,0.6);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
             }
 
         .close-admin {
@@ -1418,7 +1739,7 @@
         .reset-link {
             display: inline-block;
             margin-top: 20px;
-            color: rgba(233,69,96,0.7);
+            color: rgba(233, 69, 96, 0.7);
             text-decoration: none;
             font-size: 0.8rem;
             cursor: pointer;
@@ -1427,7 +1748,7 @@
 
             .reset-link:hover {
                 color: #e94560;
-                text-shadow: 0 0 10px rgba(233,69,96,0.5);
+                text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
             }
 
         .world2-entry-btn {
@@ -1442,7 +1763,7 @@
             border-radius: 20px;
             font-size: 2rem;
             cursor: pointer;
-            box-shadow: 0 0 40px rgba(74,222,128,0.5);
+            box-shadow: 0 0 40px rgba(74, 222, 128, 0.5);
             transition: 0.3s;
             display: block;
             text-align: center;
@@ -1451,7 +1772,7 @@
 
             .world2-entry-btn:hover:not(:disabled) {
                 transform: scale(1.05);
-                box-shadow: 0 0 60px rgba(74,222,128,0.8);
+                box-shadow: 0 0 60px rgba(74, 222, 128, 0.8);
             }
 
             .world2-entry-btn:disabled {
@@ -1465,10 +1786,10 @@
             grid-column: 1 / -1;
             text-align: center;
             padding: 30px 10px;
-            background: linear-gradient(145deg, rgba(74,222,128,0.15) 0%, rgba(20,20,30,0.95) 100%);
+            background: linear-gradient(145deg, rgba(74, 222, 128, 0.15) 0%, rgba(20, 20, 30, 0.95) 100%);
             border-radius: 30px;
-            border: 3px solid rgba(74,222,128,0.4);
-            box-shadow: 0 0 60px rgba(74,222,128,0.2);
+            border: 3px solid rgba(74, 222, 128, 0.4);
+            box-shadow: 0 0 60px rgba(74, 222, 128, 0.2);
         }
 
             .world2-entry-wrapper .hint {
@@ -1684,6 +2005,10 @@
             text-shadow: 2px 2px 0 #3d2b1a;
             font-size: 0.8rem;
             padding: 10px 15px;
+            max-width: 90vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         body.world-2 .sync-status {
@@ -1706,7 +2031,8 @@
             padding: 5px 12px;
         }
 
-        body.world-2 .logout-btn, body.world-2 .admin-panel-btn {
+        body.world-2 .logout-btn,
+        body.world-2 .admin-panel-btn {
             background: #5d3a1a;
             border: 3px solid #3d2b1a;
             border-radius: 0;
@@ -1717,7 +2043,8 @@
             padding: 5px 12px;
         }
 
-            body.world-2 .logout-btn:hover, body.world-2 .admin-panel-btn:hover {
+            body.world-2 .logout-btn:hover,
+            body.world-2 .admin-panel-btn:hover {
                 background: #7c5c3a;
                 transform: scale(1.02);
                 box-shadow: 0 0 0 3px #f5e56b;
@@ -1867,6 +2194,82 @@
             font-size: 0.6rem;
         }
 
+        body.world-2 .chest-btn {
+            background: radial-gradient(circle at 30% 30%, #f5e56b, #b8962b);
+            border: 4px solid #5d3a1a;
+            border-radius: 0;
+            box-shadow: 0 5px 0 #3d2b1a;
+            animation: none;
+        }
+
+            body.world-2 .chest-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 5px 0 #3d2b1a, 0 0 30px rgba(245, 229, 107, 0.5);
+            }
+
+        body.world-2 .luck-timer {
+            border-color: #f5e56b;
+            background: rgba(100, 70, 40, 0.9);
+            border-radius: 0;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+            body.world-2 .luck-timer .luck-time {
+                color: #f5e56b;
+            }
+
+        body.world-2 .mini-game-modal {
+            border-color: #f5e56b;
+            background: rgba(60, 40, 20, 0.98);
+            border-radius: 0;
+        }
+
+            body.world-2 .mini-game-modal .game-title {
+                color: #f5e56b;
+                font-family: 'Press Start 2P', monospace;
+            }
+
+            body.world-2 .mini-game-modal .game-btn.primary {
+                background: #5d3a1a;
+                color: #f5e56b;
+                border: 3px solid #3d2b1a;
+                border-radius: 0;
+            }
+
+        body.world-2 .investment-section {
+            border-color: #5d3a1a;
+            background: rgba(100, 70, 40, 0.3);
+        }
+
+        body.world-2 .investment-item .inv-btn {
+            background: #5d3a1a;
+            color: #f5e56b;
+            border: 2px solid #3d2b1a;
+            border-radius: 0;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+        }
+
+            body.world-2 .investment-item .inv-btn:hover {
+                background: #7c5c3a;
+            }
+
+        body.world-2 .prestige-section {
+            border-color: #e94560;
+        }
+
+        body.world-2 .prestige-btn {
+            background: #8b3a3a;
+            border: 3px solid #3d2b1a;
+            border-radius: 0;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8rem;
+        }
+
+            body.world-2 .prestige-btn:hover:not(:disabled) {
+                background: #a55a5a;
+            }
+
         /* ===== ЛОГИН ===== */
         .login-overlay {
             position: fixed;
@@ -1874,7 +2277,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.92);
+            background: rgba(0, 0, 0, 0.92);
             z-index: 2000;
             display: flex;
             justify-content: center;
@@ -1889,7 +2292,7 @@
             text-align: center;
             width: 360px;
             max-width: 95%;
-            box-shadow: 0 0 50px rgba(255,215,0,0.3);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
             position: relative;
         }
 
@@ -1914,7 +2317,7 @@
             .input-group input {
                 width: 100%;
                 padding: 14px;
-                background: rgba(0,0,0,0.4);
+                background: rgba(0, 0, 0, 0.4);
                 border: 1px solid #4ade80;
                 color: white;
                 border-radius: 10px;
@@ -1924,7 +2327,7 @@
             }
 
                 .input-group input:focus {
-                    box-shadow: 0 0 15px rgba(74,222,128,0.5);
+                    box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
                     border-color: #ffd700;
                 }
 
@@ -1948,7 +2351,7 @@
 
             .login-btn:hover {
                 transform: scale(1.02);
-                box-shadow: 0 0 25px rgba(233,69,96,0.6);
+                box-shadow: 0 0 25px rgba(233, 69, 96, 0.6);
             }
 
             .login-btn:disabled {
@@ -1980,7 +2383,7 @@
 
             .login-toggle:hover {
                 color: #ffd700;
-                text-shadow: 0 0 10px rgba(255,215,0,0.3);
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
             }
 
         .login-info {
@@ -1992,7 +2395,7 @@
 
         .login-divider {
             border: none;
-            border-top: 1px solid rgba(255,215,0,0.2);
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
             margin: 20px 0;
         }
 
@@ -2007,7 +2410,7 @@
         .pickaxe {
             font-size: 4rem;
             animation: pickaxeSwing 0.6s ease-in-out;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
             display: block;
         }
 
@@ -2074,6 +2477,55 @@
                 opacity: 0;
             }
         }
+
+        /* ===== ДОПОЛНИТЕЛЬНЫЙ ФИКС ДЛЯ МОБИЛЬНЫХ ===== */
+        @media (max-width: 480px) {
+            .multiplier-badge {
+                top: auto;
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-width: calc(100vw - 20px);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 0.7rem;
+                padding: 8px 14px;
+                text-align: center;
+                border-radius: 12px;
+            }
+
+            body.world-2 .multiplier-badge {
+                font-size: 0.6rem;
+                padding: 6px 12px;
+                max-width: calc(100vw - 20px);
+            }
+
+            .sync-status {
+                top: 10px;
+                left: 10px;
+                font-size: 0.5rem;
+                padding: 3px 8px;
+            }
+
+            .user-panel {
+                top: 10px;
+                right: 10px;
+                gap: 3px;
+            }
+
+            .user-nick {
+                font-size: 0.55rem;
+                padding: 3px 8px;
+            }
+
+            .logout-btn,
+            .admin-panel-btn {
+                font-size: 0.55rem;
+                padding: 3px 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2137,6 +2589,32 @@
         <div class="click-area"><button class="coin-btn" id="clickBtn"></button></div>
         <div class="multiplier-badge" id="multiplierBadge">x1.0</div>
 
+        <!-- КНОПКА СУНДУКА -->
+        <div class="chest-btn" id="chestBtn" onclick="openChest()">🎁</div>
+        <div class="luck-timer" id="luckTimer">
+            🍀 Удача дня<br>
+            <span class="luck-bonus" id="luckBonus">+0%</span>
+            <span class="luck-time" id="luckTime">Обновится через: 23:59:59</span>
+        </div>
+
+        <!-- КОМБО-СЧЁТЧИК -->
+        <div class="combo-display" id="comboDisplay">
+            🔥 <span class="combo-count" id="comboCount">0</span>x комбо!
+        </div>
+
+        <!-- МИНИ-ИГРА "УГАДАЙ ЧИСЛО" -->
+        <div class="mini-game-modal" id="miniGameModal">
+            <div class="game-title">🎯 Угадай число!</div>
+            <div class="game-hint">Угадай число от 1 до 100. Приз: <strong style="color:#ffd700;">x2 к доходу на 30 сек</strong></div>
+            <div class="game-attempts" id="gameAttempts">Попыток: 0/7</div>
+            <input type="number" class="game-input" id="gameInput" min="1" max="100" placeholder="1-100">
+            <div>
+                <button class="game-btn primary" onclick="guessNumber()">Угадать</button>
+                <button class="game-btn danger" onclick="closeMiniGame()">Закрыть</button>
+            </div>
+            <div class="game-feedback" id="gameFeedback"></div>
+        </div>
+
         <!-- МАГАЗИН -->
         <div class="shop-section" id="shopSection">
             <h2 class="section-title">🛒 Магазин улучшений</h2>
@@ -2160,6 +2638,8 @@
             <div class="stat-row"><span>🔄 Перерождений:</span><span id="rebirthCountDisplay">0</span></div>
             <div class="stat-row"><span>🌍 Прогресс к Миру 2:</span><span id="world2Progress">0 / 100 Qi</span></div>
             <div class="stat-row"><span>🌍 Мир:</span><span id="worldDisplay">1</span></div>
+            <div class="stat-row"><span>🎯 Престиж:</span><span id="prestigeLevelDisplay">0</span></div>
+            <div class="stat-row"><span>👑 Пик кликов:</span><span id="peakClicksDisplay">0</span></div>
 
             <!-- ДЕТАЛЬНАЯ СТАТИСТИКА -->
             <h3 style="color:#fff; text-transform:uppercase; letter-spacing:2px; margin-top:25px; margin-bottom:15px;">📈 Детальная статистика</h3>
@@ -2168,6 +2648,32 @@
                 <div class="stat-row"><span>💰 Заработано всего:</span><span id="totalEarned">$0</span></div>
                 <div class="stat-row"><span>💸 Потрачено всего:</span><span id="totalSpentDisplay">$0</span></div>
                 <div class="stat-row"><span>⏱️ Время в игре:</span><span id="playTime">00:00:00</span></div>
+                <div class="stat-row"><span>🎁 Сундуков открыто:</span><span id="chestsOpened">0</span></div>
+                <div class="stat-row"><span>🏆 Мини-игр выиграно:</span><span id="gamesWon">0</span></div>
+            </div>
+
+            <!-- ИНВЕСТИЦИИ -->
+            <div class="investment-section">
+                <h4 style="color:#fff; margin-bottom:10px;">📈 Инвестиции</h4>
+                <div id="investmentsList"></div>
+            </div>
+
+            <!-- ПРЕСТИЖ -->
+            <div class="prestige-section">
+                <h4 style="color:#fff; margin-bottom:10px;">👑 Престиж</h4>
+                <button class="prestige-btn" id="prestigeBtn" onclick="doPrestige()" disabled>Подняться на уровень престижа</button>
+                <div class="prestige-info">
+                    Требуется: <span id="prestigeRequirement">1,000,000,000$</span> |
+                    Бонус: <span class="prestige-bonus" id="prestigeBonusDisplay">x1.0</span>
+                </div>
+            </div>
+
+            <!-- РЕЙТИНГ -->
+            <div class="leaderboard-section" id="leaderboardSection">
+                <h4 style="color:#fff; margin-bottom:10px;">🏆 Топ игроков</h4>
+                <div id="leaderboardList">
+                    <div style="text-align:center; color:#888; font-size:0.9rem;">Загрузка...</div>
+                </div>
             </div>
 
             <!-- НАСТРОЙКИ -->
@@ -2180,6 +2686,10 @@
             <!-- АКТИВНЫЕ НАВЫКИ -->
             <h3 style="color:#fff; text-transform:uppercase; letter-spacing:2px; margin-top:25px; margin-bottom:10px;">⚡ Активные навыки</h3>
             <div class="skills-grid" id="skillsGrid"></div>
+
+            <!-- КОСМЕТИЧЕСКИЕ СКИНЫ -->
+            <h3 style="color:#fff; text-transform:uppercase; letter-spacing:2px; margin-top:25px; margin-bottom:10px;">🎨 Скины клика</h3>
+            <div class="skin-selector" id="skinSelector"></div>
 
             <!-- ДОСТИЖЕНИЯ -->
             <div style="text-align: center; margin-top: 30px;">
@@ -2378,6 +2888,26 @@
             } catch (e) { }
         }
 
+        function playChestSound() {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [523, 659, 784, 1047, 784, 659];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.15);
+                    osc.start(ctx.currentTime + i * 0.08);
+                    osc.stop(ctx.currentTime + i * 0.08 + 0.15);
+                });
+            } catch (e) { }
+        }
+
         // ==================== DOM REFERENCES ====================
         const balanceEl = document.getElementById('balance');
         const clickPowerEl = document.getElementById('click-power');
@@ -2425,40 +2955,673 @@
         const totalSpentDisplayEl = document.getElementById('totalSpentDisplay');
         const playTimeEl = document.getElementById('playTime');
         const skillsGrid = document.getElementById('skillsGrid');
+        const comboDisplay = document.getElementById('comboDisplay');
+        const comboCount = document.getElementById('comboCount');
+        const chestBtn = document.getElementById('chestBtn');
+        const luckTimer = document.getElementById('luckTimer');
+        const luckBonus = document.getElementById('luckBonus');
+        const luckTime = document.getElementById('luckTime');
+        const miniGameModal = document.getElementById('miniGameModal');
+        const gameInput = document.getElementById('gameInput');
+        const gameFeedback = document.getElementById('gameFeedback');
+        const gameAttempts = document.getElementById('gameAttempts');
+        const prestigeLevelDisplay = document.getElementById('prestigeLevelDisplay');
+        const prestigeBonusDisplay = document.getElementById('prestigeBonusDisplay');
+        const prestigeRequirement = document.getElementById('prestigeRequirement');
+        const prestigeBtn = document.getElementById('prestigeBtn');
+        const leaderboardList = document.getElementById('leaderboardList');
+        const skinSelector = document.getElementById('skinSelector');
+        const chestsOpenedEl = document.getElementById('chestsOpened');
+        const gamesWonEl = document.getElementById('gamesWon');
+        const peakClicksDisplay = document.getElementById('peakClicksDisplay');
+        const investmentsList = document.getElementById('investmentsList');
 
         let isLoginMode = true;
         let currentTab = 'all';
         let skillTimers = {};
         let playTimeSeconds = 0;
         let playTimeInterval = null;
+        let comboCountValue = 0;
+        let comboTimeout = null;
+        let chestCooldown = 0;
+        let chestTimer = null;
+        let luckBonusMultiplier = 1;
+        let luckTimerInterval = null;
+        let gameSecretNumber = 0;
+        let gameAttemptsLeft = 7;
+        let gameWon = false;
+        let miniGameActive = false;
+        let leaderboardCache = [];
+        let currentSkin = 'default';
+        let skins = {
+            default: { icon: '💰', label: 'Монета', unlocked: true },
+            diamond: { icon: '💎', label: 'Алмаз', unlocked: false, cost: 1000000 },
+            star: { icon: '⭐', label: 'Звезда', unlocked: false, cost: 5000000 },
+            crown: { icon: '👑', label: 'Корона', unlocked: false, cost: 20000000 },
+            lightning: { icon: '⚡', label: 'Молния', unlocked: false, cost: 50000000 },
+            fire: { icon: '🔥', label: 'Огонь', unlocked: false, cost: 100000000 },
+            rainbow: { icon: '🌈', label: 'Радуга', unlocked: false, cost: 500000000 },
+        };
 
-        function updateSyncStatus(status, text) { syncDot.className = 'sync-dot ' + status; syncText.textContent = text; }
+        // ==================== НОВЫЕ УНИКАЛЬНЫЕ ФИЧИ ====================
 
-        let firebaseApp, firebaseDb, firebaseAnalytics = null, firebaseReady = false;
+        // 1. СИСТЕМА КОМБО
+        function addCombo() {
+            comboCountValue++;
+            if (comboCountValue > 1) {
+                comboDisplay.classList.add('active');
+                comboCount.textContent = comboCountValue;
+                // Бонус за комбо: +5% к доходу за каждый уровень комбо до 20x
+                const bonus = Math.min(comboCountValue * 0.05, 1.0);
+                updateLuckBonus(bonus);
+            }
+            clearTimeout(comboTimeout);
+            comboTimeout = setTimeout(() => {
+                comboCountValue = 0;
+                comboDisplay.classList.remove('active');
+                updateLuckBonus(0);
+            }, 2000);
+        }
+
+        function updateLuckBonus(bonus) {
+            luckBonusMultiplier = 1 + bonus;
+            luckBonus.textContent = '+' + Math.round((luckBonusMultiplier - 1) * 100) + '%';
+            if (luckBonusMultiplier > 1) {
+                luckTimer.style.borderColor = '#ffd700';
+            } else {
+                luckTimer.style.borderColor = '#ff6b6b';
+            }
+        }
+
+        // 2. СИСТЕМА СУНДУКОВ
+        function openChest() {
+            if (chestCooldown > 0) return;
+            if (!currentUser) return;
+
+            playChestSound();
+            chestCooldown = 300; // 5 минут
+            updateChestUI();
+
+            const rewards = [
+                { type: 'money', amount: gameState.balance * 0.05 + 1000, label: '💸 Деньги' },
+                { type: 'money', amount: gameState.balance * 0.10 + 5000, label: '💵 Много денег' },
+                { type: 'clickPower', amount: Math.floor(gameState.clickPower * 0.1) + 5, label: '👆 Сила клика' },
+                { type: 'income', amount: Math.floor(gameState.incomePerSec * 0.05) + 1, label: '🤖 Доход/сек' },
+                { type: 'xp', amount: gameState.experienceToNextLevel * 0.1 + 50, label: '⭐ Опыт' },
+                { type: 'luck', amount: 0.2, label: '🍀 Удача (+20% на 60 сек)' },
+                { type: 'rebirth', amount: 1, label: '🔄 Одно перерождение (бесплатно!)' },
+            ];
+
+            // Шанс на редкий лут
+            let reward;
+            if (Math.random() < 0.05) {
+                // Легендарный лут
+                reward = {
+                    type: 'legendary',
+                    amount: gameState.balance * 0.5 + 100000,
+                    label: '⭐ ЛЕГЕНДАРНЫЙ ЛУТ! x3 доход на 30 сек'
+                };
+            } else if (Math.random() < 0.15) {
+                // Эпический лут
+                reward = rewards[Math.floor(Math.random() * rewards.length)];
+                reward.amount *= 3;
+                reward.label = '✨ ' + reward.label;
+            } else {
+                reward = rewards[Math.floor(Math.random() * rewards.length)];
+            }
+
+            // Применяем награду
+            let message = '';
+            switch (reward.type) {
+                case 'money':
+                    const money = Math.floor(reward.amount * (1 + Math.random() * 0.5));
+                    gameState.balance += money;
+                    gameState.totalEarned += money;
+                    message = `+${formatNumber(money)}$`;
+                    break;
+                case 'clickPower':
+                    const cp = Math.floor(reward.amount);
+                    gameState.clickPower += cp;
+                    message = `+${formatNumber(cp)} силы клика`;
+                    break;
+                case 'income':
+                    const inc = Math.floor(reward.amount);
+                    gameState.incomePerSec += inc;
+                    message = `+${formatNumber(inc)}$/сек дохода`;
+                    break;
+                case 'xp':
+                    const xp = Math.floor(reward.amount);
+                    gainExperience(xp);
+                    message = `+${formatNumber(xp)} опыта`;
+                    break;
+                case 'luck':
+                    luckBonusMultiplier += reward.amount;
+                    luckBonus.textContent = '+' + Math.round((luckBonusMultiplier - 1) * 100) + '%';
+                    setTimeout(() => {
+                        luckBonusMultiplier = Math.max(1, luckBonusMultiplier - reward.amount);
+                        luckBonus.textContent = '+' + Math.round((luckBonusMultiplier - 1) * 100) + '%';
+                    }, 60000);
+                    message = `🍀 Удача +${Math.round(reward.amount * 100)}% на 60 сек!`;
+                    break;
+                case 'rebirth':
+                    gameState.rebirthCount++;
+                    message = `🔄 БЕСПЛАТНОЕ ПЕРЕРОЖДЕНИЕ! Всего: ${gameState.rebirthCount}`;
+                    playRebirthSound();
+                    break;
+                case 'legendary':
+                    const legAmount = Math.floor(reward.amount);
+                    gameState.balance += legAmount;
+                    gameState.totalEarned += legAmount;
+                    gameState.multiplier *= 3;
+                    message = `⭐ ЛЕГЕНДА! +${formatNumber(legAmount)}$ и x3 доход на 30 сек!`;
+                    setTimeout(() => {
+                        gameState.multiplier /= 3;
+                        updateUI();
+                    }, 30000);
+                    playAchievementSound();
+                    break;
+            }
+
+            gameState.chestsOpened = (gameState.chestsOpened || 0) + 1;
+            showEventNotification('🎁 Сундук открыт!', message, '🎁');
+            updateUI();
+            debouncedSaveToCloud();
+        }
+
+        function updateChestUI() {
+            if (chestCooldown > 0) {
+                let overlay = chestBtn.querySelector('.cooldown-overlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.className = 'cooldown-overlay';
+                    chestBtn.appendChild(overlay);
+                }
+                const minutes = Math.floor(chestCooldown / 60);
+                const seconds = chestCooldown % 60;
+                overlay.textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+                chestBtn.style.opacity = '0.5';
+                chestBtn.style.pointerEvents = 'none';
+            } else {
+                const overlay = chestBtn.querySelector('.cooldown-overlay');
+                if (overlay) overlay.remove();
+                chestBtn.style.opacity = '1';
+                chestBtn.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Таймер для сундука
+        if (chestTimer) clearInterval(chestTimer);
+        chestTimer = setInterval(() => {
+            if (chestCooldown > 0) {
+                chestCooldown--;
+                updateChestUI();
+            }
+        }, 1000);
+
+        // 3. МИНИ-ИГРА "УГАДАЙ ЧИСЛО"
+        function startMiniGame() {
+            if (miniGameActive) return;
+            gameSecretNumber = Math.floor(Math.random() * 100) + 1;
+            gameAttemptsLeft = 7;
+            gameWon = false;
+            miniGameActive = true;
+            gameFeedback.textContent = '🎯 Угадай число от 1 до 100!';
+            gameFeedback.style.color = '#aaa';
+            gameAttempts.textContent = `Попыток: 0/7`;
+            gameInput.value = '';
+            gameInput.disabled = false;
+            miniGameModal.classList.add('active');
+            gameInput.focus();
+        }
+
+        function guessNumber() {
+            if (!miniGameActive || gameWon) return;
+            const guess = parseInt(gameInput.value);
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                gameFeedback.textContent = '⚠️ Введите число от 1 до 100!';
+                gameFeedback.style.color = '#ff6b6b';
+                return;
+            }
+
+            gameAttemptsLeft--;
+            gameAttempts.textContent = `Попыток: ${7 - gameAttemptsLeft}/7`;
+
+            if (guess === gameSecretNumber) {
+                gameWon = true;
+                gameFeedback.textContent = `🎉 ПРАВИЛЬНО! Число было ${gameSecretNumber}!`;
+                gameFeedback.style.color = '#4ade80';
+                gameInput.disabled = true;
+                // Награда: x2 доход на 30 сек
+                gameState.multiplier *= 2;
+                gameState.gamesWon = (gameState.gamesWon || 0) + 1;
+                showEventNotification('🎯 Победа!', 'x2 к доходу на 30 секунд!', '🏆');
+                setTimeout(() => {
+                    gameState.multiplier /= 2;
+                    updateUI();
+                }, 30000);
+                updateUI();
+                debouncedSaveToCloud();
+                playAchievementSound();
+                setTimeout(() => { closeMiniGame(); }, 3000);
+                return;
+            }
+
+            if (gameAttemptsLeft <= 0) {
+                gameFeedback.textContent = `😢 Проигрыш! Число было ${gameSecretNumber}. Попробуйте снова!`;
+                gameFeedback.style.color = '#ff6b6b';
+                gameInput.disabled = true;
+                setTimeout(() => { closeMiniGame(); }, 2000);
+                return;
+            }
+
+            const hint = guess < gameSecretNumber ? '📈 Больше' : '📉 Меньше';
+            gameFeedback.textContent = `${guess}? ${hint}. Осталось попыток: ${gameAttemptsLeft}`;
+            gameFeedback.style.color = '#ffd700';
+            gameInput.value = '';
+            gameInput.focus();
+        }
+
+        function closeMiniGame() {
+            miniGameActive = false;
+            miniGameModal.classList.remove('active');
+            gameInput.disabled = true;
+        }
+
+        // 4. ИНВЕСТИЦИИ
+        const investments = [
+            {
+                id: 'inv_stocks', name: '📈 Акции', desc: 'Пассивный доход', baseCost: 5000, incomePerLevel: 2,
+                maxLevel: 50
+            },
+            {
+                id: 'inv_bonds', name: '🏦 Облигации', desc: 'Надёжный доход', baseCost: 10000, incomePerLevel: 5,
+                maxLevel: 40
+            },
+            {
+                id: 'inv_crypto', name: '₿ Крипта', desc: 'Высокий риск и доход', baseCost: 25000, incomePerLevel: 15,
+                maxLevel: 30
+            },
+            {
+                id: 'inv_realestate', name: '🏠 Недвижимость', desc: 'Стабильный доход', baseCost: 100000, incomePerLevel: 50,
+                maxLevel: 25
+            },
+            {
+                id: 'inv_space', name: '🚀 Космос', desc: 'Галактический доход', baseCost: 1000000, incomePerLevel: 300,
+                maxLevel: 20
+            },
+        ];
+
+        function renderInvestments() {
+            investmentsList.innerHTML = '';
+            investments.forEach(inv => {
+                const level = gameState.investments?.[inv.id] || 0;
+                const cost = Math.floor(inv.baseCost * (1 + level * 0.5));
+                const totalIncome = level * inv.incomePerLevel;
+                const canBuy = gameState.balance >= cost && level < inv.maxLevel;
+
+                const div = document.createElement('div');
+                div.className = 'investment-item';
+                div.innerHTML = `
+                            <div class="inv-info">
+                                <div class="inv-name">${inv.name}</div>
+                                <div class="inv-desc">${inv.desc} | +${inv.incomePerLevel}$/сек за уровень</div>
+                            </div>
+                            <div class="inv-level">Ур. ${level}/${inv.maxLevel}</div>
+                            <button class="inv-btn" ${!canBuy ? 'disabled' : ''} onclick="buyInvestment('${inv.id}')">
+                                Купить $${formatNumber(cost)}
+                            </button>
+                        `;
+                investmentsList.appendChild(div);
+            });
+        }
+
+        function buyInvestment(id) {
+            const inv = investments.find(i => i.id === id);
+            if (!inv) return;
+            const level = gameState.investments?.[inv.id] || 0;
+            if (level >= inv.maxLevel) return;
+            const cost = Math.floor(inv.baseCost * (1 + level * 0.5));
+            if (gameState.balance < cost) return;
+
+            gameState.balance -= cost;
+            gameState.totalSpent += cost;
+            if (!gameState.investments) gameState.investments = {};
+            gameState.investments[inv.id] = (gameState.investments[inv.id] || 0) + 1;
+            gameState.incomePerSec += inv.incomePerLevel;
+            playBuySound();
+            updateUI();
+            debouncedSaveToCloud();
+        }
+
+        // 5. ПРЕСТИЖ
+        function doPrestige() {
+            if (!currentUser) return;
+            const required = getPrestigeRequirement();
+            if (gameState.balance < required) {
+                showEventNotification('⚠️ Недостаточно средств', `Нужно ${formatNumber(required)}$`, '💔');
+                return;
+            }
+
+            if (confirm(`Подняться на уровень престижа?\nБаланс: ${formatNumber(gameState.balance)}$\nНовый множитель: x${gameState.prestigeMultiplier + 0.5}\nВсё остальное сбрасывается!`)) {
+                gameState.balance = 0;
+                gameState.clickPower = 1;
+                gameState.incomePerSec = 0;
+                gameState.level = 1;
+                gameState.experience = 0;
+                gameState.experienceToNextLevel = 100;
+                gameState.unlockedItems = [];
+                gameState.investments = {};
+                gameState.prestigeLevel = (gameState.prestigeLevel || 0) + 1;
+                gameState.prestigeMultiplier = (gameState.prestigeMultiplier || 1) + 0.5;
+                gameState.multiplier = gameState.prestigeMultiplier;
+                playRebirthSound();
+                showEventNotification('👑 Новый уровень престижа!', `Множитель: x${gameState.prestigeMultiplier}`, '👑');
+                updateUI();
+                saveToCloud();
+            }
+        }
+
+        function getPrestigeRequirement() {
+            const level = gameState.prestigeLevel || 0;
+            return Math.floor(1000000000 * Math.pow(2, level));
+        }
+
+        // 6. СКИНЫ КЛИКА
+        function renderSkins() {
+            skinSelector.innerHTML = '';
+            Object.keys(skins).forEach(key => {
+                const skin = skins[key];
+                const div = document.createElement('div');
+                div.className = 'skin-option' + (currentSkin === key ? ' active' : '');
+                div.textContent = skin.icon;
+                div.title = skin.label + (skin.unlocked ? '' : ` (${formatNumber(skin.cost)}$)`);
+
+                if (!skin.unlocked) {
+                    div.classList.add('locked');
+                    div.onclick = () => buySkin(key);
+                } else {
+                    div.onclick = () => selectSkin(key);
+                }
+                skinSelector.appendChild(div);
+            });
+            updateCoinSkin();
+        }
+
+        function buySkin(key) {
+            const skin = skins[key];
+            if (skin.unlocked) return;
+            if (gameState.balance < skin.cost) {
+                showEventNotification('⚠️ Недостаточно средств', `Скин стоит ${formatNumber(skin.cost)}$`, '💔');
+                return;
+            }
+            gameState.balance -= skin.cost;
+            gameState.totalSpent += skin.cost;
+            skin.unlocked = true;
+            if (!gameState.unlockedSkins) gameState.unlockedSkins = [];
+            gameState.unlockedSkins.push(key);
+            selectSkin(key);
+            playBuySound();
+            updateUI();
+            debouncedSaveToCloud();
+        }
+
+        function selectSkin(key) {
+            currentSkin = key;
+            updateCoinSkin();
+            renderSkins();
+        }
+
+        function updateCoinSkin() {
+            const btn = document.getElementById('clickBtn');
+            const icon = skins[currentSkin]?.icon || '💰';
+            // Меняем иконку через псевдоэлемент
+            btn.style.setProperty('--skin-icon', `"${icon}"`);
+            // Применяем через класс или data-атрибут
+            btn.dataset.skin = icon;
+            // Переопределяем ::before через стиль
+            const style = document.createElement('style');
+            style.id = 'skin-style';
+            style.textContent = `.coin-btn::before { content: "${icon}" !important; }`;
+            const old = document.getElementById('skin-style');
+            if (old) old.remove();
+            document.head.appendChild(style);
+        }
+
+        // 7. РЕЙТИНГ ИГРОКОВ
+        function updateLeaderboard() {
+            if (!firebaseReady || !firebaseDb) return;
+            firebaseDb.ref('users').once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    if (!data) return;
+                    const players = [];
+                    Object.keys(data).forEach(key => {
+                        const user = data[key];
+                        if (user.username && user.balance !== undefined) {
+                            const score = user.balance * (user.prestigeMultiplier || 1);
+                            players.push({
+                                name: user.username,
+                                balance: user.balance,
+                                prestige: user.prestigeLevel || 0,
+                                score: score
+                            });
+                        }
+                    });
+                    players.sort((a, b) => b.score - a.score);
+                    leaderboardCache = players.slice(0, 10);
+
+                    leaderboardList.innerHTML = '';
+                    if (leaderboardCache.length === 0) {
+                        leaderboardList.innerHTML =
+                            '<div style="text-align:center; color:#888;">Нет данных</div>';
+                        return;
+                    }
+                    leaderboardCache.forEach((p, i) => {
+                        const div = document.createElement('div');
+                        div.className = 'leaderboard-item';
+                        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
+                        div.innerHTML = `
+                                    <span class="lb-rank">${medal}</span>
+                                    <span class="lb-name">${p.name}</span>
+                                    <span class="lb-score">${formatNumber(p.balance)}$</span>
+                                    <span style="font-size:0.7rem; color:#888;">👑${p.prestige}</span>
+                                `;
+                        leaderboardList.appendChild(div);
+                    });
+                })
+                .catch(e => console.error('Leaderboard error:', e));
+        }
+
+        // 8. УВЕДОМЛЕНИЯ О СОБЫТИЯХ
+        function showEventNotification(title, desc, icon = '🎉') {
+            const existing = document.querySelector('.event-notification');
+            if (existing) existing.remove();
+
+            const div = document.createElement('div');
+            div.className = 'event-notification';
+            div.innerHTML = `
+                        <span class="event-icon">${icon}</span>
+                        <div class="event-title">${title}</div>
+                        <div class="event-desc">${desc}</div>
+                    `;
+            document.body.appendChild(div);
+            setTimeout(() => {
+                if (div.parentNode) div.parentNode.removeChild(div);
+            }, 3000);
+        }
+
+        // 9. СЛУЧАЙНЫЕ СОБЫТИЯ
+        function triggerRandomEvent() {
+            if (!currentUser || Math.random() > 0.1) return; // 10% шанс каждые 30 сек
+
+            const events = [{
+                title: '📈 Рынок вырос!',
+                desc: '+10% к доходу на 30 сек',
+                effect: () => {
+                    gameState.multiplier *= 1.1;
+                    setTimeout(() => {
+                        gameState.multiplier /= 1.1;
+                        updateUI();
+                    }, 30000);
+                }
+            }, {
+                title: '🍀 Удача улыбнулась!',
+                desc: '+50% к балансу',
+                effect: () => {
+                    const bonus = Math.floor(gameState.balance * 0.5);
+                    gameState.balance += bonus;
+                    gameState.totalEarned += bonus;
+                }
+            }, {
+                title: '⚡ Сила клика +10%',
+                desc: 'Навсегда!',
+                effect: () => {
+                    gameState.clickPower = Math.floor(gameState.clickPower * 1.1) + 1;
+                }
+            }, {
+                title: '💫 Бесплатный скин!',
+                desc: 'Вы получили скин "Звезда"',
+                effect: () => {
+                    if (!skins.star.unlocked) {
+                        skins.star.unlocked = true;
+                        if (!gameState.unlockedSkins) gameState.unlockedSkins = [];
+                        if (!gameState.unlockedSkins.includes('star')) gameState.unlockedSkins.push('star');
+                        renderSkins();
+                    }
+                }
+            }, {
+                title: '🎯 Бонусная мини-игра!',
+                desc: 'Угадай число и получи x3 доход на 60 сек!',
+                effect: () => {
+                    // Запускаем мини-игру с улучшенным призом
+                    startMiniGameWithBonus();
+                }
+            }];
+
+            const event = events[Math.floor(Math.random() * events.length)];
+            event.effect();
+            showEventNotification(event.title, event.desc, event.title.split(' ')[0]);
+            playAchievementSound();
+            updateUI();
+            debouncedSaveToCloud();
+        }
+
+        function startMiniGameWithBonus() {
+            // Модифицированная мини-игра с лучшим призом
+            gameSecretNumber = Math.floor(Math.random() * 100) + 1;
+            gameAttemptsLeft = 10;
+            gameWon = false;
+            miniGameActive = true;
+            gameFeedback.textContent = '🎯 Угадай число от 1 до 100! Приз: x3 доход на 60 сек!';
+            gameFeedback.style.color = '#ffd700';
+            gameAttempts.textContent = `Попыток: 0/10`;
+            gameInput.value = '';
+            gameInput.disabled = false;
+            miniGameModal.classList.add('active');
+            gameInput.focus();
+
+            // Переопределяем обработчик победы
+            const oldGuess = guessNumber;
+            guessNumber = function () {
+                if (!miniGameActive || gameWon) return;
+                const guess = parseInt(gameInput.value);
+                if (isNaN(guess) || guess < 1 || guess > 100) {
+                    gameFeedback.textContent = '⚠️ Введите число от 1 до 100!';
+                    gameFeedback.style.color = '#ff6b6b';
+                    return;
+                }
+
+                gameAttemptsLeft--;
+                gameAttempts.textContent = `Попыток: ${10 - gameAttemptsLeft}/10`;
+
+                if (guess === gameSecretNumber) {
+                    gameWon = true;
+                    gameFeedback.textContent = `🎉 ПРАВИЛЬНО! x3 доход на 60 сек!`;
+                    gameFeedback.style.color = '#4ade80';
+                    gameInput.disabled = true;
+                    gameState.multiplier *= 3;
+                    gameState.gamesWon = (gameState.gamesWon || 0) + 1;
+                    showEventNotification('🎯 Бонусная победа!', 'x3 к доходу на 60 секунд!', '🌟');
+                    setTimeout(() => {
+                        gameState.multiplier /= 3;
+                        updateUI();
+                    }, 60000);
+                    updateUI();
+                    debouncedSaveToCloud();
+                    playAchievementSound();
+                    setTimeout(() => { closeMiniGame(); }, 3000);
+                    return;
+                }
+
+                if (gameAttemptsLeft <= 0) {
+                    gameFeedback.textContent = `😢 Проигрыш! Число было ${gameSecretNumber}.`;
+                    gameFeedback.style.color = '#ff6b6b';
+                    gameInput.disabled = true;
+                    setTimeout(() => { closeMiniGame(); }, 2000);
+                    return;
+                }
+
+                const hint = guess < gameSecretNumber ? '📈 Больше' : '📉 Меньше';
+                gameFeedback.textContent = `${guess}? ${hint}. Осталось попыток: ${gameAttemptsLeft}`;
+                gameFeedback.style.color = '#ffd700';
+                gameInput.value = '';
+                gameInput.focus();
+            };
+        }
+
+        // ==================== ОСТАЛЬНАЯ ЛОГИКА (сохранена из оригинала с дополнениями) ====================
+
+        function updateSyncStatus(status, text) {
+            syncDot.className = 'sync-dot ' + status;
+            syncText.textContent = text;
+        }
+
+        let firebaseApp, firebaseDb, firebaseAnalytics = null,
+            firebaseReady = false;
         try {
             firebaseApp = firebase.initializeApp(firebaseConfig);
             firebaseDb = firebase.database();
             if (firebase.analytics && firebase.analytics.isSupported()) firebaseAnalytics = firebase.analytics();
             firebaseReady = true;
             updateSyncStatus('syncing', 'Подключение...');
-        } catch (e) { console.error(e); updateSyncStatus('offline', 'Ошибка подключения'); firebaseReady = false; }
+        } catch (e) {
+            console.error(e);
+            updateSyncStatus('offline', 'Ошибка подключения');
+            firebaseReady = false;
+        }
 
         function getDefaultGameState() {
             return {
-                balance: 0, clickPower: 1, incomePerSec: 0, level: 1,
-                experience: 0, experienceToNextLevel: 100, multiplier: 1.0,
-                unlockedItems: [], achievements: [], username: '',
-                rebirthCount: 0, shopHiddenUntilLevel: 0, lastUpdated: Date.now(),
+                balance: 0,
+                clickPower: 1,
+                incomePerSec: 0,
+                level: 1,
+                experience: 0,
+                experienceToNextLevel: 100,
+                multiplier: 1.0,
+                unlockedItems: [],
+                achievements: [],
+                username: '',
+                rebirthCount: 0,
+                shopHiddenUntilLevel: 0,
+                lastUpdated: Date.now(),
                 world: 1,
                 totalClicks: 0,
                 totalEarned: 0,
                 totalSpent: 0,
                 playTimeSeconds: 0,
-                // Счётчики навыков
                 skills: {
                     speedBoost: { cooldown: 0, active: false, remaining: 0 },
                     megaClick: { cooldown: 0, active: false, remaining: 0 }
-                }
+                },
+                chestsOpened: 0,
+                gamesWon: 0,
+                prestigeLevel: 0,
+                prestigeMultiplier: 1,
+                investments: {},
+                unlockedSkins: [],
+                peakClicks: 0,
+                lastLuckCheck: 0,
             };
         }
         let gameState = getDefaultGameState();
@@ -2471,135 +3634,464 @@
 
         // ==================== ПРЕДМЕТЫ МИРА 1 ====================
         const baseShopItems = [
-            { id: 'click_upgrade_1', name: 'Усиленный палец', icon: '👆', cost: 50, type: 'click', value: 2, desc: '+2 к силе клика' },
-            { id: 'click_upgrade_2', name: 'Золотой палец', icon: '✨', cost: 300, type: 'click', value: 10, desc: '+10 к силе клика' },
+            {
+                id: 'click_upgrade_1', name: 'Усиленный палец', icon: '👆', cost: 50, type: 'click', value: 2,
+                desc: '+2 к силе клика'
+            },
+            {
+                id: 'click_upgrade_2', name: 'Золотой палец', icon: '✨', cost: 300, type: 'click', value: 10,
+                desc: '+10 к силе клика'
+            },
             { id: 'skin_akr762', name: 'AKR-762', icon: '🔫', cost: 1500, type: 'click', value: 50, desc: '+50 к силе клика' },
             { id: 'skin_awp', name: 'AWP Скин', icon: '🏹', cost: 5000, type: 'click', value: 75, desc: '+75 к силе клика' },
             { id: 'skin_m4a1s', name: 'M4A1-S', icon: '🔫⚡', cost: 8000, type: 'click', value: 150, desc: '+150 к силе клика' },
-            { id: 'skin_glock', name: 'Glock Скин', icon: '🔫✨', cost: 25000, type: 'click', value: 200, desc: '+200 к силе клика' },
+            {
+                id: 'skin_glock', name: 'Glock Скин', icon: '🔫✨', cost: 25000, type: 'click', value: 200,
+                desc: '+200 к силе клика'
+            },
             { id: 'skin_p90', name: 'P90', icon: '🔫💨', cost: 35000, type: 'click', value: 400, desc: '+400 к силе клика' },
-            { id: 'skin_m4', name: 'M4A1 Скин', icon: '🔫🌟', cost: 100000, type: 'click', value: 500, desc: '+500 к силе клика' },
-            { id: 'skin_desert_eagle', name: 'Desert Eagle', icon: '🔫💥', cost: 2000000, type: 'click', value: 3000, desc: '+3000 к силе клика' },
-            { id: 'click_20', name: 'Кибер-палец', icon: '🦾', cost: 5000000, type: 'click', value: 8000, desc: '+8,000 к силе клика' },
-            { id: 'click_21', name: 'Плазменный кулак', icon: '⚡👊', cost: 15000000, type: 'click', value: 20000, desc: '+20,000 к силе клика' },
-            { id: 'click_22', name: 'Гравитационный удар', icon: '🌌', cost: 40000000, type: 'click', value: 50000, desc: '+50,000 к силе клика' },
-            { id: 'click_23', name: 'Квантовый тап', icon: '🔬', cost: 100000000, type: 'click', value: 120000, desc: '+120,000 к силе клика' },
-            { id: 'click_24', name: 'Кулак Титана', icon: '🗿', cost: 300000000, type: 'click', value: 300000, desc: '+300,000 к силе клика' },
-            { id: 'click_25', name: 'Экзоскелет', icon: '🦿', cost: 800000000, type: 'click', value: 800000, desc: '+800,000 к силе клика' },
-            { id: 'click_26', name: 'Антиматерия', icon: '💥', cost: 2000000000, type: 'click', value: 2000000, desc: '+2,000,000 к силе клика' },
-            { id: 'click_27', name: 'Чёрная дыра', icon: '🕳️', cost: 5000000000, type: 'click', value: 5000000, desc: '+5,000,000 к силе клика' },
-            { id: 'click_28', name: 'Нейтронная звезда', icon: '⭐', cost: 15000000000, type: 'click', value: 15000000, desc: '+15,000,000 к силе клика' },
-            { id: 'click_29', name: 'Гиперновая', icon: '🌟', cost: 50000000000, type: 'click', value: 50000000, desc: '+50,000,000 к силе клика' },
-            { id: 'click_30', name: 'Космический скипетр', icon: '👑', cost: 150000000000, type: 'click', value: 150000000, desc: '+150,000,000 к силе клика' },
-            { id: 'click_31', name: 'Молот Тора', icon: '🔨', cost: 500000000000, type: 'click', value: 500000000, desc: '+500,000,000 к силе клика' },
-            { id: 'click_32', name: 'Перчатка Таноса', icon: '🧤', cost: 2000000000000, type: 'click', value: 2000000000, desc: '+2,000,000,000 к силе клика' },
-            { id: 'click_33', name: 'Божественный клик', icon: '☄️', cost: 8000000000000, type: 'click', value: 8000000000, desc: '+8,000,000,000 к силе клика' },
-            { id: 'click_34', name: 'Вселенский тап', icon: '🌠', cost: 25000000000000, type: 'click', value: 25000000000, desc: '+25,000,000,000 к силе клика' },
-            { id: 'click_35', name: 'Мультивселенная', icon: '🌌', cost: 100000000000000, type: 'click', value: 100000000000, desc: '+100,000,000,000 к силе клика' },
-            { id: 'click_36', name: 'Кротовый удар', icon: '🌀', cost: 500000000000000, type: 'click', value: 500000000000, desc: '+500,000,000,000 к силе клика' },
-            { id: 'click_37', name: 'Квантовый скачок', icon: '⚛️', cost: 2000000000000000, type: 'click', value: 2000000000000, desc: '+2,000,000,000,000 к силе клика' },
-            { id: 'click_38', name: 'Тёмная материя', icon: '🌑', cost: 10000000000000000, type: 'click', value: 10000000000000, desc: '+10,000,000,000,000 к силе клика' },
-            { id: 'click_39', name: 'Сингулярность', icon: '💫', cost: 50000000000000000, type: 'click', value: 50000000000000, desc: '+50,000,000,000,000 к силе клика' },
+            {
+                id: 'skin_m4', name: 'M4A1 Скин', icon: '🔫🌟', cost: 100000, type: 'click', value: 500,
+                desc: '+500 к силе клика'
+            },
+            {
+                id: 'skin_desert_eagle', name: 'Desert Eagle', icon: '🔫💥', cost: 2000000, type: 'click', value: 3000,
+                desc: '+3000 к силе клика'
+            },
+            {
+                id: 'click_20', name: 'Кибер-палец', icon: '🦾', cost: 5000000, type: 'click', value: 8000,
+                desc: '+8,000 к силе клика'
+            },
+            {
+                id: 'click_21', name: 'Плазменный кулак', icon: '⚡👊', cost: 15000000, type: 'click', value: 20000,
+                desc: '+20,000 к силе клика'
+            },
+            {
+                id: 'click_22', name: 'Гравитационный удар', icon: '🌌', cost: 40000000, type: 'click', value: 50000,
+                desc: '+50,000 к силе клика'
+            },
+            {
+                id: 'click_23', name: 'Квантовый тап', icon: '🔬', cost: 100000000, type: 'click', value: 120000,
+                desc: '+120,000 к силе клика'
+            },
+            {
+                id: 'click_24', name: 'Кулак Титана', icon: '🗿', cost: 300000000, type: 'click', value: 300000,
+                desc: '+300,000 к силе клика'
+            },
+            {
+                id: 'click_25', name: 'Экзоскелет', icon: '🦿', cost: 800000000, type: 'click', value: 800000,
+                desc: '+800,000 к силе клика'
+            },
+            {
+                id: 'click_26', name: 'Антиматерия', icon: '💥', cost: 2000000000, type: 'click', value: 2000000,
+                desc: '+2,000,000 к силе клика'
+            },
+            {
+                id: 'click_27', name: 'Чёрная дыра', icon: '🕳️', cost: 5000000000, type: 'click', value: 5000000,
+                desc: '+5,000,000 к силе клика'
+            },
+            {
+                id: 'click_28', name: 'Нейтронная звезда', icon: '⭐', cost: 15000000000, type: 'click', value: 15000000,
+                desc: '+15,000,000 к силе клика'
+            },
+            {
+                id: 'click_29', name: 'Гиперновая', icon: '🌟', cost: 50000000000, type: 'click', value: 50000000,
+                desc: '+50,000,000 к силе клика'
+            },
+            {
+                id: 'click_30', name: 'Космический скипетр', icon: '👑', cost: 150000000000, type: 'click', value: 150000000,
+                desc: '+150,000,000 к силе клика'
+            },
+            {
+                id: 'click_31', name: 'Молот Тора', icon: '🔨', cost: 500000000000, type: 'click', value: 500000000,
+                desc: '+500,000,000 к силе клика'
+            },
+            {
+                id: 'click_32', name: 'Перчатка Таноса', icon: '🧤', cost: 2000000000000, type: 'click', value: 2000000000,
+                desc: '+2,000,000,000 к силе клика'
+            },
+            {
+                id: 'click_33', name: 'Божественный клик', icon: '☄️', cost: 8000000000000, type: 'click', value: 8000000000,
+                desc: '+8,000,000,000 к силе клика'
+            },
+            {
+                id: 'click_34', name: 'Вселенский тап', icon: '🌠', cost: 25000000000000, type: 'click', value: 25000000000,
+                desc: '+25,000,000,000 к силе клика'
+            },
+            {
+                id: 'click_35', name: 'Мультивселенная', icon: '🌌', cost: 100000000000000, type: 'click', value: 100000000000,
+                desc: '+100,000,000,000 к силе клика'
+            },
+            {
+                id: 'click_36', name: 'Кротовый удар', icon: '🌀', cost: 500000000000000, type: 'click', value: 500000000000,
+                desc: '+500,000,000,000 к силе клика'
+            },
+            {
+                id: 'click_37', name: 'Квантовый скачок', icon: '⚛️', cost: 2000000000000000, type: 'click',
+                value: 2000000000000, desc: '+2,000,000,000,000 к силе клика'
+            },
+            {
+                id: 'click_38', name: 'Тёмная материя', icon: '🌑', cost: 10000000000000000, type: 'click',
+                value: 10000000000000, desc: '+10,000,000,000,000 к силе клика'
+            },
+            {
+                id: 'click_39', name: 'Сингулярность', icon: '💫', cost: 50000000000000000, type: 'click',
+                value: 50000000000000, desc: '+50,000,000,000,000 к силе клика'
+            },
             { id: 'auto_bot_1', name: 'Авто-бот lvl.1', icon: '🤖', cost: 100, type: 'income', value: 5, desc: '+5$/сек' },
-            { id: 'auto_bot_2', name: 'Авто-бот lvl.2', icon: '🤖💎', cost: 500, type: 'income', value: 15, desc: '+15$/сек' },
-            { id: 'auto_bot_3', name: 'Авто-бот lvl.3', icon: '🤖💎💎', cost: 2000, type: 'income', value: 40, desc: '+40$/сек' },
-            { id: 'auto_bot_4', name: 'Авто-бот lvl.4', icon: '🤖💎💎💎', cost: 10000, type: 'income', value: 100, desc: '+100$/сек' },
-            { id: 'auto_bot_5', name: 'Авто-бот lvl.5', icon: '🤖💎💎💎💎', cost: 50000, type: 'income', value: 300, desc: '+300$/сек' },
-            { id: 'auto_bot_6', name: 'Авто-бот lvl.6', icon: '🤖💎💎💎💎💎', cost: 250000, type: 'income', value: 800, desc: '+800$/сек' },
-            { id: 'auto_bot_7', name: 'Авто-бот lvl.7', icon: '🤖💎💎💎💎💎💎', cost: 5000000, type: 'income', value: 2500, desc: '+2500$/сек' },
-            { id: 'income_8', name: 'Авто-бот lvl.8', icon: '🤖🔥', cost: 10000000, type: 'income', value: 8000, desc: '+8,000$/сек' },
-            { id: 'income_9', name: 'Авто-бот lvl.9', icon: '🤖💫', cost: 30000000, type: 'income', value: 20000, desc: '+20,000$/сек' },
-            { id: 'income_10', name: 'Авто-завод', icon: '🏭', cost: 100000000, type: 'income', value: 80000, desc: '+80,000$/сек' },
-            { id: 'income_11', name: 'Робо-ферма', icon: '🚜', cost: 300000000, type: 'income', value: 250000, desc: '+250,000$/сек' },
-            { id: 'income_12', name: 'Добывающая станция', icon: '⛏️', cost: 1000000000, type: 'income', value: 1000000, desc: '+1,000,000$/сек' },
-            { id: 'income_13', name: 'Энерго-реактор', icon: '☢️', cost: 3000000000, type: 'income', value: 4000000, desc: '+4,000,000$/сек' },
-            { id: 'income_14', name: 'Орбитальная станция', icon: '🛰️', cost: 10000000000, type: 'income', value: 15000000, desc: '+15,000,000$/сек' },
-            { id: 'income_15', name: 'Лунная база', icon: '🌙', cost: 50000000000, type: 'income', value: 80000000, desc: '+80,000,000$/сек' },
-            { id: 'income_16', name: 'Марсианская колония', icon: '🔴', cost: 200000000000, type: 'income', value: 400000000, desc: '+400,000,000$/сек' },
-            { id: 'income_17', name: 'Звезда Дайсона', icon: '☀️', cost: 1000000000000, type: 'income', value: 2500000000, desc: '+2,500,000,000$/сек' },
-            { id: 'income_18', name: 'Галактическая сеть', icon: '🌐', cost: 5000000000000, type: 'income', value: 15000000000, desc: '+15,000,000,000$/сек' },
-            { id: 'income_19', name: 'Чёрный рынок', icon: '🕶️', cost: 25000000000000, type: 'income', value: 100000000000, desc: '+100,000,000,000$/сек' },
-            { id: 'income_20', name: 'Межзвёздный банк', icon: '🏦', cost: 120000000000000, type: 'income', value: 600000000000, desc: '+600,000,000,000$/сек' },
-            { id: 'income_21', name: 'Квантовый компьютер', icon: '💻', cost: 600000000000000, type: 'income', value: 4000000000000, desc: '+4,000,000,000,000$/сек' },
-            { id: 'income_22', name: 'ИИ-корпорация', icon: '🧠', cost: 3000000000000000, type: 'income', value: 25000000000000, desc: '+25,000,000,000,000$/сек' },
-            { id: 'income_23', name: 'Нано-фабрика', icon: '🔬', cost: 15000000000000000, type: 'income', value: 150000000000000, desc: '+150,000,000,000,000$/сек' },
-            { id: 'income_24', name: 'Терраформирование', icon: '🌍', cost: 80000000000000000, type: 'income', value: 1000000000000000, desc: '+1,000,000,000,000,000$/сек' },
-            { id: 'income_25', name: 'Вселенский картель', icon: '💼', cost: 500000000000000000, type: 'income', value: 8000000000000000, desc: '+8,000,000,000,000,000$/сек' },
-            { id: 'income_26', name: 'Тёмная энергия', icon: '⚡', cost: 3000000000000000000, type: 'income', value: 60000000000000000, desc: '+60,000,000,000,000,000$/сек' },
-            { id: 'income_27', name: 'Мультивселенная', icon: '🌌', cost: 20000000000000000000, type: 'income', value: 500000000000000000, desc: '+500,000,000,000,000,000$/сек' },
-            { id: 'rebirth_1', name: 'Перерождение x2', icon: '🔄', cost: 1000, type: 'rebirth', value: 2, desc: 'Сброс прогресса. Доход x2' },
-            { id: 'rebirth_2', name: 'Перерождение x3', icon: '🌀', cost: 5000, type: 'rebirth', value: 3, desc: 'Сброс прогресса. Доход x3' },
-            { id: 'rebirth_3', name: 'Перерождение x4', icon: '⚡', cost: 20000, type: 'rebirth', value: 4, desc: 'Сброс прогресса. Доход x4' },
-            { id: 'rebirth_4', name: 'Перерождение x5', icon: '💎', cost: 100000, type: 'rebirth', value: 5, desc: 'Сброс прогресса. Доход x5' },
-            { id: 'rebirth_5', name: 'Перерождение x6', icon: '🔮', cost: 500000, type: 'rebirth', value: 6, desc: 'Сброс прогресса. Доход x6' },
-            { id: 'rebirth_6', name: 'Перерождение x8', icon: '🌟', cost: 2000000, type: 'rebirth', value: 8, desc: 'Сброс прогресса. Доход x8' },
-            { id: 'rebirth_7', name: 'Перерождение x10', icon: '💫', cost: 10000000, type: 'rebirth', value: 10, desc: 'Сброс прогресса. Доход x10' },
-            { id: 'rebirth_8', name: 'Перерождение x15', icon: '🌠', cost: 50000000, type: 'rebirth', value: 15, desc: 'Сброс прогресса. Доход x15' },
-            { id: 'rebirth_9', name: 'Перерождение x20', icon: '🎆', cost: 200000000, type: 'rebirth', value: 20, desc: 'Сброс прогресса. Доход x20' },
-            { id: 'rebirth_10', name: 'Перерождение x30', icon: '🎇', cost: 1000000000, type: 'rebirth', value: 30, desc: 'Сброс прогресса. Доход x30' },
-            { id: 'rebirth_11', name: 'Перерождение x50', icon: '✨', cost: 5000000000, type: 'rebirth', value: 50, desc: 'Сброс прогресса. Доход x50' },
-            { id: 'rebirth_12', name: 'Перерождение x75', icon: '💥', cost: 30000000000, type: 'rebirth', value: 75, desc: 'Сброс прогресса. Доход x75' },
-            { id: 'rebirth_13', name: 'Перерождение x100', icon: '🔥', cost: 200000000000, type: 'rebirth', value: 100, desc: 'Сброс прогресса. Доход x100' },
+            {
+                id: 'auto_bot_2', name: 'Авто-бот lvl.2', icon: '🤖💎', cost: 500, type: 'income', value: 15,
+                desc: '+15$/сек'
+            },
+            {
+                id: 'auto_bot_3', name: 'Авто-бот lvl.3', icon: '🤖💎💎', cost: 2000, type: 'income', value: 40,
+                desc: '+40$/сек'
+            },
+            {
+                id: 'auto_bot_4', name: 'Авто-бот lvl.4', icon: '🤖💎💎💎', cost: 10000, type: 'income', value: 100,
+                desc: '+100$/сек'
+            },
+            {
+                id: 'auto_bot_5', name: 'Авто-бот lvl.5', icon: '🤖💎💎💎💎', cost: 50000, type: 'income', value: 300,
+                desc: '+300$/сек'
+            },
+            {
+                id: 'auto_bot_6', name: 'Авто-бот lvl.6', icon: '🤖💎💎💎💎💎', cost: 250000, type: 'income', value: 800,
+                desc: '+800$/сек'
+            },
+            {
+                id: 'auto_bot_7', name: 'Авто-бот lvl.7', icon: '🤖💎💎💎💎💎💎', cost: 5000000, type: 'income', value: 2500,
+                desc: '+2500$/сек'
+            },
+            {
+                id: 'income_8', name: 'Авто-бот lvl.8', icon: '🤖🔥', cost: 10000000, type: 'income', value: 8000,
+                desc: '+8,000$/сек'
+            },
+            {
+                id: 'income_9', name: 'Авто-бот lvl.9', icon: '🤖💫', cost: 30000000, type: 'income', value: 20000,
+                desc: '+20,000$/сек'
+            },
+            {
+                id: 'income_10', name: 'Авто-завод', icon: '🏭', cost: 100000000, type: 'income', value: 80000,
+                desc: '+80,000$/сек'
+            },
+            {
+                id: 'income_11', name: 'Робо-ферма', icon: '🚜', cost: 300000000, type: 'income', value: 250000,
+                desc: '+250,000$/сек'
+            },
+            {
+                id: 'income_12', name: 'Добывающая станция', icon: '⛏️', cost: 1000000000, type: 'income', value: 1000000,
+                desc: '+1,000,000$/сек'
+            },
+            {
+                id: 'income_13', name: 'Энерго-реактор', icon: '☢️', cost: 3000000000, type: 'income', value: 4000000,
+                desc: '+4,000,000$/сек'
+            },
+            {
+                id: 'income_14', name: 'Орбитальная станция', icon: '🛰️', cost: 10000000000, type: 'income', value: 15000000,
+                desc: '+15,000,000$/сек'
+            },
+            {
+                id: 'income_15', name: 'Лунная база', icon: '🌙', cost: 50000000000, type: 'income', value: 80000000,
+                desc: '+80,000,000$/сек'
+            },
+            {
+                id: 'income_16', name: 'Марсианская колония', icon: '🔴', cost: 200000000000, type: 'income', value: 400000000,
+                desc: '+400,000,000$/сек'
+            },
+            {
+                id: 'income_17', name: 'Звезда Дайсона', icon: '☀️', cost: 1000000000000, type: 'income', value: 2500000000,
+                desc: '+2,500,000,000$/сек'
+            },
+            {
+                id: 'income_18', name: 'Галактическая сеть', icon: '🌐', cost: 5000000000000, type: 'income',
+                value: 15000000000, desc: '+15,000,000,000$/сек'
+            },
+            {
+                id: 'income_19', name: 'Чёрный рынок', icon: '🕶️', cost: 25000000000000, type: 'income', value: 100000000000,
+                desc: '+100,000,000,000$/сек'
+            },
+            {
+                id: 'income_20', name: 'Межзвёздный банк', icon: '🏦', cost: 120000000000000, type: 'income',
+                value: 600000000000, desc: '+600,000,000,000$/сек'
+            },
+            {
+                id: 'income_21', name: 'Квантовый компьютер', icon: '💻', cost: 600000000000000, type: 'income',
+                value: 4000000000000, desc: '+4,000,000,000,000$/сек'
+            },
+            {
+                id: 'income_22', name: 'ИИ-корпорация', icon: '🧠', cost: 3000000000000000, type: 'income',
+                value: 25000000000000, desc: '+25,000,000,000,000$/сек'
+            },
+            {
+                id: 'income_23', name: 'Нано-фабрика', icon: '🔬', cost: 15000000000000000, type: 'income',
+                value: 150000000000000, desc: '+150,000,000,000,000$/сек'
+            },
+            {
+                id: 'income_24', name: 'Терраформирование', icon: '🌍', cost: 80000000000000000, type: 'income',
+                value: 1000000000000000, desc: '+1,000,000,000,000,000$/сек'
+            },
+            {
+                id: 'income_25', name: 'Вселенский картель', icon: '💼', cost: 500000000000000000, type: 'income',
+                value: 8000000000000000, desc: '+8,000,000,000,000,000$/сек'
+            },
+            {
+                id: 'income_26', name: 'Тёмная энергия', icon: '⚡', cost: 3000000000000000000, type: 'income',
+                value: 60000000000000000, desc: '+60,000,000,000,000,000$/сек'
+            },
+            {
+                id: 'income_27', name: 'Мультивселенная', icon: '🌌', cost: 20000000000000000000, type: 'income',
+                value: 500000000000000000, desc: '+500,000,000,000,000,000$/сек'
+            },
+            {
+                id: 'rebirth_1', name: 'Перерождение x2', icon: '🔄', cost: 1000, type: 'rebirth', value: 2,
+                desc: 'Сброс прогресса. Доход x2'
+            },
+            {
+                id: 'rebirth_2', name: 'Перерождение x3', icon: '🌀', cost: 5000, type: 'rebirth', value: 3,
+                desc: 'Сброс прогресса. Доход x3'
+            },
+            {
+                id: 'rebirth_3', name: 'Перерождение x4', icon: '⚡', cost: 20000, type: 'rebirth', value: 4,
+                desc: 'Сброс прогресса. Доход x4'
+            },
+            {
+                id: 'rebirth_4', name: 'Перерождение x5', icon: '💎', cost: 100000, type: 'rebirth', value: 5,
+                desc: 'Сброс прогресса. Доход x5'
+            },
+            {
+                id: 'rebirth_5', name: 'Перерождение x6', icon: '🔮', cost: 500000, type: 'rebirth', value: 6,
+                desc: 'Сброс прогресса. Доход x6'
+            },
+            {
+                id: 'rebirth_6', name: 'Перерождение x8', icon: '🌟', cost: 2000000, type: 'rebirth', value: 8,
+                desc: 'Сброс прогресса. Доход x8'
+            },
+            {
+                id: 'rebirth_7', name: 'Перерождение x10', icon: '💫', cost: 10000000, type: 'rebirth', value: 10,
+                desc: 'Сброс прогресса. Доход x10'
+            },
+            {
+                id: 'rebirth_8', name: 'Перерождение x15', icon: '🌠', cost: 50000000, type: 'rebirth', value: 15,
+                desc: 'Сброс прогресса. Доход x15'
+            },
+            {
+                id: 'rebirth_9', name: 'Перерождение x20', icon: '🎆', cost: 200000000, type: 'rebirth', value: 20,
+                desc: 'Сброс прогресса. Доход x20'
+            },
+            {
+                id: 'rebirth_10', name: 'Перерождение x30', icon: '🎇', cost: 1000000000, type: 'rebirth', value: 30,
+                desc: 'Сброс прогресса. Доход x30'
+            },
+            {
+                id: 'rebirth_11', name: 'Перерождение x50', icon: '✨', cost: 5000000000, type: 'rebirth', value: 50,
+                desc: 'Сброс прогресса. Доход x50'
+            },
+            {
+                id: 'rebirth_12', name: 'Перерождение x75', icon: '💥', cost: 30000000000, type: 'rebirth', value: 75,
+                desc: 'Сброс прогресса. Доход x75'
+            },
+            {
+                id: 'rebirth_13', name: 'Перерождение x100', icon: '🔥', cost: 200000000000, type: 'rebirth', value: 100,
+                desc: 'Сброс прогресса. Доход x100'
+            },
         ];
 
         // ==================== НОВЫЕ ПРЕДМЕТЫ МИРА 2 (Minecraft) ====================
         function generateWorld2Items() {
             return [
-                // Улучшения клика (Minecraft тематика)
-                { id: 'w2_wood_pick', name: 'Деревянная кирка', icon: '🪓', cost: 100, type: 'click', value: 5, desc: '+5 к силе клика' },
-                { id: 'w2_stone_pick', name: 'Каменная кирка', icon: '⛏️', cost: 500, type: 'click', value: 20, desc: '+20 к силе клика' },
-                { id: 'w2_iron_pick', name: 'Железная кирка', icon: '🔨', cost: 2500, type: 'click', value: 80, desc: '+80 к силе клика' },
-                { id: 'w2_gold_pick', name: 'Золотая кирка', icon: '✨', cost: 8000, type: 'click', value: 150, desc: '+150 к силе клика' },
-                { id: 'w2_diamond_pick', name: 'Алмазная кирка', icon: '💎', cost: 30000, type: 'click', value: 400, desc: '+400 к силе клика' },
-                { id: 'w2_netherite_pick', name: 'Незеритовая кирка', icon: '🔥', cost: 150000, type: 'click', value: 1200, desc: '+1,200 к силе клика' },
-                { id: 'w2_enchanted_pick', name: 'Зачарованная кирка', icon: '✨⛏️', cost: 500000, type: 'click', value: 3500, desc: '+3,500 к силе клика' },
-                { id: 'w2_ender_pick', name: 'Эндер-кирка', icon: '🌀', cost: 2000000, type: 'click', value: 10000, desc: '+10,000 к силе клика' },
-                { id: 'w2_obsidian_pick', name: 'Обсидиановая кирка', icon: '🪨', cost: 8000000, type: 'click', value: 35000, desc: '+35,000 к силе клика' },
-                { id: 'w2_crystal_pick', name: 'Кристальная кирка', icon: '💠', cost: 30000000, type: 'click', value: 120000, desc: '+120,000 к силе клика' },
-                { id: 'w2_hero_pick', name: 'Кирка Героя', icon: '⚔️', cost: 120000000, type: 'click', value: 450000, desc: '+450,000 к силе клика' },
-                { id: 'w2_legendary_pick', name: 'Легендарная кирка', icon: '🌟', cost: 500000000, type: 'click', value: 2000000, desc: '+2,000,000 к силе клика' },
-                { id: 'w2_cosmic_pick', name: 'Космическая кирка', icon: '🌌', cost: 2000000000, type: 'click', value: 8000000, desc: '+8,000,000 к силе клика' },
-                { id: 'w2_void_pick', name: 'Кирка Бездны', icon: '🕳️', cost: 8000000000, type: 'click', value: 30000000, desc: '+30,000,000 к силе клика' },
-                { id: 'w2_god_pick', name: 'Кирка Богов', icon: '☀️', cost: 30000000000, type: 'click', value: 150000000, desc: '+150,000,000 к силе клика' },
-
-                // Новые типы улучшений для Мира 2
-                { id: 'w2_xp_potion', name: 'Зелье опыта', icon: '🧪', cost: 100000, type: 'click', value: 500, desc: '+500 к силе клика и +5% опыта' },
-                { id: 'w2_ancient_tome', name: 'Древний фолиант', icon: '📜', cost: 10000000, type: 'click', value: 50000, desc: '+50,000 к силе клика и +10% опыта' },
-                { id: 'w2_dragon_egg', name: 'Яйцо дракона', icon: '🥚', cost: 500000000, type: 'income', value: 10000000, desc: '+10,000,000$/сек и шанс найти редкие ресурсы' },
-                { id: 'w2_beacon', name: 'Маяк Незера', icon: '🔮', cost: 10000000000, type: 'income', value: 500000000, desc: '+500,000,000$/сек и усиление всех навыков' },
-
-                // Авто-доход (Minecraft фермы)
-                { id: 'w2_wheat_farm', name: 'Пшеничная ферма', icon: '🌾', cost: 200, type: 'income', value: 8, desc: '+8$/сек' },
-                { id: 'w2_carrot_farm', name: 'Морковная ферма', icon: '🥕', cost: 800, type: 'income', value: 25, desc: '+25$/сек' },
-                { id: 'w2_potato_farm', name: 'Картофельная ферма', icon: '🥔', cost: 3000, type: 'income', value: 70, desc: '+70$/сек' },
-                { id: 'w2_cow_farm', name: 'Коровья ферма', icon: '🐄', cost: 12000, type: 'income', value: 200, desc: '+200$/сек' },
-                { id: 'w2_chicken_farm', name: 'Куриная ферма', icon: '🐔', cost: 40000, type: 'income', value: 600, desc: '+600$/сек' },
-                { id: 'w2_pig_farm', name: 'Свиная ферма', icon: '🐷', cost: 150000, type: 'income', value: 1800, desc: '+1,800$/сек' },
-                { id: 'w2_sheep_farm', name: 'Овечья ферма', icon: '🐑', cost: 500000, type: 'income', value: 5000, desc: '+5,000$/сек' },
-                { id: 'w2_iron_golem', name: 'Железный голем', icon: '🤖', cost: 2000000, type: 'income', value: 15000, desc: '+15,000$/сек' },
-                { id: 'w2_snow_golem', name: 'Снежный голем', icon: '⛄', cost: 7000000, type: 'income', value: 45000, desc: '+45,000$/сек' },
-                { id: 'w2_ender_farm', name: 'Эндер-ферма', icon: '👾', cost: 25000000, type: 'income', value: 150000, desc: '+150,000$/сек' },
-                { id: 'w2_blaze_farm', name: 'Ферма ифритов', icon: '🔥', cost: 90000000, type: 'income', value: 500000, desc: '+500,000$/сек' },
-                { id: 'w2_nether_farm', name: 'Незер-ферма', icon: '🌋', cost: 350000000, type: 'income', value: 2000000, desc: '+2,000,000$/сек' },
-                { id: 'w2_ender_dragon', name: 'Ферма Дракона', icon: '🐉', cost: 1500000000, type: 'income', value: 10000000, desc: '+10,000,000$/сек' },
-                { id: 'w2_wither_farm', name: 'Ферма Визера', icon: '💀', cost: 6000000000, type: 'income', value: 50000000, desc: '+50,000,000$/сек' },
-                { id: 'w2_ancient_city', name: 'Древний город', icon: '🏛️', cost: 25000000000, type: 'income', value: 300000000, desc: '+300,000,000$/сек' },
-                { id: 'w2_end_city', name: 'Эндер-город', icon: '🌆', cost: 120000000000, type: 'income', value: 2000000000, desc: '+2,000,000,000$/сек' },
-
-                // Перерождения (Minecraft стиль)
-                { id: 'w2_rebirth_2', name: 'Возрождение x2', icon: '🔄', cost: 2000, type: 'rebirth', value: 2, desc: 'Сброс прогресса. Доход x2' },
-                { id: 'w2_rebirth_3', name: 'Возрождение x3', icon: '🌀', cost: 8000, type: 'rebirth', value: 3, desc: 'Сброс прогресса. Доход x3' },
-                { id: 'w2_rebirth_4', name: 'Возрождение x4', icon: '⚡', cost: 35000, type: 'rebirth', value: 4, desc: 'Сброс прогресса. Доход x4' },
-                { id: 'w2_rebirth_5', name: 'Возрождение x5', icon: '💎', cost: 150000, type: 'rebirth', value: 5, desc: 'Сброс прогресса. Доход x5' },
-                { id: 'w2_rebirth_6', name: 'Возрождение x6', icon: '🔮', cost: 800000, type: 'rebirth', value: 6, desc: 'Сброс прогресса. Доход x6' },
-                { id: 'w2_rebirth_8', name: 'Возрождение x8', icon: '🌟', cost: 3500000, type: 'rebirth', value: 8, desc: 'Сброс прогресса. Доход x8' },
-                { id: 'w2_rebirth_10', name: 'Возрождение x10', icon: '💫', cost: 15000000, type: 'rebirth', value: 10, desc: 'Сброс прогресса. Доход x10' },
-                { id: 'w2_rebirth_15', name: 'Возрождение x15', icon: '🌠', cost: 70000000, type: 'rebirth', value: 15, desc: 'Сброс прогресса. Доход x15' },
-                { id: 'w2_rebirth_20', name: 'Возрождение x20', icon: '🎆', cost: 300000000, type: 'rebirth', value: 20, desc: 'Сброс прогресса. Доход x20' },
-                { id: 'w2_rebirth_30', name: 'Возрождение x30', icon: '🎇', cost: 1500000000, type: 'rebirth', value: 30, desc: 'Сброс прогресса. Доход x30' },
-                { id: 'w2_rebirth_50', name: 'Возрождение x50', icon: '✨', cost: 8000000000, type: 'rebirth', value: 50, desc: 'Сброс прогресса. Доход x50' },
-                { id: 'w2_rebirth_75', name: 'Возрождение x75', icon: '💥', cost: 40000000000, type: 'rebirth', value: 75, desc: 'Сброс прогресса. Доход x75' },
-                { id: 'w2_rebirth_100', name: 'Возрождение x100', icon: '🔥', cost: 250000000000, type: 'rebirth', value: 100, desc: 'Сброс прогресса. Доход x100' },
+                {
+                    id: 'w2_wood_pick', name: 'Деревянная кирка', icon: '🪓', cost: 100, type: 'click', value: 5,
+                    desc: '+5 к силе клика'
+                },
+                {
+                    id: 'w2_stone_pick', name: 'Каменная кирка', icon: '⛏️', cost: 500, type: 'click', value: 20,
+                    desc: '+20 к силе клика'
+                },
+                {
+                    id: 'w2_iron_pick', name: 'Железная кирка', icon: '🔨', cost: 2500, type: 'click', value: 80,
+                    desc: '+80 к силе клика'
+                },
+                {
+                    id: 'w2_gold_pick', name: 'Золотая кирка', icon: '✨', cost: 8000, type: 'click', value: 150,
+                    desc: '+150 к силе клика'
+                },
+                {
+                    id: 'w2_diamond_pick', name: 'Алмазная кирка', icon: '💎', cost: 30000, type: 'click', value: 400,
+                    desc: '+400 к силе клика'
+                },
+                {
+                    id: 'w2_netherite_pick', name: 'Незеритовая кирка', icon: '🔥', cost: 150000, type: 'click', value: 1200,
+                    desc: '+1,200 к силе клика'
+                },
+                {
+                    id: 'w2_enchanted_pick', name: 'Зачарованная кирка', icon: '✨⛏️', cost: 500000, type: 'click',
+                    value: 3500, desc: '+3,500 к силе клика'
+                },
+                {
+                    id: 'w2_ender_pick', name: 'Эндер-кирка', icon: '🌀', cost: 2000000, type: 'click', value: 10000,
+                    desc: '+10,000 к силе клика'
+                },
+                {
+                    id: 'w2_obsidian_pick', name: 'Обсидиановая кирка', icon: '🪨', cost: 8000000, type: 'click',
+                    value: 35000, desc: '+35,000 к силе клика'
+                },
+                {
+                    id: 'w2_crystal_pick', name: 'Кристальная кирка', icon: '💠', cost: 30000000, type: 'click',
+                    value: 120000, desc: '+120,000 к силе клика'
+                },
+                {
+                    id: 'w2_hero_pick', name: 'Кирка Героя', icon: '⚔️', cost: 120000000, type: 'click', value: 450000,
+                    desc: '+450,000 к силе клика'
+                },
+                {
+                    id: 'w2_legendary_pick', name: 'Легендарная кирка', icon: '🌟', cost: 500000000, type: 'click',
+                    value: 2000000, desc: '+2,000,000 к силе клика'
+                },
+                {
+                    id: 'w2_cosmic_pick', name: 'Космическая кирка', icon: '🌌', cost: 2000000000, type: 'click',
+                    value: 8000000, desc: '+8,000,000 к силе клика'
+                },
+                {
+                    id: 'w2_void_pick', name: 'Кирка Бездны', icon: '🕳️', cost: 8000000000, type: 'click', value: 30000000,
+                    desc: '+30,000,000 к силе клика'
+                },
+                {
+                    id: 'w2_god_pick', name: 'Кирка Богов', icon: '☀️', cost: 30000000000, type: 'click', value: 150000000,
+                    desc: '+150,000,000 к силе клика'
+                },
+                {
+                    id: 'w2_xp_potion', name: 'Зелье опыта', icon: '🧪', cost: 100000, type: 'click', value: 500,
+                    desc: '+500 к силе клика и +5% опыта'
+                },
+                {
+                    id: 'w2_ancient_tome', name: 'Древний фолиант', icon: '📜', cost: 10000000, type: 'click', value: 50000,
+                    desc: '+50,000 к силе клика и +10% опыта'
+                },
+                {
+                    id: 'w2_dragon_egg', name: 'Яйцо дракона', icon: '🥚', cost: 500000000, type: 'income', value: 10000000,
+                    desc: '+10,000,000$/сек и шанс найти редкие ресурсы'
+                },
+                {
+                    id: 'w2_beacon', name: 'Маяк Незера', icon: '🔮', cost: 10000000000, type: 'income', value: 500000000,
+                    desc: '+500,000,000$/сек и усиление всех навыков'
+                },
+                {
+                    id: 'w2_wheat_farm', name: 'Пшеничная ферма', icon: '🌾', cost: 200, type: 'income', value: 8,
+                    desc: '+8$/сек'
+                },
+                {
+                    id: 'w2_carrot_farm', name: 'Морковная ферма', icon: '🥕', cost: 800, type: 'income', value: 25,
+                    desc: '+25$/сек'
+                },
+                {
+                    id: 'w2_potato_farm', name: 'Картофельная ферма', icon: '🥔', cost: 3000, type: 'income', value: 70,
+                    desc: '+70$/сек'
+                },
+                {
+                    id: 'w2_cow_farm', name: 'Коровья ферма', icon: '🐄', cost: 12000, type: 'income', value: 200,
+                    desc: '+200$/сек'
+                },
+                {
+                    id: 'w2_chicken_farm', name: 'Куриная ферма', icon: '🐔', cost: 40000, type: 'income', value: 600,
+                    desc: '+600$/сек'
+                },
+                {
+                    id: 'w2_pig_farm', name: 'Свиная ферма', icon: '🐷', cost: 150000, type: 'income', value: 1800,
+                    desc: '+1,800$/сек'
+                },
+                {
+                    id: 'w2_sheep_farm', name: 'Овечья ферма', icon: '🐑', cost: 500000, type: 'income', value: 5000,
+                    desc: '+5,000$/сек'
+                },
+                {
+                    id: 'w2_iron_golem', name: 'Железный голем', icon: '🤖', cost: 2000000, type: 'income', value: 15000,
+                    desc: '+15,000$/сек'
+                },
+                {
+                    id: 'w2_snow_golem', name: 'Снежный голем', icon: '⛄', cost: 7000000, type: 'income', value: 45000,
+                    desc: '+45,000$/сек'
+                },
+                {
+                    id: 'w2_ender_farm', name: 'Эндер-ферма', icon: '👾', cost: 25000000, type: 'income', value: 150000,
+                    desc: '+150,000$/сек'
+                },
+                {
+                    id: 'w2_blaze_farm', name: 'Ферма ифритов', icon: '🔥', cost: 90000000, type: 'income', value: 500000,
+                    desc: '+500,000$/сек'
+                },
+                {
+                    id: 'w2_nether_farm', name: 'Незер-ферма', icon: '🌋', cost: 350000000, type: 'income', value: 2000000,
+                    desc: '+2,000,000$/сек'
+                },
+                {
+                    id: 'w2_ender_dragon', name: 'Ферма Дракона', icon: '🐉', cost: 1500000000, type: 'income',
+                    value: 10000000, desc: '+10,000,000$/сек'
+                },
+                {
+                    id: 'w2_wither_farm', name: 'Ферма Визера', icon: '💀', cost: 6000000000, type: 'income', value: 50000000,
+                    desc: '+50,000,000$/сек'
+                },
+                {
+                    id: 'w2_ancient_city', name: 'Древний город', icon: '🏛️', cost: 25000000000, type: 'income',
+                    value: 300000000, desc: '+300,000,000$/сек'
+                },
+                {
+                    id: 'w2_end_city', name: 'Эндер-город', icon: '🌆', cost: 120000000000, type: 'income', value: 2000000000,
+                    desc: '+2,000,000,000$/сек'
+                },
+                {
+                    id: 'w2_rebirth_2', name: 'Возрождение x2', icon: '🔄', cost: 2000, type: 'rebirth', value: 2,
+                    desc: 'Сброс прогресса. Доход x2'
+                },
+                {
+                    id: 'w2_rebirth_3', name: 'Возрождение x3', icon: '🌀', cost: 8000, type: 'rebirth', value: 3,
+                    desc: 'Сброс прогресса. Доход x3'
+                },
+                {
+                    id: 'w2_rebirth_4', name: 'Возрождение x4', icon: '⚡', cost: 35000, type: 'rebirth', value: 4,
+                    desc: 'Сброс прогресса. Доход x4'
+                },
+                {
+                    id: 'w2_rebirth_5', name: 'Возрождение x5', icon: '💎', cost: 150000, type: 'rebirth', value: 5,
+                    desc: 'Сброс прогресса. Доход x5'
+                },
+                {
+                    id: 'w2_rebirth_6', name: 'Возрождение x6', icon: '🔮', cost: 800000, type: 'rebirth', value: 6,
+                    desc: 'Сброс прогресса. Доход x6'
+                },
+                {
+                    id: 'w2_rebirth_8', name: 'Возрождение x8', icon: '🌟', cost: 3500000, type: 'rebirth', value: 8,
+                    desc: 'Сброс прогресса. Доход x8'
+                },
+                {
+                    id: 'w2_rebirth_10', name: 'Возрождение x10', icon: '💫', cost: 15000000, type: 'rebirth', value: 10,
+                    desc: 'Сброс прогресса. Доход x10'
+                },
+                {
+                    id: 'w2_rebirth_15', name: 'Возрождение x15', icon: '🌠', cost: 70000000, type: 'rebirth', value: 15,
+                    desc: 'Сброс прогресса. Доход x15'
+                },
+                {
+                    id: 'w2_rebirth_20', name: 'Возрождение x20', icon: '🎆', cost: 300000000, type: 'rebirth', value: 20,
+                    desc: 'Сброс прогресса. Доход x20'
+                },
+                {
+                    id: 'w2_rebirth_30', name: 'Возрождение x30', icon: '🎇', cost: 1500000000, type: 'rebirth', value: 30,
+                    desc: 'Сброс прогресса. Доход x30'
+                },
+                {
+                    id: 'w2_rebirth_50', name: 'Возрождение x50', icon: '✨', cost: 8000000000, type: 'rebirth', value: 50,
+                    desc: 'Сброс прогресса. Доход x50'
+                },
+                {
+                    id: 'w2_rebirth_75', name: 'Возрождение x75', icon: '💥', cost: 40000000000, type: 'rebirth', value: 75,
+                    desc: 'Сброс прогресса. Доход x75'
+                },
+                {
+                    id: 'w2_rebirth_100', name: 'Возрождение x100', icon: '🔥', cost: 250000000000, type: 'rebirth',
+                    value: 100, desc: 'Сброс прогресса. Доход x100'
+                },
             ];
         }
 
@@ -2612,63 +4104,106 @@
         }
 
         // ==================== АКТИВНЫЕ НАВЫКИ ====================
-        const skills = [
-            {
-                id: 'speedBoost',
-                name: 'Ускорение',
-                icon: '🚀',
-                desc: 'x2 доход на 10 секунд',
-                cooldown: 30,
-                duration: 10,
-                effect: () => {
-                    gameState.multiplier *= 2;
-                    multiplierBadge.classList.add('active-skill');
-                    setTimeout(() => {
-                        gameState.multiplier /= 2;
-                        multiplierBadge.classList.remove('active-skill');
-                        updateUI();
-                    }, 10000);
-                },
-                condition: () => true
+        const skills = [{
+            id: 'speedBoost',
+            name: 'Ускорение',
+            icon: '🚀',
+            desc: 'x2 доход на 10 секунд',
+            cooldown: 30,
+            duration: 10,
+            effect: () => {
+                gameState.multiplier *= 2;
+                multiplierBadge.classList.add('active-skill');
+                setTimeout(() => {
+                    gameState.multiplier /= 2;
+                    multiplierBadge.classList.remove('active-skill');
+                    updateUI();
+                }, 10000);
             },
-            {
-                id: 'megaClick',
-                name: 'Мега-клик',
-                icon: '⚡',
-                desc: 'x10 сила клика на 5 кликов',
-                cooldown: 20,
-                duration: 5,
-                effect: () => {
-                    let clicks = 0;
-                    const originalPower = gameState.clickPower;
-                    gameState.clickPower *= 10;
-                    const handler = () => {
-                        clicks++;
-                        if (clicks >= 5) {
-                            gameState.clickPower = originalPower;
-                            document.getElementById('clickBtn').removeEventListener('click', handler);
-                            updateUI();
-                        }
-                    };
-                    document.getElementById('clickBtn').addEventListener('click', handler);
-                    setTimeout(() => {
-                        if (clicks < 5) {
-                            gameState.clickPower = originalPower;
-                            document.getElementById('clickBtn').removeEventListener('click', handler);
-                            updateUI();
-                        }
-                    }, 5000);
-                },
-                condition: () => true
-            }
-        ];
+            condition: () => true
+        }, {
+            id: 'megaClick',
+            name: 'Мега-клик',
+            icon: '⚡',
+            desc: 'x10 сила клика на 5 кликов',
+            cooldown: 20,
+            duration: 5,
+            effect: () => {
+                let clicks = 0;
+                const originalPower = gameState.clickPower;
+                gameState.clickPower *= 10;
+                const handler = () => {
+                    clicks++;
+                    if (clicks >= 5) {
+                        gameState.clickPower = originalPower;
+                        document.getElementById('clickBtn').removeEventListener('click', handler);
+                        updateUI();
+                    }
+                };
+                document.getElementById('clickBtn').addEventListener('click', handler);
+                setTimeout(() => {
+                    if (clicks < 5) {
+                        gameState.clickPower = originalPower;
+                        document.getElementById('clickBtn').removeEventListener('click', handler);
+                        updateUI();
+                    }
+                }, 5000);
+            },
+            condition: () => true
+        }, {
+            id: 'goldenTouch',
+            name: 'Золотое касание',
+            icon: '✨👆',
+            desc: 'x3 доход от кликов на 15 сек',
+            cooldown: 45,
+            duration: 15,
+            effect: () => {
+                const originalMultiplier = gameState.multiplier;
+                gameState.multiplier *= 3;
+                multiplierBadge.classList.add('active-skill');
+                setTimeout(() => {
+                    gameState.multiplier = originalMultiplier;
+                    multiplierBadge.classList.remove('active-skill');
+                    updateUI();
+                }, 15000);
+            },
+            condition: () => gameState.rebirthCount >= 3
+        }, {
+            id: 'luckyStrike',
+            name: 'Удача',
+            icon: '🍀',
+            desc: 'Шанс получить x10 дохода от клика (5 кликов)',
+            cooldown: 60,
+            duration: 5,
+            effect: () => {
+                let clicks = 0;
+                const handler = () => {
+                    clicks++;
+                    if (Math.random() < 0.2) {
+                        const bonus = gameState.clickPower * 10;
+                        gameState.balance += bonus;
+                        gameState.totalEarned += bonus;
+                        showEventNotification('🍀 УДАЧА!', `+${formatNumber(bonus)}$`, '🍀');
+                    }
+                    if (clicks >= 5) {
+                        document.getElementById('clickBtn').removeEventListener('click', handler);
+                    }
+                };
+                document.getElementById('clickBtn').addEventListener('click', handler);
+                setTimeout(() => {
+                    document.getElementById('clickBtn').removeEventListener('click', handler);
+                }, 5000);
+            },
+            condition: () => gameState.rebirthCount >= 5
+        }];
 
         function renderSkills() {
             skillsGrid.innerHTML = '';
             skills.forEach(skill => {
                 const card = document.createElement('div');
                 card.className = 'skill-card';
-                const isAvailable = skill.condition() && (!gameState.skills[skill.id] || gameState.skills[skill.id].cooldown <= 0);
+                const isAvailable = skill.condition() && (!gameState.skills[skill.id] || gameState.skills[skill.id]
+                    .cooldown <= 0);
                 const isOnCooldown = gameState.skills[skill.id] && gameState.skills[skill.id].cooldown > 0;
                 const isActive = gameState.skills[skill.id] && gameState.skills[skill.id].active;
 
@@ -2680,14 +4215,14 @@
                 const activeText = isActive ? '⚡ Активирован!' : '';
 
                 card.innerHTML = `
-                        <div class="skill-icon">${skill.icon}</div>
-                        <div class="skill-name">${skill.name}</div>
-                        <div class="skill-desc">${skill.desc}</div>
-                        <button class="skill-btn" ${!isAvailable ? 'disabled' : ''} onclick="useSkill('${skill.id}')">
-                            ${isActive ? '⏳ Активен' : isOnCooldown ? `⏳ ${Math.ceil(gameState.skills[skill.id].cooldown)}с` : '▶️ Использовать'}
-                        </button>
-                        <div class="skill-cooldown">${cooldownText || activeText}</div>
-                    `;
+                            <div class="skill-icon">${skill.icon}</div>
+                            <div class="skill-name">${skill.name}</div>
+                            <div class="skill-desc">${skill.desc}</div>
+                            <button class="skill-btn" ${!isAvailable ? 'disabled' : ''} onclick="useSkill('${skill.id}')">
+                                ${isActive ? '⏳ Активен' : isOnCooldown ? `⏳ ${Math.ceil(gameState.skills[skill.id].cooldown)}с` : '▶️ Использовать'}
+                            </button>
+                            <div class="skill-cooldown">${cooldownText || activeText}</div>
+                        `;
                 skillsGrid.appendChild(card);
             });
         }
@@ -2704,7 +4239,6 @@
             updateUI();
             renderSkills();
 
-            // Таймер кулдауна
             if (skillTimers[skillId]) clearInterval(skillTimers[skillId]);
             skillTimers[skillId] = setInterval(() => {
                 gameState.skills[skillId].cooldown -= 0.5;
@@ -2723,56 +4257,170 @@
             }, skill.duration * 1000);
         }
 
-        // ==================== ДОСТИЖЕНИЯ ====================
+        // ==================== ДОСТИЖЕНИЯ (расширены) ====================
         const achievements = [
             { id: 'bal_100', name: 'Сотня', icon: '💰', desc: 'Накопите $100', condition: () => gameState.balance >= 100 },
-            { id: 'bal_1k', name: 'Тысяча', icon: '💵', desc: 'Накопите $1,000', condition: () => gameState.balance >= 1000 },
-            { id: 'bal_10k', name: 'Десятка тысяч', icon: '💶', desc: 'Накопите $10,000', condition: () => gameState.balance >= 10000 },
-            { id: 'bal_100k', name: 'Сто тысяч', icon: '💷', desc: 'Накопите $100,000', condition: () => gameState.balance >= 100000 },
-            { id: 'bal_1m', name: 'Миллионер', icon: '🤑', desc: 'Накопите $1,000,000', condition: () => gameState.balance >= 1000000 },
-            { id: 'bal_10m', name: 'Десятка миллионов', icon: '💎', desc: 'Накопите $10,000,000', condition: () => gameState.balance >= 10000000 },
-            { id: 'bal_100m', name: 'Сто миллионов', icon: '💍', desc: 'Накопите $100,000,000', condition: () => gameState.balance >= 100000000 },
-            { id: 'bal_1b', name: 'Миллиардер', icon: '👑', desc: 'Накопите $1,000,000,000', condition: () => gameState.balance >= 1000000000 },
-            { id: 'bal_10b', name: 'Десять миллиардов', icon: '🌍', desc: 'Накопите $10,000,000,000', condition: () => gameState.balance >= 10000000000 },
-            { id: 'bal_100b', name: 'Сто миллиардов', icon: '🌎', desc: 'Накопите $100,000,000,000', condition: () => gameState.balance >= 100000000000 },
-            { id: 'bal_1t', name: 'Триллионер', icon: '🚀', desc: 'Накопите $1,000,000,000,000', condition: () => gameState.balance >= 1000000000000 },
-            { id: 'click_10', name: 'Силач', icon: '💪', desc: 'Сила клика 10+', condition: () => gameState.clickPower >= 10 },
-            { id: 'click_50', name: 'Крепкий удар', icon: '👊', desc: 'Сила клика 50+', condition: () => gameState.clickPower >= 50 },
-            { id: 'click_100', name: 'Сотня силы', icon: '✊', desc: 'Сила клика 100+', condition: () => gameState.clickPower >= 100 },
-            { id: 'click_500', name: 'Мощный тап', icon: '🤛', desc: 'Сила клика 500+', condition: () => gameState.clickPower >= 500 },
-            { id: 'click_1k', name: 'Клик-киллер', icon: '🗡️', desc: 'Сила клика 1,000+', condition: () => gameState.clickPower >= 1000 },
-            { id: 'click_5k', name: 'Разрушитель', icon: '⚔️', desc: 'Сила клика 5,000+', condition: () => gameState.clickPower >= 5000 },
-            { id: 'click_10k', name: 'Тяжёлая артиллерия', icon: '🔫', desc: 'Сила клика 10,000+', condition: () => gameState.clickPower >= 10000 },
-            { id: 'click_50k', name: 'Огневая мощь', icon: '💣', desc: 'Сила клика 50,000+', condition: () => gameState.clickPower >= 50000 },
-            { id: 'click_100k', name: 'Сотня тысяч кликов', icon: '🚀', desc: 'Сила клика 100,000+', condition: () => gameState.clickPower >= 100000 },
-            { id: 'click_1m', name: 'Миллион кликов', icon: '🌠', desc: 'Сила клика 1,000,000+', condition: () => gameState.clickPower >= 1000000 },
-            { id: 'inc_10', name: 'Первые доллары', icon: '💸', desc: 'Доход 10$/сек', condition: () => gameState.incomePerSec >= 10 },
-            { id: 'inc_50', name: 'Стабильный доход', icon: '💲', desc: 'Доход 50$/сек', condition: () => gameState.incomePerSec >= 50 },
-            { id: 'inc_100', name: 'Бизнесмен', icon: '💼', desc: 'Доход 100$/сек', condition: () => gameState.incomePerSec >= 100 },
-            { id: 'inc_500', name: 'Корпорация', icon: '🏢', desc: 'Доход 500$/сек', condition: () => gameState.incomePerSec >= 500 },
-            { id: 'inc_1k', name: 'Империя', icon: '🏰', desc: 'Доход 1,000$/сек', condition: () => gameState.incomePerSec >= 1000 },
-            { id: 'inc_5k', name: 'Заводской комплекс', icon: '🏭', desc: 'Доход 5,000$/сек', condition: () => gameState.incomePerSec >= 5000 },
-            { id: 'inc_10k', name: 'Мега-корпорация', icon: '🏗️', desc: 'Доход 10,000$/сек', condition: () => gameState.incomePerSec >= 10000 },
-            { id: 'inc_50k', name: 'Мировой гигант', icon: '🌐', desc: 'Доход 50,000$/сек', condition: () => gameState.incomePerSec >= 50000 },
-            { id: 'inc_100k', name: 'Космический доход', icon: '🛰️', desc: 'Доход 100,000$/сек', condition: () => gameState.incomePerSec >= 100000 },
-            { id: 'lvl_5', name: 'Новичок', icon: '⭐', desc: 'Достигните 5 уровня', condition: () => gameState.level >= 5 },
-            { id: 'lvl_10', name: 'Опытный', icon: '🌟', desc: 'Достигните 10 уровня', condition: () => gameState.level >= 10 },
-            { id: 'lvl_15', name: 'Продвинутый', icon: '✨', desc: 'Достигните 15 уровня', condition: () => gameState.level >= 15 },
-            { id: 'lvl_20', name: 'Мастер', icon: '🎖️', desc: 'Достигните 20 уровня', condition: () => gameState.level >= 20 },
-            { id: 'lvl_25', name: 'Элита', icon: '🏅', desc: 'Достигните 25 уровня', condition: () => gameState.level >= 25 },
-            { id: 'lvl_30', name: 'Легенда', icon: '👑', desc: 'Достигните 30 уровня', condition: () => gameState.level >= 30 },
-            { id: 'lvl_40', name: 'Мифический', icon: '🐉', desc: 'Достигните 40 уровня', condition: () => gameState.level >= 40 },
-            { id: 'lvl_50', name: 'Титан', icon: '🗿', desc: 'Достигните 50 уровня', condition: () => gameState.level >= 50 },
-            { id: 'reb_1', name: 'Первое перерождение', icon: '🔄', desc: 'Совершите 1 перерождение', condition: () => gameState.rebirthCount >= 1 },
-            { id: 'reb_5', name: 'Пять перерождений', icon: '♻️', desc: 'Совершите 5 перерождений', condition: () => gameState.rebirthCount >= 5 },
-            { id: 'reb_10', name: 'Десятка перерождений', icon: '🔁', desc: 'Совершите 10 перерождений', condition: () => gameState.rebirthCount >= 10 },
-            { id: 'buy_first', name: 'Первая покупка', icon: '🛒', desc: 'Купите любое улучшение', condition: () => gameState.unlockedItems.length > 0 },
-            { id: 'buy_10', name: 'Шопоголик', icon: '🛍️', desc: 'Купите 10 разных улучшений', condition: () => gameState.unlockedItems.length >= 10 },
-            { id: 'buy_30', name: 'Коллекционер', icon: '📦', desc: 'Купите 30 разных улучшений', condition: () => gameState.unlockedItems.length >= 30 },
-            { id: 'buy_50', name: 'Магнат', icon: '🏬', desc: 'Купите 50 разных улучшений', condition: () => gameState.unlockedItems.length >= 50 },
-            { id: 'mult_10', name: 'Усиление x10', icon: '✖️', desc: 'Достигните множителя x10', condition: () => gameState.multiplier >= 10 },
-            { id: 'mult_100', name: 'Стократное усиление', icon: '💯', desc: 'Достигните множителя x100', condition: () => gameState.multiplier >= 100 },
-            { id: 'skill_first', name: 'Первый навык', icon: '⚡', desc: 'Используйте любой навык', condition: () => gameState.skills?.speedBoost?.cooldown > 0 || gameState.skills?.megaClick?.cooldown > 0 },
+            {
+                id: 'bal_1k', name: 'Тысяча', icon: '💵', desc: 'Накопите $1,000', condition: () => gameState.balance >=
+                    1000
+            },
+            {
+                id: 'bal_10k', name: 'Десятка тысяч', icon: '💶', desc: 'Накопите $10,000', condition: () => gameState
+                    .balance >= 10000
+            },
+            {
+                id: 'bal_100k', name: 'Сто тысяч', icon: '💷', desc: 'Накопите $100,000', condition: () => gameState
+                    .balance >= 100000
+            },
+            {
+                id: 'bal_1m', name: 'Миллионер', icon: '🤑', desc: 'Накопите $1,000,000', condition: () => gameState
+                    .balance >= 1000000
+            },
+            {
+                id: 'bal_10m', name: 'Десятка миллионов', icon: '💎', desc: 'Накопите $10,000,000', condition: () =>
+                    gameState.balance >= 10000000
+            },
+            {
+                id: 'bal_100m', name: 'Сто миллионов', icon: '💍', desc: 'Накопите $100,000,000', condition: () =>
+                    gameState.balance >= 100000000
+            },
+            {
+                id: 'bal_1b', name: 'Миллиардер', icon: '👑', desc: 'Накопите $1,000,000,000', condition: () => gameState
+                    .balance >= 1000000000
+            },
+            {
+                id: 'click_10', name: 'Силач', icon: '💪', desc: 'Сила клика 10+', condition: () => gameState.clickPower >=
+                    10
+            },
+            {
+                id: 'click_50', name: 'Крепкий удар', icon: '👊', desc: 'Сила клика 50+', condition: () => gameState
+                    .clickPower >= 50
+            },
+            {
+                id: 'click_100', name: 'Сотня силы', icon: '✊', desc: 'Сила клика 100+', condition: () => gameState
+                    .clickPower >= 100
+            },
+            {
+                id: 'click_500', name: 'Мощный тап', icon: '🤛', desc: 'Сила клика 500+', condition: () => gameState
+                    .clickPower >= 500
+            },
+            {
+                id: 'click_1k', name: 'Клик-киллер', icon: '🗡️', desc: 'Сила клика 1,000+', condition: () => gameState
+                    .clickPower >= 1000
+            },
+            {
+                id: 'click_5k', name: 'Разрушитель', icon: '⚔️', desc: 'Сила клика 5,000+', condition: () => gameState
+                    .clickPower >= 5000
+            },
+            {
+                id: 'click_10k', name: 'Тяжёлая артиллерия', icon: '🔫', desc: 'Сила клика 10,000+', condition: () =>
+                    gameState.clickPower >= 10000
+            },
+            {
+                id: 'inc_10', name: 'Первые доллары', icon: '💸', desc: 'Доход 10$/сек', condition: () => gameState
+                    .incomePerSec >= 10
+            },
+            {
+                id: 'inc_50', name: 'Стабильный доход', icon: '💲', desc: 'Доход 50$/сек', condition: () => gameState
+                    .incomePerSec >= 50
+            },
+            {
+                id: 'inc_100', name: 'Бизнесмен', icon: '💼', desc: 'Доход 100$/сек', condition: () => gameState
+                    .incomePerSec >= 100
+            },
+            {
+                id: 'inc_500', name: 'Корпорация', icon: '🏢', desc: 'Доход 500$/сек', condition: () => gameState
+                    .incomePerSec >= 500
+            },
+            {
+                id: 'inc_1k', name: 'Империя', icon: '🏰', desc: 'Доход 1,000$/сек', condition: () => gameState
+                    .incomePerSec >= 1000
+            },
+            {
+                id: 'lvl_5', name: 'Новичок', icon: '⭐', desc: 'Достигните 5 уровня', condition: () => gameState.level >=
+                    5
+            },
+            {
+                id: 'lvl_10', name: 'Опытный', icon: '🌟', desc: 'Достигните 10 уровня', condition: () => gameState.level >=
+                    10
+            },
+            {
+                id: 'lvl_15', name: 'Продвинутый', icon: '✨', desc: 'Достигните 15 уровня', condition: () => gameState
+                    .level >= 15
+            },
+            {
+                id: 'lvl_20', name: 'Мастер', icon: '🎖️', desc: 'Достигните 20 уровня', condition: () => gameState.level >=
+                    20
+            },
+            {
+                id: 'reb_1', name: 'Первое перерождение', icon: '🔄', desc: 'Совершите 1 перерождение', condition: () =>
+                    gameState.rebirthCount >= 1
+            },
+            {
+                id: 'reb_5', name: 'Пять перерождений', icon: '♻️', desc: 'Совершите 5 перерождений', condition: () =>
+                    gameState.rebirthCount >= 5
+            },
+            {
+                id: 'reb_10', name: 'Десятка перерождений', icon: '🔁', desc: 'Совершите 10 перерождений', condition: () =>
+                    gameState.rebirthCount >= 10
+            },
+            {
+                id: 'buy_first', name: 'Первая покупка', icon: '🛒', desc: 'Купите любое улучшение', condition: () =>
+                    gameState.unlockedItems.length > 0
+            },
+            {
+                id: 'buy_10', name: 'Шопоголик', icon: '🛍️', desc: 'Купите 10 разных улучшений', condition: () =>
+                    gameState.unlockedItems.length >= 10
+            },
+            {
+                id: 'buy_30', name: 'Коллекционер', icon: '📦', desc: 'Купите 30 разных улучшений', condition: () =>
+                    gameState.unlockedItems.length >= 30
+            },
+            {
+                id: 'mult_10', name: 'Усиление x10', icon: '✖️', desc: 'Достигните множителя x10', condition: () =>
+                    gameState.multiplier >= 10
+            },
+            {
+                id: 'chest_1', name: 'Первый сундук', icon: '🎁', desc: 'Откройте 1 сундук', condition: () => (gameState
+                    .chestsOpened || 0) >= 1
+            },
+            {
+                id: 'chest_10', name: 'Коллекционер сундуков', icon: '📦', desc: 'Откройте 10 сундуков', condition: () => (
+                    gameState.chestsOpened || 0) >= 10
+            },
+            {
+                id: 'chest_50', name: 'Мастер сундуков', icon: '🗃️', desc: 'Откройте 50 сундуков', condition: () => (
+                    gameState.chestsOpened || 0) >= 50
+            },
+            {
+                id: 'game_win_1', name: 'Первая победа', icon: '🎯', desc: 'Выиграйте мини-игру', condition: () => (
+                    gameState.gamesWon || 0) >= 1
+            },
+            {
+                id: 'game_win_10', name: 'Чемпион', icon: '🏆', desc: 'Выиграйте 10 мини-игр', condition: () => (
+                    gameState.gamesWon || 0) >= 10
+            },
+            {
+                id: 'prestige_1', name: 'Первый престиж', icon: '👑', desc: 'Достигните 1 уровня престижа', condition: () =>
+                    (gameState.prestigeLevel || 0) >= 1
+            },
+            {
+                id: 'prestige_5', name: 'Легенда', icon: '⭐', desc: 'Достигните 5 уровня престижа', condition: () => (
+                    gameState.prestigeLevel || 0) >= 5
+            },
+            {
+                id: 'invest_10', name: 'Инвестор', icon: '📊', desc: 'Вложитесь в инвестиции 10 раз', condition: () => {
+                    let total = 0;
+                    if (gameState.investments) {
+                        Object.values(gameState.investments).forEach(v => total += v);
+                    }
+                    return total >= 10;
+                }
+            },
+            {
+                id: 'skin_collector', name: 'Коллекционер скинов', icon: '🎨', desc: 'Соберите 3 скина', condition: () => (
+                    gameState.unlockedSkins?.length || 0) >= 3
+            },
         ];
 
         // ==================== FIREBASE SAVE/LOAD ====================
@@ -2781,11 +4429,18 @@
         function saveToCloud() {
             if (!firebaseReady || !currentUser || !firebaseDb) return;
             const key = sanitizeKey(currentUser);
-            const dataToSave = { ...gameState, username: currentUser, lastUpdated: firebase.database.ServerValue.TIMESTAMP };
+            const dataToSave = {
+                ...gameState,
+                username: currentUser,
+                lastUpdated: firebase.database.ServerValue.TIMESTAMP
+            };
             updateSyncStatus('syncing', 'Сохранение...');
             firebaseDb.ref('users/' + key).set(dataToSave)
                 .then(() => { updateSyncStatus('online', 'Облако ✓'); })
-                .catch((error) => { console.error(error); updateSyncStatus('offline', 'Ошибка сохранения'); });
+                .catch((error) => {
+                    console.error(error);
+                    updateSyncStatus('offline', 'Ошибка сохранения');
+                });
         }
 
         function loadFromCloud(username, callback) {
@@ -2797,11 +4452,24 @@
                     if (snapshot.exists()) {
                         const data = snapshot.val();
                         delete data.lastUpdated;
-                        callback({ ...getDefaultGameState(), ...data });
+                        // Обновляем скины
+                        if (data.unlockedSkins) {
+                            data.unlockedSkins.forEach(s => {
+                                if (skins[s]) skins[s].unlocked = true;
+                            });
+                        }
+                        callback({
+                            ...getDefaultGameState(),
+                            ...data
+                        });
                     } else callback(null);
                     updateSyncStatus('online', 'Облако ✓');
                 })
-                .catch((error) => { console.error(error); updateSyncStatus('offline', 'Ошибка загрузки'); callback(null); });
+                .catch((error) => {
+                    console.error(error);
+                    updateSyncStatus('offline', 'Ошибка загрузки');
+                    callback(null);
+                });
         }
 
         function debouncedSaveToCloud() {
@@ -2809,7 +4477,6 @@
             saveTimeout = setTimeout(() => { saveToCloud(); }, 2000);
         }
 
-        // Сохранение при закрытии страницы
         window.addEventListener('beforeunload', () => {
             if (currentUser && firebaseReady) {
                 saveToCloud();
@@ -2897,7 +4564,16 @@
 
                     loginSuccess.textContent = '✅ Вход выполнен!';
                     delete data.password;
-                    gameState = { ...getDefaultGameState(), ...data };
+                    // Обновляем скины
+                    if (data.unlockedSkins) {
+                        data.unlockedSkins.forEach(s => {
+                            if (skins[s]) skins[s].unlocked = true;
+                        });
+                    }
+                    gameState = {
+                        ...getDefaultGameState(),
+                        ...data
+                    };
                     currentUser = username;
                     gameState.username = username;
                     loginOverlay.style.display = 'none';
@@ -2910,6 +4586,8 @@
                     initAchievementsDisplay();
                     checkAdminAccess();
                     applyWorldStyle();
+                    renderSkins();
+                    renderInvestments();
                     saveToCloud();
                     startPlayTime();
 
@@ -2930,7 +4608,10 @@
 
                     loginSuccess.textContent = '✅ Аккаунт создан!';
                     delete newUser.password;
-                    gameState = { ...getDefaultGameState(), ...newUser };
+                    gameState = {
+                        ...getDefaultGameState(),
+                        ...newUser
+                    };
                     currentUser = username;
                     gameState.username = username;
                     loginOverlay.style.display = 'none';
@@ -2943,6 +4624,8 @@
                     initAchievementsDisplay();
                     checkAdminAccess();
                     applyWorldStyle();
+                    renderSkins();
+                    renderInvestments();
                     saveToCloud();
                     startPlayTime();
                 }
@@ -2967,7 +4650,15 @@
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     delete data.password;
-                    gameState = { ...getDefaultGameState(), ...data };
+                    if (data.unlockedSkins) {
+                        data.unlockedSkins.forEach(s => {
+                            if (skins[s]) skins[s].unlocked = true;
+                        });
+                    }
+                    gameState = {
+                        ...getDefaultGameState(),
+                        ...data
+                    };
                     currentUser = lastUser;
                     gameState.username = lastUser;
                     loginOverlay.style.display = 'none';
@@ -2980,6 +4671,8 @@
                     initAchievementsDisplay();
                     checkAdminAccess();
                     applyWorldStyle();
+                    renderSkins();
+                    renderInvestments();
                     saveToCloud();
                     startPlayTime();
                     return true;
@@ -3012,6 +4705,8 @@
             shopSection.classList.remove('hidden');
             shopReopenNotify.style.display = 'none';
             applyWorldStyle();
+            renderSkins();
+            renderInvestments();
         }
 
         function startPlayTime() {
@@ -3028,7 +4723,8 @@
             const hours = Math.floor(playTimeSeconds / 3600);
             const minutes = Math.floor((playTimeSeconds % 3600) / 60);
             const seconds = playTimeSeconds % 60;
-            playTimeEl.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            playTimeEl.textContent =
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
         // ==================== АДМИН ====================
@@ -3062,7 +4758,10 @@
                             const newData = getDefaultGameState();
                             newData.username = target;
                             updateFn(newData);
-                            return firebaseDb.ref('users/' + key).set(newData).then(() => { resolve(newData); });
+                            return firebaseDb.ref('users/' + key).set(newData).then(() => {
+                                resolve(
+                                    newData);
+                            });
                         } else {
                             const data = snapshot.val();
                             updateFn(data);
@@ -3092,7 +4791,10 @@
                 const data = await updateUserData(adminTargetNick.value, d => { d.balance = (d.balance || 0) + amount; });
                 const target = adminTargetNick.value.trim() || currentUser;
                 if (target === currentUser) {
-                    gameState = { ...gameState, ...data };
+                    gameState = {
+                        ...gameState,
+                        ...data
+                    };
                     updateUI();
                 }
                 showAdminFeedback(`✅ Денег выдано: +$${amount}. Новый баланс: $${data.balance}`);
@@ -3112,7 +4814,10 @@
                 const data = await updateUserData(adminTargetNick.value, d => { d.clickPower = amount; });
                 const target = adminTargetNick.value.trim() || currentUser;
                 if (target === currentUser) {
-                    gameState = { ...gameState, ...data };
+                    gameState = {
+                        ...gameState,
+                        ...data
+                    };
                     updateUI();
                 }
                 showAdminFeedback(`✅ Сила клика установлена: ${amount}`);
@@ -3132,7 +4837,10 @@
                 const data = await updateUserData(adminTargetNick.value, d => { d.incomePerSec = amount; });
                 const target = adminTargetNick.value.trim() || currentUser;
                 if (target === currentUser) {
-                    gameState = { ...gameState, ...data };
+                    gameState = {
+                        ...gameState,
+                        ...data
+                    };
                     updateUI();
                 }
                 showAdminFeedback(`✅ Авто-доход установлен: ${amount}$/сек`);
@@ -3164,7 +4872,7 @@
         // ==================== GAME LOGIC ====================
         function addIncome(baseAmount) {
             if (baseAmount <= 0) return;
-            const effectiveAmount = Math.floor(baseAmount * gameState.multiplier);
+            const effectiveAmount = Math.floor(baseAmount * gameState.multiplier * luckBonusMultiplier);
             gameState.balance += effectiveAmount;
             gameState.totalEarned += effectiveAmount;
             gainExperience(Math.max(1, Math.floor(effectiveAmount / 5)));
@@ -3193,13 +4901,13 @@
             }
             gameState.clickPower += reward;
 
-            // Показываем модальное окно с подробностями
             document.getElementById('levelUpReward').textContent = `+${reward} к силе клика`;
             document.getElementById('levelUpBonus').textContent = bonusText || 'Продолжайте прокачиваться!';
             document.getElementById('levelUpNumber').textContent = gameState.level;
             document.getElementById('lvlClickPower').textContent = gameState.clickPower;
             document.getElementById('lvlIncome').textContent = formatNumber(gameState.incomePerSec);
-            document.getElementById('lvlMultiplier').textContent = 'x' + gameState.multiplier.toFixed(1);
+            document.getElementById('lvlMultiplier').textContent = 'x' + (gameState.multiplier * luckBonusMultiplier).toFixed(
+                1);
             document.getElementById('lvlRebirths').textContent = gameState.rebirthCount;
 
             levelUpModal.classList.remove('hidden');
@@ -3257,11 +4965,22 @@
 
         document.getElementById('clickBtn').addEventListener('click', (e) => {
             if (!currentUser) return;
-            const amount = gameState.clickPower * gameState.multiplier;
+
+            // Комбо
+            addCombo();
+
+            const effectiveMultiplier = gameState.multiplier * luckBonusMultiplier;
+            const amount = gameState.clickPower * effectiveMultiplier;
             const earned = Math.floor(amount);
             gameState.balance += earned;
             gameState.totalEarned += earned;
             gameState.totalClicks++;
+
+            // Пик кликов
+            if (gameState.clickPower > (gameState.peakClicks || 0)) {
+                gameState.peakClicks = gameState.clickPower;
+            }
+
             gainExperience(Math.max(1, Math.floor(earned / 10)));
 
             if (gameState.world === 2) {
@@ -3343,21 +5062,21 @@
                     return;
                 }
                 const progressDiv = document.createElement('div');
-                progressDiv.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 15px; background: rgba(74,222,128,0.1); border-radius: 15px; border: 2px solid rgba(74,222,128,0.3); margin-bottom: 10px;';
+                progressDiv.style.cssText =
+                    'grid-column: 1 / -1; text-align: center; padding: 15px; background: rgba(74,222,128,0.1); border-radius: 15px; border: 2px solid rgba(74,222,128,0.3); margin-bottom: 10px;';
                 progressDiv.innerHTML = `<div style="font-size: 1.1rem; margin-bottom: 5px;">🌍 Прогресс к Миру 2</div>
-                        <div style="font-size: 0.9rem; color: #aaa;">
-                            Перерождений: ${gameState.rebirthCount}/5 ${gameState.rebirthCount >= 5 ? '✅' : '❌'} |
-                            Баланс: ${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_ENTRY_COST)} ${gameState.balance >= WORLD2_ENTRY_COST ? '✅' : '❌'}
-                        </div>
-                        <div style="font-size: 0.8rem; color: #ff6b6b; margin-top: 5px;">
-                            ${gameState.rebirthCount < 5 ? `❌ Нужно ещё ${5 - gameState.rebirthCount} перерождений` : ''}
-                            ${gameState.balance < WORLD2_ENTRY_COST ? `❌ Не хватает ${formatNumber(WORLD2_ENTRY_COST - gameState.balance)}$` : ''}
-                        </div>`;
+                            <div style="font-size: 0.9rem; color: #aaa;">
+                                Перерождений: ${gameState.rebirthCount}/5 ${gameState.rebirthCount >= 5 ? '✅' : '❌'} |
+                                Баланс: ${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_ENTRY_COST)} ${gameState.balance >= WORLD2_ENTRY_COST ? '✅' : '❌'}
+                            </div>
+                            <div style="font-size: 0.8rem; color: #ff6b6b; margin-top: 5px;">
+                                ${gameState.rebirthCount < 5 ? `❌ Нужно ещё ${5 - gameState.rebirthCount} перерождений` : ''}
+                                ${gameState.balance < WORLD2_ENTRY_COST ? `❌ Не хватает ${formatNumber(WORLD2_ENTRY_COST - gameState.balance)}$` : ''}
+                            </div>`;
                 shopGrid.appendChild(progressDiv);
             }
 
             items.forEach(item => {
-                // Фильтрация по вкладкам
                 if (currentTab !== 'all') {
                     if (currentTab === 'click' && item.type !== 'click') return;
                     if (currentTab === 'income' && item.type !== 'income') return;
@@ -3372,11 +5091,14 @@
                 const isRebirth = item.type === 'rebirth';
                 const btnClass = isRebirth ? 'item-btn rebirth-btn-type' : 'item-btn';
                 const onclickHandler = isRebirth ? `openRebirthModal('${item.id}')` : `buyItem('${item.id}')`;
-                let buttonsHtml = `<button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${isRebirth ? '🔄 Переродиться' : 'Купить'}</button>`;
+                let buttonsHtml =
+                    `<button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${isRebirth ? '🔄 Переродиться' : 'Купить'}</button>`;
                 if (!isRebirth && canAfford) {
-                    buttonsHtml += `<button class="item-btn buy-max-btn" onclick="buyMax('${item.id}')">📦 На все</button>`;
+                    buttonsHtml +=
+                        `<button class="item-btn buy-max-btn" onclick="buyMax('${item.id}')">📦 На все</button>`;
                 }
-                el.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div>${buttonsHtml}`;
+                el.innerHTML =
+                    `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div>${buttonsHtml}`;
                 shopGrid.appendChild(el);
             });
         }
@@ -3469,41 +5191,64 @@
         }
 
         function updateUI() {
-            const effectiveIncome = Math.floor(gameState.incomePerSec * gameState.multiplier);
+            const effectiveMultiplier = gameState.multiplier * luckBonusMultiplier;
+            const effectiveIncome = Math.floor(gameState.incomePerSec * effectiveMultiplier);
             balanceEl.textContent = '$' + formatNumber(Math.floor(gameState.balance));
             clickPowerEl.textContent = formatNumber(gameState.clickPower);
             incomePerSecEl.textContent = formatNumber(effectiveIncome);
             levelEl.textContent = gameState.level;
-            multiplierBadge.textContent = 'x' + gameState.multiplier.toFixed(1);
-            multiplierDisplay.textContent = 'x' + gameState.multiplier.toFixed(1);
+            multiplierBadge.textContent = 'x' + effectiveMultiplier.toFixed(1);
+            multiplierDisplay.textContent = 'x' + effectiveMultiplier.toFixed(1);
             rebirthCountDisplay.textContent = formatNumber(gameState.rebirthCount);
 
             const progress = Math.min(100, (gameState.balance / WORLD2_REQUIRED_BALANCE) * 100);
-            const progressText = (gameState.balance >= WORLD2_REQUIRED_BALANCE) ? '✅ Доступен' : `${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_REQUIRED_BALANCE)} (${progress.toFixed(1)}%)`;
+            const progressText = (gameState.balance >= WORLD2_REQUIRED_BALANCE) ? '✅ Доступен' :
+                `${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_REQUIRED_BALANCE)} (${progress.toFixed(1)}%)`;
             world2Progress.textContent = progressText;
             worldDisplay.textContent = gameState.world + (gameState.world === 2 ? ' ⭐' : '');
 
             const expPercent = Math.min(100, (gameState.experience / gameState.experienceToNextLevel) * 100);
             levelProgressEl.style.width = expPercent + '%';
             progressTextEl.textContent = Math.floor(expPercent) + '%';
-            expDisplayEl.textContent = formatNumber(gameState.experience) + ' / ' + formatNumber(gameState.experienceToNextLevel);
+            expDisplayEl.textContent = formatNumber(gameState.experience) + ' / ' + formatNumber(gameState
+                .experienceToNextLevel);
 
-            // Детальная статистика
             totalClicksEl.textContent = formatNumber(gameState.totalClicks || 0);
             totalEarnedEl.textContent = '$' + formatNumber(gameState.totalEarned || 0);
             totalSpentDisplayEl.textContent = '$' + formatNumber(gameState.totalSpent || 0);
+            chestsOpenedEl.textContent = formatNumber(gameState.chestsOpened || 0);
+            gamesWonEl.textContent = formatNumber(gameState.gamesWon || 0);
+            peakClicksDisplay.textContent = formatNumber(gameState.peakClicks || 0);
+
+            // Престиж
+            const prestigeLevel = gameState.prestigeLevel || 0;
+            prestigeLevelDisplay.textContent = prestigeLevel;
+            const prestigeMultiplier = gameState.prestigeMultiplier || 1;
+            prestigeBonusDisplay.textContent = 'x' + prestigeMultiplier.toFixed(1);
+            const required = getPrestigeRequirement();
+            prestigeRequirement.textContent = formatNumber(required) + '$';
+            prestigeBtn.disabled = gameState.balance < required;
+
             updatePlayTimeDisplay();
 
             renderShop();
             renderSkills();
+            renderInvestments();
             checkAchievements();
+            updateLeaderboard();
         }
 
         function formatNumber(num) {
             if (num < 1000) return Math.floor(num).toLocaleString();
-            const suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'UDc', 'DDc', 'TDc', 'QaDc', 'QiDc', 'SxDc', 'SpDc', 'OcDc', 'NoDc', 'Vg'];
-            let tier = 0, n = num;
-            while (n >= 1000 && tier < suffixes.length - 1) { n /= 1000; tier++; }
+            const suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'UDc', 'DDc', 'TDc', 'QaDc',
+                'QiDc', 'SxDc', 'SpDc', 'OcDc', 'NoDc', 'Vg'
+            ];
+            let tier = 0,
+                n = num;
+            while (n >= 1000 && tier < suffixes.length - 1) {
+                n /= 1000;
+                tier++;
+            }
             return tier < suffixes.length ? n.toFixed(2) + suffixes[tier] : n.toExponential(2);
         }
 
@@ -3526,12 +5271,14 @@
                     newUnlock = true;
                     const div = document.createElement('div');
                     div.className = 'achievement-item unlocked';
-                    div.innerHTML = `<div class="achievement-icon">${ach.icon}</div><div class="achievement-info"><h4>${ach.name}</h4><p>${ach.desc}</p></div>`;
+                    div.innerHTML =
+                        `<div class="achievement-icon">${ach.icon}</div><div class="achievement-info"><h4>${ach.name}</h4><p>${ach.desc}</p></div>`;
                     achievementsList.prepend(div);
+                    showEventNotification('🏆 Достижение разблокировано!', ach.name, ach.icon);
+                    playAchievementSound();
                 }
             });
             if (newUnlock) {
-                playAchievementSound();
                 debouncedSaveToCloud();
             }
         }
@@ -3542,7 +5289,8 @@
                 const unlocked = gameState.achievements.includes(ach.id);
                 const div = document.createElement('div');
                 div.className = 'achievement-item' + (unlocked ? ' unlocked' : '');
-                div.innerHTML = `<div class="achievement-icon">${unlocked ? ach.icon : '🔒'}</div><div class="achievement-info"><h4>${ach.name}</h4><p>${ach.desc}</p></div>`;
+                div.innerHTML =
+                    `<div class="achievement-icon">${unlocked ? ach.icon : '🔒'}</div><div class="achievement-info"><h4>${ach.name}</h4><p>${ach.desc}</p></div>`;
                 achievementsList.appendChild(div);
             });
         }
@@ -3552,8 +5300,14 @@
             if (confirm('Вы уверены? Весь прогресс этого аккаунта будет удалён (включая облако)!')) {
                 gameState = getDefaultGameState();
                 gameState.username = currentUser;
+                // Сбрасываем скины
+                Object.keys(skins).forEach(key => {
+                    skins[key].unlocked = key === 'default';
+                });
                 updateUI();
                 initAchievementsDisplay();
+                renderSkins();
+                renderInvestments();
                 saveToCloud();
                 applyWorldStyle();
             }
@@ -3592,16 +5346,38 @@
             }
             renderShop();
             renderSkills();
+            renderSkins();
+            renderInvestments();
+            updateLeaderboard();
 
             setInterval(() => { if (currentUser && gameState.incomePerSec > 0) addIncome(gameState.incomePerSec); }, 1000);
             setInterval(() => { if (currentUser && firebaseReady) saveToCloud(); }, 30000);
             setInterval(checkAchievements, 2000);
+            setInterval(() => { if (currentUser) triggerRandomEvent(); }, 30000);
+
+            // Кнопка для мини-игры
+            const miniGameBtn = document.createElement('button');
+            miniGameBtn.textContent = '🎯 Мини-игра';
+            miniGameBtn.style.cssText =
+                'position:fixed; bottom:160px; right:20px; padding:10px 16px; background:linear-gradient(135deg,#4a90d9,#357abd); border:none; color:#fff; border-radius:12px; font-weight:bold; cursor:pointer; z-index:55; font-size:0.9rem; box-shadow:0 5px 20px rgba(74,144,217,0.4);';
+            miniGameBtn.onclick = startMiniGame;
+            document.body.appendChild(miniGameBtn);
 
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && loginOverlay.style.display !== 'none') {
-                    handleLogin();
+                if (e.key === 'Enter') {
+                    if (loginOverlay.style.display !== 'none') {
+                        handleLogin();
+                    } else if (miniGameActive) {
+                        guessNumber();
+                    }
+                }
+                if (e.key === 'Escape') {
+                    if (miniGameActive) closeMiniGame();
                 }
             });
+
+            // Обновление таймера удачи
+            luckTime.textContent = 'Обновится через: 23:59:59';
         }
 
         init();

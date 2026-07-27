@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Standoff 2D 🔥</title>
     <style>
         * {
@@ -13,535 +13,1384 @@
             -webkit-user-select: none;
         }
 
-        body, html {
+        body,
+        html {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #111;
-            font-family: 'Segoe UI',sans-serif;
+            background: #0a0a0f;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            touch-action: none;
         }
 
         canvas {
             display: block;
+            touch-action: none;
         }
 
+        /* HUD - стильный и информативный */
         #hud {
             position: absolute;
-            top: 15px;
-            left: 15px;
+            top: 12px;
+            left: 12px;
             color: #fff;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            text-shadow: 0 0 10px rgba(0,0,0,0.7);
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
             pointer-events: none;
             z-index: 10;
-            background: rgba(0,0,0,0.5);
-            padding: 8px 15px;
-            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 10px 18px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
         }
+
+            #hud .hp-bar {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            #hud .hp-fill {
+                width: 80px;
+                height: 8px;
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 4px;
+                overflow: hidden;
+            }
+
+            #hud .hp-fill-inner {
+                height: 100%;
+                background: linear-gradient(90deg, #e74c3c, #2ecc71);
+                transition: width 0.3s ease;
+                border-radius: 4px;
+            }
+
+            #hud .stat {
+                color: #aaa;
+                font-weight: 400;
+            }
+
+                #hud .stat span {
+                    color: #fff;
+                    font-weight: 700;
+                }
 
         #wave-box {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            color: #ffaa00;
-            font-size: 18px;
-            background: rgba(0,0,0,0.5);
-            padding: 8px 15px;
-            border-radius: 8px;
+            top: 12px;
+            right: 12px;
+            color: #ffd700;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 10px 18px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.15);
             pointer-events: none;
             z-index: 10;
+            text-align: center;
         }
+
+            #wave-box .wave-num {
+                font-size: 24px;
+                font-weight: 800;
+                color: #ffd700;
+            }
+
+            #wave-box .enemies-left {
+                font-size: 12px;
+                color: #aaa;
+                margin-top: 2px;
+            }
 
         #ammo-box {
             position: absolute;
             bottom: 20px;
             right: 20px;
             color: #ffcc00;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: bold;
-            background: rgba(0,0,0,0.5);
-            padding: 5px 18px;
-            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 8px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 204, 0, 0.15);
             pointer-events: none;
             z-index: 10;
         }
 
+            #ammo-box .ammo-reload {
+                font-size: 14px;
+                color: #ff6b6b;
+                font-weight: 400;
+            }
+
+        /* Мобильные кнопки */
         .mobile-btn {
             position: absolute;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.08);
             color: #fff;
-            border: 2px solid rgba(255,255,255,0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
+            width: 64px;
+            height: 64px;
+            font-size: 26px;
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 20;
             cursor: pointer;
-            touch-action: manipulation;
+            touch-action: none;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
         }
+
+            .mobile-btn:active {
+                transform: scale(0.88);
+                background: rgba(255, 255, 255, 0.2);
+            }
 
         #reload-btn {
             bottom: 100px;
             right: 20px;
+            font-size: 20px;
         }
 
         #shoot-btn {
             bottom: 20px;
             right: 100px;
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+            border-color: rgba(255, 50, 50, 0.4);
+            background: rgba(255, 50, 50, 0.15);
         }
 
+        /* Джойстик */
         #joystick-zone {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            width: 120px;
-            height: 120px;
-            background: rgba(255,255,255,0.08);
-            border: 2px solid rgba(255,255,255,0.3);
+            width: 130px;
+            height: 130px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.12);
             border-radius: 50%;
             display: none;
             z-index: 10;
+            touch-action: none;
         }
+
+            #joystick-zone::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                border: 1px dashed rgba(255, 255, 255, 0.1);
+                pointer-events: none;
+            }
 
         #joystick-stick {
             position: absolute;
-            top: 35px;
-            left: 35px;
+            top: 40px;
+            left: 40px;
             width: 50px;
             height: 50px;
-            background: rgba(255,204,0,0.6);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 204, 0, 0.8), rgba(255, 170, 0, 0.4));
             border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.2);
+            transition: none;
+            touch-action: none;
         }
 
+        /* Game Over */
         #game-over {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             color: #fff;
             font-size: 32px;
             text-align: center;
             display: none;
             z-index: 30;
-            background: rgba(0,0,0,0.9);
-            padding: 40px;
-            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.92);
+            padding: 40px 50px;
+            border-radius: 20px;
             border: 2px solid #e74c3c;
+            backdrop-filter: blur(20px);
+            min-width: 320px;
         }
+
+            #game-over .go-title {
+                font-size: 40px;
+                font-weight: 800;
+                color: #e74c3c;
+            }
+
+            #game-over .go-stats {
+                font-size: 16px;
+                color: #aaa;
+                margin: 16px 0;
+                line-height: 1.8;
+            }
+
+                #game-over .go-stats span {
+                    color: #ffd700;
+                }
 
         #restart-btn {
             margin-top: 20px;
-            padding: 12px 30px;
-            background: #f1c40f;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
             color: #000;
             border: none;
-            border-radius: 6px;
-            font-size: 20px;
+            border-radius: 10px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 25px rgba(241, 196, 15, 0.3);
+        }
+
+            #restart-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 35px rgba(241, 196, 15, 0.5);
+            }
+
+            #restart-btn:active {
+                transform: scale(0.95);
+            }
+
+        /* Уровень сложности */
+        #difficulty-box {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 16px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .diff-btn {
+            padding: 6px 18px;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.06);
+            color: #888;
+        }
+
+            .diff-btn:hover {
+                background: rgba(255, 255, 255, 0.12);
+                color: #fff;
+            }
+
+            .diff-btn.active {
+                background: #f1c40f;
+                color: #000;
+                box-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
+            }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            #hud {
+                font-size: 14px;
+                padding: 8px 12px;
+                gap: 10px;
+                top: 8px;
+                left: 8px;
+            }
+
+                #hud .hp-fill {
+                    width: 50px;
+                    height: 6px;
+                }
+
+            #wave-box {
+                font-size: 13px;
+                padding: 6px 12px;
+                top: 8px;
+                right: 8px;
+            }
+
+                #wave-box .wave-num {
+                    font-size: 18px;
+                }
+
+            #ammo-box {
+                font-size: 20px;
+                padding: 5px 14px;
+                bottom: 12px;
+                right: 12px;
+            }
+
+            #joystick-zone {
+                width: 100px;
+                height: 100px;
+                bottom: 12px;
+                left: 12px;
+            }
+
+            #joystick-stick {
+                width: 40px;
+                height: 40px;
+                top: 30px;
+                left: 30px;
+            }
+
+            .mobile-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            #shoot-btn {
+                width: 64px;
+                height: 64px;
+                font-size: 26px;
+                right: 80px;
+                bottom: 12px;
+            }
+
+            #reload-btn {
+                bottom: 80px;
+                right: 12px;
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+            }
+
+            #game-over {
+                padding: 30px 25px;
+                min-width: auto;
+                width: 90%;
+                font-size: 24px;
+            }
+
+                #game-over .go-title {
+                    font-size: 30px;
+                }
+
+            #difficulty-box {
+                bottom: 80px;
+                padding: 5px 12px;
+                gap: 6px;
+            }
+
+            .diff-btn {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            #hud {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+                #hud .hp-fill {
+                    width: 35px;
+                }
+
+            #joystick-zone {
+                width: 80px;
+                height: 80px;
+            }
+
+            #joystick-stick {
+                width: 32px;
+                height: 32px;
+                top: 24px;
+                left: 24px;
+            }
+
+            #shoot-btn {
+                width: 56px;
+                height: 56px;
+                font-size: 22px;
+                right: 60px;
+            }
+
+            #ammo-box {
+                font-size: 16px;
+                padding: 4px 10px;
+            }
+        }
+
+        /* Анимация для волны */
+        @keyframes wavePulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .wave-pulse {
+            animation: wavePulse 0.5s ease 3;
         }
     </style>
 </head>
 <body>
-    <div id="hud">❤️ <span id="hp">100</span> | 💀 <span id="score">0</span></div>
-    <div id="wave-box">🌊 Волна <span id="wave">1</span></div>
-    <div id="ammo-box">🔫 <span id="ammo">30</span> / ∞</div>
+    <!-- HUD -->
+    <div id="hud">
+        <div class="hp-bar">
+            ❤️
+            <div class="hp-fill"><div class="hp-fill-inner" id="hpFill" style="width:100%"></div></div>
+            <span id="hp">100</span>
+        </div>
+        <div class="stat">💀 <span id="score">0</span></div>
+        <div class="stat">🔥 <span id="killstreak">0</span></div>
+    </div>
 
+    <div id="wave-box">
+        <div>🌊 Волна</div>
+        <div class="wave-num" id="wave">1</div>
+        <div class="enemies-left">👾 <span id="enemiesLeft">0</span></div>
+    </div>
+
+    <div id="ammo-box">
+        🔫 <span id="ammo">30</span>
+        <span class="ammo-reload" id="reloadStatus"></span>
+    </div>
+
+    <!-- Мобильные кнопки -->
     <div class="mobile-btn" id="reload-btn">↻</div>
     <div class="mobile-btn" id="shoot-btn">🔫</div>
 
+    <!-- Джойстик -->
     <div id="joystick-zone"><div id="joystick-stick"></div></div>
 
+    <!-- Сложность -->
+    <div id="difficulty-box">
+        <button class="diff-btn active" data-diff="normal" onclick="setDifficulty('normal')">Нормальная</button>
+        <button class="diff-btn" data-diff="hard" onclick="setDifficulty('hard')">Сложная</button>
+        <button class="diff-btn" data-diff="insane" onclick="setDifficulty('insane')">🔥 Безумие</button>
+    </div>
+
+    <!-- Game Over -->
     <div id="game-over">
-        <div>ВЫ ПОГИБЛИ</div>
-        <div style="font-size:20px; margin-top:10px;">Рекорд: <span id="highscore">0</span></div>
-        <button id="restart-btn" onclick="restartGame()">Играть снова</button>
+        <div class="go-title">💀 ВЫ ПОГИБЛИ</div>
+        <div class="go-stats">
+            📊 Счёт: <span id="finalScore">0</span><br>
+            🏆 Рекорд: <span id="highscore">0</span><br>
+            🌊 Волна: <span id="finalWave">1</span><br>
+            🔥 Серия: <span id="finalKillstreak">0</span>
+        </div>
+        <button id="restart-btn" onclick="restartGame()">🔄 Играть снова</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
 
     <script>
-        // ---------- НАСТРОЙКИ ----------
+        // ==================== НАСТРОЙКИ ====================
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
 
         const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         if (isMobile) {
             document.getElementById('joystick-zone').style.display = 'block';
             document.getElementById('reload-btn').style.display = 'flex';
             document.getElementById('shoot-btn').style.display = 'flex';
+            document.getElementById('difficulty-box').style.display = 'none';
         }
 
-        // ---------- ЗВУКИ (Web Audio) ----------
+        // ==================== ЗВУКИ ====================
         let audioCtx = null;
+
         function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        function playBeep(freq, duration, type = 'square', vol = 0.1) {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = type; osc.frequency.value = freq;
-            gain.gain.value = vol;
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); setTimeout(() => osc.stop(), duration);
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
         }
 
-        // ---------- СОСТОЯНИЕ ИГРЫ ----------
+        function playSound(freq, duration, type = 'square', vol = 0.08) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.value = vol;
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration / 1000);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration / 1000);
+            } catch (e) { /* игнорируем ошибки звука */ }
+        }
+
+        function playShootSound() {
+            playSound(700, 60, 'square', 0.06);
+            setTimeout(() => playSound(400, 40, 'square', 0.03), 30);
+        }
+
+        function playHitSound() { playSound(300, 80, 'sine', 0.08); }
+
+        function playPickupSound() {
+            playSound(600, 100, 'triangle', 0.07);
+            setTimeout(() => playSound(800, 80, 'triangle', 0.05), 100);
+        }
+
+        function playReloadSound() {
+            playSound(200, 150, 'sawtooth', 0.05);
+            setTimeout(() => playSound(300, 100, 'sawtooth', 0.04), 200);
+        }
+
+        function playGameOverSound() {
+            [400, 300, 200, 150].forEach((f, i) => setTimeout(() => playSound(f, 200, 'sawtooth', 0.06), i * 200));
+        }
+
+        function playWaveSound() {
+            [500, 600, 700, 800].forEach((f, i) => setTimeout(() => playSound(f, 100, 'sine', 0.05), i * 100));
+        }
+
+        // ==================== СОСТОЯНИЕ ИГРЫ ====================
         let gameActive = true;
         let score = 0;
         let wave = 1;
-        let enemiesRemaining = 5; // врагов на волну
+        let killstreak = 0;
+        let enemiesRemaining = 0;
+        let totalEnemiesSpawned = 0;
         let highScore = parseInt(localStorage.getItem('standoff2d_hs')) || 0;
-        document.getElementById('highscore').innerText = highScore;
+        let difficulty = 'normal';
 
-        const player = {
-            x: canvas.width / 2, y: canvas.height / 2, radius: 18, speed: 4.2,
-            hp: 100, maxHp: 100, ammo: 30, maxAmmo: 30, isReloading: false, angle: 0
+        const DIFFICULTY = {
+            normal: { enemySpeed: 1.2, enemyHp: 1, spawnRate: 400, enemyCount: 5, playerSpeed: 4.2 },
+            hard: { enemySpeed: 1.6, enemyHp: 1.3, spawnRate: 300, enemyCount: 7, playerSpeed: 4.5 },
+            insane: { enemySpeed: 2.0, enemyHp: 1.6, spawnRate: 200, enemyCount: 10, playerSpeed: 4.8 }
         };
 
-        // ---------- УПРАВЛЕНИЕ КЛАВИАТУРОЙ ----------
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 18,
+            speed: 4.2,
+            hp: 100,
+            maxHp: 100,
+            ammo: 30,
+            maxAmmo: 30,
+            isReloading: false,
+            angle: 0,
+            invincible: 0
+        };
+
+        // ==================== УПРАВЛЕНИЕ ====================
         const keys = {};
         window.addEventListener('keydown', e => {
             keys[e.code] = true;
             if (e.code === 'KeyR') reload();
+            if (e.code === 'Space') {
+                e.preventDefault();
+                shoot();
+            }
             initAudio();
         });
         window.addEventListener('keyup', e => keys[e.code] = false);
 
-        let mouseX = canvas.width / 2, mouseY = canvas.height / 2, mouseDown = false;
-        window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
-        window.addEventListener('mousedown', e => { if (e.button === 0) { mouseDown = true; initAudio(); } });
+        let mouseX = canvas.width / 2,
+            mouseY = canvas.height / 2,
+            mouseDown = false;
+        window.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        window.addEventListener('mousedown', e => {
+            if (e.button === 0) {
+                mouseDown = true;
+                initAudio();
+                shoot();
+            }
+        });
         window.addEventListener('mouseup', e => { if (e.button === 0) mouseDown = false; });
 
-        // ---------- МОБИЛЬНЫЙ ДЖОЙСТИК ----------
+        // ==================== ДЖОЙСТИК ====================
         const joyZone = document.getElementById('joystick-zone');
         const joyStick = document.getElementById('joystick-stick');
-        let joyVec = { x: 0, y: 0 }, joyTouchId = null;
+        let joyVec = { x: 0, y: 0 },
+            joyTouchId = null;
 
         function updateJoystick(touch) {
             const rect = joyZone.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-            let dx = touch.clientX - cx, dy = touch.clientY - cy;
-            const dist = Math.hypot(dx, dy), max = 40;
-            if (dist > max) { dx = (dx / dist) * max; dy = (dy / dist) * max; }
-            joyStick.style.left = `${35 + dx}px`; joyStick.style.top = `${35 + dy}px`;
-            joyVec.x = dx / max; joyVec.y = dy / max;
+            const cx = rect.left + rect.width / 2,
+                cy = rect.top + rect.height / 2;
+            let dx = touch.clientX - cx,
+                dy = touch.clientY - cy;
+            const dist = Math.hypot(dx, dy),
+                max = 40;
+            if (dist > max) {
+                dx = (dx / dist) * max;
+                dy = (dy / dist) * max;
+            }
+            joyStick.style.left = `${35 + dx}px`;
+            joyStick.style.top = `${35 + dy}px`;
+            joyVec.x = dx / max;
+            joyVec.y = dy / max;
         }
 
         window.addEventListener('touchstart', e => {
             initAudio();
             for (let t of e.changedTouches) {
                 if (t.clientX < window.innerWidth / 2 && joyTouchId === null) {
-                    joyTouchId = t.identifier; updateJoystick(t);
+                    joyTouchId = t.identifier;
+                    updateJoystick(t);
                 }
             }
-        });
+        }, { passive: true });
+
         window.addEventListener('touchmove', e => {
-            for (let t of e.changedTouches) if (t.identifier === joyTouchId) updateJoystick(t);
-        });
-        window.addEventListener('touchend', e => {
-            for (let t of e.changedTouches) if (t.identifier === joyTouchId) {
-                joyTouchId = null; joyVec = { x: 0, y: 0 };
-                joyStick.style.top = '35px'; joyStick.style.left = '35px';
+            for (let t of e.changedTouches) {
+                if (t.identifier === joyTouchId) updateJoystick(t);
             }
-        });
+        }, { passive: true });
 
-        // Кнопки мобильные
-        document.getElementById('shoot-btn').addEventListener('touchstart', (e) => { e.preventDefault(); mouseDown = true; });
-        document.getElementById('shoot-btn').addEventListener('touchend', () => { mouseDown = false; });
-        document.getElementById('reload-btn').addEventListener('touchstart', (e) => { e.preventDefault(); reload(); });
+        window.addEventListener('touchend', e => {
+            for (let t of e.changedTouches) {
+                if (t.identifier === joyTouchId) {
+                    joyTouchId = null;
+                    joyVec = { x: 0, y: 0 };
+                    joyStick.style.top = '35px';
+                    joyStick.style.left = '35px';
+                }
+            }
+        }, { passive: true });
 
-        // ---------- ПЕРЕЗАРЯДКА ----------
+        // ==================== МОБИЛЬНЫЕ КНОПКИ ====================
+        let mobileShootActive = false;
+
+        document.getElementById('shoot-btn').addEventListener('touchstart', e => {
+            e.preventDefault();
+            initAudio();
+            mobileShootActive = true;
+            shoot();
+        }, { passive: false });
+
+        document.getElementById('shoot-btn').addEventListener('touchend', e => {
+            e.preventDefault();
+            mobileShootActive = false;
+        }, { passive: false });
+
+        document.getElementById('shoot-btn').addEventListener('touchcancel', () => { mobileShootActive = false; });
+
+        document.getElementById('reload-btn').addEventListener('touchstart', e => {
+            e.preventDefault();
+            reload();
+        }, { passive: false });
+
+        // ==================== ПЕРЕЗАРЯДКА ====================
         function reload() {
             if (player.isReloading || player.ammo === player.maxAmmo) return;
             player.isReloading = true;
-            document.getElementById('ammo').innerText = '…';
+            document.getElementById('reloadStatus').textContent = '⏳';
+            playReloadSound();
             setTimeout(() => {
                 player.ammo = player.maxAmmo;
                 player.isReloading = false;
                 document.getElementById('ammo').innerText = player.ammo;
-            }, 1400);
+                document.getElementById('reloadStatus').textContent = '';
+            }, 1500);
         }
 
-        // ---------- ВРАГИ И ВОЛНЫ ----------
+        // ==================== ВРАГИ И ВОЛНЫ ====================
         const enemies = [];
         const particles = [];
         const powerups = [];
+        const bullets = [];
+        let lastShot = 0;
+        let waveDelay = 0;
 
         function spawnWave() {
-            enemiesRemaining = 4 + wave * 2;
+            const diff = DIFFICULTY[difficulty];
+            enemiesRemaining = diff.enemyCount + wave * 2;
+            totalEnemiesSpawned = enemiesRemaining;
             document.getElementById('wave').innerText = wave;
+            document.getElementById('enemiesLeft').innerText = enemiesRemaining;
+            playWaveSound();
+
             for (let i = 0; i < enemiesRemaining; i++) {
                 setTimeout(() => {
                     if (!gameActive) return;
                     let x, y;
                     if (Math.random() < 0.5) {
-                        x = Math.random() < 0.5 ? -30 : canvas.width + 30;
+                        x = Math.random() < 0.5 ? -40 : canvas.width + 40;
                         y = Math.random() * canvas.height;
                     } else {
                         x = Math.random() * canvas.width;
-                        y = Math.random() < 0.5 ? -30 : canvas.height + 30;
+                        y = Math.random() < 0.5 ? -40 : canvas.height + 40;
                     }
-                    // Типы врагов с разной скоростью и HP
-                    const type = Math.random();
-                    let speed, hp, radius, color;
-                    if (type < 0.6) { // обычный
-                        speed = 1.8 + Math.random() * 0.8; hp = 3; radius = 18; color = '#d35400';
-                    } else if (type < 0.9) { // быстрый
-                        speed = 2.8 + Math.random() * 0.5; hp = 2; radius = 14; color = '#e67e22';
-                    } else { // танк
-                        speed = 1.2 + Math.random() * 0.4; hp = 6; radius = 24; color = '#c0392b';
+                    // Типы врагов
+                    const rand = Math.random();
+                    let speed = diff.enemySpeed + Math.random() * 0.4;
+                    let hp = Math.ceil(2 * diff.enemyHp);
+                    let radius = 18;
+                    let color = '#d35400';
+                    let type = 'normal';
+                    let scoreValue = 1;
+
+                    if (rand < 0.1 && wave > 3) { // Танк
+                        hp = Math.ceil(6 * diff.enemyHp);
+                        radius = 28;
+                        color = '#8e44ad';
+                        type = 'tank';
+                        speed *= 0.7;
+                        scoreValue = 5;
+                    } else if (rand < 0.25 && wave > 2) { // Быстрый
+                        hp = Math.ceil(1.5 * diff.enemyHp);
+                        radius = 14;
+                        color = '#e67e22';
+                        type = 'fast';
+                        speed *= 1.6;
+                        scoreValue = 2;
+                    } else if (rand < 0.4 && wave > 5) { // Стреляющий
+                        hp = Math.ceil(3 * diff.enemyHp);
+                        radius = 20;
+                        color = '#c0392b';
+                        type = 'shooter';
+                        speed *= 0.6;
+                        scoreValue = 3;
+                    } else { // Обычный
+                        hp = Math.ceil(2 * diff.enemyHp);
+                        radius = 18;
+                        color = '#d35400';
+                        type = 'normal';
+                        scoreValue = 1;
                     }
-                    enemies.push({ x, y, radius, speed, hp, maxHp: hp, color });
-                }, i * 400);
+
+                    enemies.push({
+                        x,
+                        y,
+                        radius,
+                        speed,
+                        hp,
+                        maxHp: hp,
+                        color,
+                        type,
+                        scoreValue,
+                        shootCooldown: 0,
+                        angle: 0
+                    });
+                }, i * diff.spawnRate);
             }
         }
 
         function dropPowerup(x, y) {
-            if (Math.random() < 0.25) {
-                const type = Math.random() < 0.5 ? 'health' : 'ammo';
-                powerups.push({ x, y, type, radius: 12, life: 12000 });
+            if (Math.random() < 0.2) {
+                const types = ['health', 'ammo', 'shield', 'speed'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                powerups.push({ x, y, type, radius: 14, life: 10000, bob: Math.random() * Math.PI * 2 });
             }
         }
 
         function nextWave() {
             wave++;
+            // Восстановление
+            player.hp = Math.min(player.maxHp, player.hp + 20);
+            updateHUD();
+            // Бонус за выживание
+            const bonus = wave * 10;
+            score += bonus;
+            document.getElementById('score').innerText = score;
             spawnWave();
-            // Восстановление немного HP между волнами
-            player.hp = Math.min(player.maxHp, player.hp + 25);
-            document.getElementById('hp').innerText = player.hp;
+            showWaveNotification();
         }
 
-        spawnWave();
+        function showWaveNotification() {
+            const box = document.getElementById('wave-box');
+            box.classList.add('wave-pulse');
+            setTimeout(() => box.classList.remove('wave-pulse'), 1500);
+        }
 
-        // ---------- СТРЕЛЬБА ----------
-        const bullets = [];
-        let lastShot = 0;
+        // ==================== СТРЕЛЬБА ====================
         function shoot() {
             if (!gameActive || player.isReloading || player.ammo <= 0) {
-                if (player.ammo <= 0) reload();
+                if (player.ammo <= 0 && !player.isReloading) reload();
                 return;
             }
-            if (Date.now() - lastShot < 100) return;
-            lastShot = Date.now();
+            const now = Date.now();
+            if (now - lastShot < 100) return;
+            lastShot = now;
             player.ammo--;
             document.getElementById('ammo').innerText = player.ammo;
-            playBeep(800, 60, 'square', 0.05);
+            playShootSound();
 
-            const spread = (Math.random() - 0.5) * 0.12;
+            const spread = (Math.random() - 0.5) * 0.1;
             const angle = player.angle + spread;
+            const speed = 16;
             bullets.push({
                 x: player.x + Math.cos(player.angle) * player.radius,
                 y: player.y + Math.sin(player.angle) * player.radius,
-                vx: Math.cos(angle) * 14, vy: Math.sin(angle) * 14,
-                radius: 3
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                radius: 4,
+                life: 80,
+                trail: []
             });
+
+            // Трассер
+            for (let i = 0; i < 3; i++) {
+                particles.push({
+                    x: player.x + Math.cos(player.angle) * player.radius,
+                    y: player.y + Math.sin(player.angle) * player.radius,
+                    vx: Math.cos(angle) * (speed + 2),
+                    vy: Math.sin(angle) * (speed + 2),
+                    life: 100 + Math.random() * 50,
+                    color: `hsl(${40 + Math.random() * 20}, 100%, 60%)`,
+                    size: 2 + Math.random() * 2
+                });
+            }
         }
 
-        // ---------- ОБНОВЛЕНИЕ ----------
+        // ==================== СЛОЖНОСТЬ ====================
+        function setDifficulty(diff) {
+            difficulty = diff;
+            document.querySelectorAll('.diff-btn').forEach(b => b.classList.toggle('active', b.dataset.diff === diff));
+            player.speed = DIFFICULTY[diff].playerSpeed;
+            // Перезапуск с новой сложностью
+            if (gameActive) {
+                restartGame();
+            }
+        }
+
+        // ==================== ОБНОВЛЕНИЕ ====================
         function update() {
             if (!gameActive) return;
 
-            // Движение игрока
-            let dx = 0, dy = 0;
+            // --- Движение игрока ---
+            let dx = 0,
+                dy = 0;
             if (keys['KeyW'] || keys['ArrowUp']) dy--;
             if (keys['KeyS'] || keys['ArrowDown']) dy++;
             if (keys['KeyA'] || keys['ArrowLeft']) dx--;
             if (keys['KeyD'] || keys['ArrowRight']) dx++;
-            if (joyVec.x !== 0 || joyVec.y !== 0) { dx = joyVec.x; dy = joyVec.y; }
-            if (dx !== 0 && dy !== 0) { dx *= 0.7071; dy *= 0.7071; }
+            if (joyVec.x !== 0 || joyVec.y !== 0) {
+                dx = joyVec.x;
+                dy = joyVec.y;
+            }
+            if (dx !== 0 && dy !== 0) {
+                dx *= 0.7071;
+                dy *= 0.7071;
+            }
             player.x += dx * player.speed;
             player.y += dy * player.speed;
             player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
             player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, player.y));
             player.angle = Math.atan2(mouseY - player.y, mouseX - player.x);
 
-            if (mouseDown) shoot();
+            // Авто-стрельба
+            if (mouseDown || mobileShootActive) shoot();
 
-            // Пули
+            // --- Пули ---
             for (let i = bullets.length - 1; i >= 0; i--) {
                 const b = bullets[i];
-                b.x += b.vx; b.y += b.vy;
-                if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) bullets.splice(i, 1);
+                b.x += b.vx;
+                b.y += b.vy;
+                b.life--;
+                if (b.x < -20 || b.x > canvas.width + 20 || b.y < -20 || b.y > canvas.height + 20 || b.life <= 0) {
+                    bullets.splice(i, 1);
+                }
             }
 
-            // Враги
+            // --- Враги ---
             for (let i = enemies.length - 1; i >= 0; i--) {
                 const e = enemies[i];
                 const angle = Math.atan2(player.y - e.y, player.x - e.x);
+                e.angle = angle;
+
+                // Стреляющие враги
+                if (e.type === 'shooter') {
+                    e.shootCooldown--;
+                    if (e.shootCooldown <= 0 && Math.hypot(player.x - e.x, player.y - e.y) < 600) {
+                        e.shootCooldown = 60;
+                        const bAngle = Math.atan2(player.y - e.y, player.x - e.x);
+                        bullets.push({
+                            x: e.x + Math.cos(bAngle) * e.radius,
+                            y: e.y + Math.sin(bAngle) * e.radius,
+                            vx: Math.cos(bAngle) * 4,
+                            vy: Math.sin(bAngle) * 4,
+                            radius: 6,
+                            life: 120,
+                            isEnemy: true,
+                            trail: []
+                        });
+                        playSound(200, 50, 'sawtooth', 0.04);
+                    }
+                }
+
                 e.x += Math.cos(angle) * e.speed;
                 e.y += Math.sin(angle) * e.speed;
 
-                if (Math.hypot(player.x - e.x, player.y - e.y) < player.radius + e.radius) {
-                    player.hp -= 15;
-                    document.getElementById('hp').innerText = Math.max(0, player.hp);
-                    // Отбрасывание
+                // Столкновение с игроком
+                if (player.invincible <= 0 && Math.hypot(player.x - e.x, player.y - e.y) < player.radius + e.radius) {
+                    player.hp -= 12 + (e.type === 'tank' ? 8 : 0);
+                    player.invincible = 30;
+                    updateHUD();
+                    createExplosion(e.x, e.y, '#ff4444', 10);
                     enemies.splice(i, 1);
                     enemiesRemaining--;
-                    if (player.hp <= 0) gameOver();
+                    document.getElementById('enemiesLeft').innerText = enemiesRemaining;
+                    playHitSound();
+                    if (player.hp <= 0) { gameOver(); return; }
                     continue;
                 }
 
+                // Пули попадают во врагов
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     const b = bullets[j];
+                    if (b.isEnemy) continue;
                     if (Math.hypot(e.x - b.x, e.y - b.y) < e.radius + b.radius) {
                         e.hp--;
                         bullets.splice(j, 1);
+                        createExplosion(b.x, b.y, '#ffaa00', 5);
                         if (e.hp <= 0) {
-                            createExplosion(e.x, e.y);
+                            createExplosion(e.x, e.y, e.color, 15);
                             dropPowerup(e.x, e.y);
+                            score += e.scoreValue || 1;
+                            killstreak++;
+                            document.getElementById('score').innerText = score;
+                            document.getElementById('killstreak').innerText = killstreak;
                             enemies.splice(i, 1);
                             enemiesRemaining--;
-                            score++;
-                            document.getElementById('score').innerText = score;
-                            playBeep(300, 100, 'sine', 0.08);
+                            document.getElementById('enemiesLeft').innerText = enemiesRemaining;
+                            playHitSound();
+                            // Бонус за серию
+                            if (killstreak > 0 && killstreak % 10 === 0) {
+                                score += killstreak * 5;
+                                document.getElementById('score').innerText = score;
+                                showEventNotification(`🔥 Серия ${killstreak}! +${killstreak * 5} очков!`);
+                            }
                         }
                         break;
                     }
                 }
             }
 
-            // Частицы
+            // --- Частицы ---
             for (let i = particles.length - 1; i >= 0; i--) {
                 const p = particles[i];
-                p.x += p.vx; p.y += p.vy; p.life -= 20;
+                p.x += p.vx || 0;
+                p.y += p.vy || 0;
+                if (p.vx) p.vx *= 0.98;
+                if (p.vy) p.vy *= 0.98;
+                p.life -= 15;
                 if (p.life <= 0) particles.splice(i, 1);
             }
 
-            // Бонусы
+            // --- Бонусы ---
             for (let i = powerups.length - 1; i >= 0; i--) {
                 const p = powerups[i];
+                p.bob += 0.05;
+                p.y += Math.sin(p.bob) * 0.3;
                 p.life -= 20;
                 if (p.life <= 0) { powerups.splice(i, 1); continue; }
                 if (Math.hypot(player.x - p.x, player.y - p.y) < player.radius + p.radius) {
                     if (p.type === 'health') {
-                        player.hp = Math.min(player.maxHp, player.hp + 30);
-                        document.getElementById('hp').innerText = player.hp;
+                        player.hp = Math.min(player.maxHp, player.hp + 35);
+                        showEventNotification('❤️ +35 HP');
                     } else if (p.type === 'ammo') {
                         player.ammo = player.maxAmmo;
                         document.getElementById('ammo').innerText = player.ammo;
+                        showEventNotification('🔫 Полный магазин!');
+                    } else if (p.type === 'shield') {
+                        player.invincible = 120;
+                        showEventNotification('🛡️ Щит на 2 секунды!');
+                    } else if (p.type === 'speed') {
+                        player.speed *= 1.5;
+                        showEventNotification('💨 Ускорение!');
+                        setTimeout(() => {
+                            player.speed = DIFFICULTY[difficulty].playerSpeed;
+                        }, 3000);
                     }
                     powerups.splice(i, 1);
-                    playBeep(600, 100, 'triangle', 0.1);
+                    playPickupSound();
+                    updateHUD();
                 }
             }
 
-            // Проверка окончания волны
+            // --- Invincibility ---
+            if (player.invincible > 0) player.invincible--;
+
+            // --- Проверка волны ---
             if (enemiesRemaining <= 0 && enemies.length === 0) {
-                nextWave();
+                if (waveDelay <= 0) {
+                    waveDelay = 60;
+                    nextWave();
+                } else {
+                    waveDelay--;
+                }
+            } else {
+                waveDelay = 0;
+            }
+
+            // --- Обновление HUD ---
+            updateHUD();
+        }
+
+        function updateHUD() {
+            document.getElementById('hp').innerText = Math.max(0, player.hp);
+            document.getElementById('hpFill').style.width = Math.max(0, (player.hp / player.maxHp) * 100) + '%';
+            if (player.hp < 30) {
+                document.getElementById('hpFill').style.background = 'linear-gradient(90deg, #ff4444, #ff6b6b)';
+            } else {
+                document.getElementById('hpFill').style.background = 'linear-gradient(90deg, #e74c3c, #2ecc71)';
             }
         }
 
-        function createExplosion(x, y) {
-            for (let i = 0; i < 12; i++) {
+        function showEventNotification(text) {
+            const el = document.createElement('div');
+            el.style.cssText =
+                'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:28px;font-weight:bold;text-shadow:0 0 30px rgba(0,0,0,0.9);z-index:25;pointer-events:none;animation:eventPop 1.2s ease-out forwards;background:rgba(0,0,0,0.6);padding:20px 40px;border-radius:16px;border:2px solid rgba(255,215,0,0.3);';
+            el.textContent = text;
+            document.body.appendChild(el);
+            setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 1300);
+        }
+
+        // Добавляем стиль для уведомлений
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+                        @keyframes eventPop {
+                            0% { opacity:0; transform:translate(-50%,-50%) scale(0.5); }
+                            20% { opacity:1; transform:translate(-50%,-50%) scale(1.1); }
+                            80% { opacity:1; transform:translate(-50%,-50%) scale(1); }
+                            100% { opacity:0; transform:translate(-50%,-70%) scale(0.9); }
+                        }
+                    `;
+        document.head.appendChild(styleSheet);
+
+        function createExplosion(x, y, color = '#ff8800', count = 12) {
+            for (let i = 0; i < count; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const speed = 2 + Math.random() * 3;
+                const speed = 1 + Math.random() * 4;
                 particles.push({
-                    x, y,
+                    x,
+                    y,
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed,
-                    life: 400 + Math.random() * 300,
-                    color: `hsl(${Math.random() * 30 + 20}, 100%, 50%)`
+                    life: 300 + Math.random() * 200,
+                    color: color || `hsl(${Math.random() * 60 + 20}, 100%, 50%)`,
+                    size: 2 + Math.random() * 4
                 });
             }
         }
 
         function gameOver() {
             gameActive = false;
+            playGameOverSound();
             if (score > highScore) {
                 highScore = score;
                 localStorage.setItem('standoff2d_hs', highScore);
-                document.getElementById('highscore').innerText = highScore;
             }
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('highscore').innerText = highScore;
+            document.getElementById('finalWave').innerText = wave;
+            document.getElementById('finalKillstreak').innerText = killstreak;
             document.getElementById('game-over').style.display = 'block';
         }
 
         function restartGame() {
-            player.x = canvas.width / 2; player.y = canvas.height / 2;
-            player.hp = player.maxHp; player.ammo = player.maxAmmo; player.isReloading = false;
-            score = 0; wave = 1;
-            enemies.length = bullets.length = particles.length = powerups.length = 0;
+            player.x = canvas.width / 2;
+            player.y = canvas.height / 2;
+            player.hp = player.maxHp;
+            player.ammo = player.maxAmmo;
+            player.isReloading = false;
+            player.invincible = 60;
+            player.speed = DIFFICULTY[difficulty].playerSpeed;
+            score = 0;
+            wave = 1;
+            killstreak = 0;
+            enemies.length = 0;
+            bullets.length = 0;
+            particles.length = 0;
+            powerups.length = 0;
+            waveDelay = 0;
             document.getElementById('hp').innerText = player.hp;
             document.getElementById('score').innerText = score;
             document.getElementById('ammo').innerText = player.ammo;
+            document.getElementById('killstreak').innerText = killstreak;
             document.getElementById('game-over').style.display = 'none';
+            document.getElementById('reloadStatus').textContent = '';
+            updateHUD();
             gameActive = true;
             spawnWave();
         }
 
-        // ---------- ОТРИСОВКА ----------
+        // ==================== ОТРИСОВКА ====================
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Фон с сеткой
-            ctx.fillStyle = '#1a1a1a';
+
+            // Фон
+            const gradient = ctx.createRadialGradient(
+                canvas.width / 2, canvas.height / 2, 100,
+                canvas.width / 2, canvas.height / 2, canvas.width * 0.7
+            );
+            gradient.addColorStop(0, '#1a1a2e');
+            gradient.addColorStop(1, '#0a0a0f');
+            ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#2a2a2a';
+
+            // Сетка
+            ctx.strokeStyle = 'rgba(255,255,255,0.03)';
             ctx.lineWidth = 1;
-            const gs = 40;
-            for (let x = 0; x < canvas.width; x += gs) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
-            for (let y = 0; y < canvas.height; y += gs) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
+            const gs = 50;
+            for (let x = 0; x < canvas.width; x += gs) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += gs) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // Круг вокруг игрока (радар)
+            ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, 200, 0, Math.PI * 2);
+            ctx.stroke();
 
             if (!gameActive) return;
 
             // Частицы
             particles.forEach(p => {
-                ctx.fillStyle = p.color;
-                ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); ctx.fill();
+                ctx.globalAlpha = Math.min(1, p.life / 100);
+                ctx.fillStyle = p.color || '#ff8800';
+                const size = p.size || 3;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, size * (p.life / 300 + 0.3), 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
             });
 
-            // Пули
-            ctx.fillStyle = '#ffaa00';
-            bullets.forEach(b => { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2); ctx.fill(); });
+            // Пули врагов
+            bullets.forEach(b => {
+                if (!b.isEnemy) return;
+                ctx.fillStyle = '#ff4444';
+                ctx.shadowColor = '#ff4444';
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // Пули игрока
+            bullets.forEach(b => {
+                if (b.isEnemy) return;
+                ctx.fillStyle = '#ffdd44';
+                ctx.shadowColor = '#ffdd44';
+                ctx.shadowBlur = 20;
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
 
             // Бонусы
             powerups.forEach(p => {
-                ctx.fillStyle = p.type === 'health' ? '#2ecc71' : '#f1c40f';
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+                const colors = { health: '#2ecc71', ammo: '#f1c40f', shield: '#3498db', speed: '#e67e22' };
+                ctx.fillStyle = colors[p.type] || '#fff';
+                ctx.shadowColor = colors[p.type] || '#fff';
+                ctx.shadowBlur = 20;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
                 ctx.fillStyle = '#fff';
-                ctx.font = '14px Arial'; ctx.textAlign = 'center';
-                ctx.fillText(p.type === 'health' ? '+' : '⏺', p.x, p.y + 5);
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const icons = { health: '+', ammo: '⏺', shield: '🛡', speed: '⚡' };
+                ctx.fillText(icons[p.type] || '?', p.x, p.y + 1);
             });
 
             // Враги
             enemies.forEach(e => {
-                ctx.save(); ctx.translate(e.x, e.y);
-                ctx.rotate(Math.atan2(player.y - e.y, player.x - e.x));
+                ctx.save();
+                ctx.translate(e.x, e.y);
+                ctx.rotate(e.angle);
+
+                // Тень
+                ctx.shadowColor = e.color;
+                ctx.shadowBlur = 25;
+
+                // Тело
                 ctx.fillStyle = e.color;
-                ctx.beginPath(); ctx.arc(0, 0, e.radius, 0, Math.PI * 2); ctx.fill();
-                // Полоска HP
-                const hpW = e.radius * 1.5;
-                ctx.fillStyle = '#333'; ctx.fillRect(-hpW / 2, -e.radius - 8, hpW, 4);
-                ctx.fillStyle = '#2ecc71'; ctx.fillRect(-hpW / 2, -e.radius - 8, hpW * (e.hp / e.maxHp), 4);
+                ctx.beginPath();
+                ctx.arc(0, 0, e.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Глаза
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(e.radius * 0.3, -e.radius * 0.2, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(e.radius * 0.3, e.radius * 0.2, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#222';
+                ctx.beginPath();
+                ctx.arc(e.radius * 0.45, -e.radius * 0.2, 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(e.radius * 0.45, e.radius * 0.2, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Тип врага - иконка
+                if (e.type === 'tank') {
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('🛡', 0, -e.radius - 14);
+                } else if (e.type === 'shooter') {
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('🔫', 0, -e.radius - 14);
+                }
+
+                // HP бар
+                const hpW = e.radius * 1.6;
+                ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                ctx.fillRect(-hpW / 2, -e.radius - 10, hpW, 5);
+                const hpRatio = e.hp / e.maxHp;
+                ctx.fillStyle = hpRatio > 0.5 ? '#2ecc71' : hpRatio > 0.25 ? '#f1c40f' : '#e74c3c';
+                ctx.fillRect(-hpW / 2, -e.radius - 10, hpW * hpRatio, 5);
+
                 ctx.restore();
             });
 
             // Игрок
-            ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
-            ctx.fillStyle = '#2a75d3';
-            ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#000'; ctx.fillRect(10, 6, 20, 5);
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            ctx.rotate(player.angle);
+
+            // Свечение
+            const glow = ctx.createRadialGradient(0, 0, 10, 0, 0, player.radius * 2);
+            glow.addColorStop(0, 'rgba(42, 117, 211, 0.2)');
+            glow.addColorStop(1, 'rgba(42, 117, 211, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(0, 0, player.radius * 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Тело
+            ctx.shadowColor = '#2a75d3';
+            ctx.shadowBlur = 30;
+            ctx.fillStyle = player.invincible > 0 && Math.floor(Date.now() / 100) % 2 === 0 ? 'rgba(42,117,211,0.5)' :
+                '#2a75d3';
+            ctx.beginPath();
+            ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Ствол
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(10, -3, 18, 6);
+
+            // Глаза
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(6, -6, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(6, 6, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#1a1a2e';
+            ctx.beginPath();
+            ctx.arc(8, -6, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(8, 6, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
             ctx.restore();
 
             // Прицел
-            ctx.strokeStyle = '#0f0'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.arc(mouseX, mouseY, 10, 0, Math.PI * 2); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(mouseX - 15, mouseY); ctx.lineTo(mouseX + 15, mouseY);
-            ctx.moveTo(mouseX, mouseY - 15); ctx.lineTo(mouseX, mouseY + 15); ctx.stroke();
+            const aimDist = 30;
+            const ax = player.x + Math.cos(player.angle) * aimDist;
+            const ay = player.y + Math.sin(player.angle) * aimDist;
+            ctx.strokeStyle = 'rgba(0, 255, 0, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 6]);
+            ctx.beginPath();
+            ctx.arc(ax, ay, 12, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.moveTo(ax - 16, ay);
+            ctx.lineTo(ax + 16, ay);
+            ctx.moveTo(ax, ay - 16);
+            ctx.lineTo(ax, ay + 16);
+            ctx.stroke();
+
+            // Индикатор перезарядки
+            if (player.isReloading) {
+                ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('⏳ ПЕРЕЗАРЯДКА...', player.x, player.y - player.radius - 30);
+            }
         }
 
+        // ==================== ИГРОВОЙ ЦИКЛ ====================
         function gameLoop() {
             update();
             render();
             requestAnimationFrame(gameLoop);
         }
+
+        // Запуск
+        spawnWave();
         gameLoop();
+
+        // ==================== ФИКС ДЛЯ ТАЧА ====================
+        // Предотвращаем скролл на мобильных
+        document.addEventListener('touchmove', e => {
+            if (e.target === canvas || e.target.closest('#joystick-zone') || e.target.closest('.mobile-btn')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // ==================== КЛАВИША R ДЛЯ ПЕРЕЗАРЯДКИ ====================
+        console.log('🎮 Standoff 2D обновлён!');
+        console.log('⌨️ Управление: WASD - движение, мышь - прицел, ЛКМ/Пробел - стрельба, R - перезарядка');
+        console.log('📱 На мобильных: джойстик для движения, кнопки для стрельбы и перезарядки');
     </script>
 </body>
 </html>
