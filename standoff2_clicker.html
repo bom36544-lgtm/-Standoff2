@@ -174,6 +174,17 @@
                         background: #a55a5a;
                     }
 
+                body.world-2 .item-btn.buy-max-btn {
+                    background: #4a7c3a;
+                    color: #f5e56b;
+                    border: 3px solid #2d5a1a;
+                }
+
+                    body.world-2 .item-btn.buy-max-btn:hover {
+                        background: #5a9c4a;
+                        box-shadow: 0 0 0 3px #f5e56b;
+                    }
+
             body.world-2 .stats-section {
                 background: rgba(139, 109, 76, 0.7);
                 border: 4px solid #5d3a1a;
@@ -562,6 +573,7 @@
             align-items: center;
             margin-bottom: 50px;
             perspective: 1000px;
+            position: relative;
         }
 
         .coin-btn {
@@ -664,6 +676,85 @@
             100% {
                 opacity: 0;
                 transform: translateY(-150px) scale(2) rotate(360deg);
+            }
+        }
+
+        /* ===== АНИМАЦИЯ КИРКИ ДЛЯ МИРА 2 ===== */
+        .pickaxe-container {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        .pickaxe {
+            font-size: 4rem;
+            animation: pickaxeSwing 0.6s ease-in-out;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            display: block;
+        }
+
+        @keyframes pickaxeSwing {
+            0% {
+                transform: rotate(-60deg) scale(0.5);
+                opacity: 0;
+            }
+
+            30% {
+                transform: rotate(10deg) scale(1.3);
+                opacity: 1;
+            }
+
+            60% {
+                transform: rotate(-20deg) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .crystal-shard {
+            position: absolute;
+            font-size: 1.5rem;
+            pointer-events: none;
+            animation: shardBurst 0.8s ease-out forwards;
+        }
+
+        @keyframes shardBurst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--sx), var(--sy)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .crystal-sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleFloat 0.6s ease-out forwards;
+            box-shadow: 0 0 6px #f5e56b, 0 0 12px #f5e56b;
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--sx), var(--sy)) scale(0);
+                opacity: 0;
             }
         }
 
@@ -787,6 +878,18 @@
                 background: #e94560;
                 color: #fff;
             }
+
+            .item-btn.buy-max-btn {
+                background: linear-gradient(135deg, #4a90d9, #357abd);
+                color: #fff;
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+                .item-btn.buy-max-btn:hover {
+                    background: linear-gradient(135deg, #5aa0e9, #458bcb);
+                    box-shadow: 0 5px 20px rgba(74,144,217,0.5);
+                }
 
             .item-btn:hover {
                 transform: scale(1.03);
@@ -1474,6 +1577,143 @@
             measurementId: "G-R525VXEN82"
         };
 
+        // ==================== AUDIO CONTEXT ====================
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioCtx;
+        }
+
+        // Звук клика (короткий щелчок)
+        function playClickSound() {
+            try {
+                const ctx = getAudioContext();
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(800, ctx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.15);
+            } catch (e) { /* тихо игнорируем */ }
+        }
+
+        // Звук покупки (приятный динь)
+        function playBuySound() {
+            try {
+                const ctx = getAudioContext();
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(600, ctx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.15);
+                gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.3);
+            } catch (e) { }
+        }
+
+        // Звук перерождения (мощный аккорд)
+        function playRebirthSound() {
+            try {
+                const ctx = getAudioContext();
+                [200, 300, 400, 600].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+                    osc.start(ctx.currentTime + i * 0.1);
+                    osc.stop(ctx.currentTime + 0.8);
+                });
+            } catch (e) { }
+        }
+
+        // Звук повышения уровня (фанфары)
+        function playLevelUpSound() {
+            try {
+                const ctx = getAudioContext();
+                [523, 659, 784, 1047].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.12);
+                    gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.12 + 0.3);
+                    osc.start(ctx.currentTime + i * 0.12);
+                    osc.stop(ctx.currentTime + i * 0.12 + 0.3);
+                });
+            } catch (e) { }
+        }
+
+        // Звук кирки для Мира 2
+        function playPickaxeSound() {
+            try {
+                const ctx = getAudioContext();
+                // Шумовой удар
+                const bufferSize = ctx.sampleRate * 0.1;
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.02));
+                }
+                const noise = ctx.createBufferSource();
+                noise.buffer = buffer;
+                const noiseGain = ctx.createGain();
+                noiseGain.gain.setValueAtTime(0.4, ctx.currentTime);
+                noiseGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                noise.connect(noiseGain);
+                noiseGain.connect(ctx.destination);
+                noise.start(ctx.currentTime);
+                noise.stop(ctx.currentTime + 0.15);
+                // Тон
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(200, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.12);
+            } catch (e) { }
+        }
+
+        // Звук достижения
+        function playAchievementSound() {
+            try {
+                const ctx = getAudioContext();
+                [800, 1000, 1200, 1600].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.25);
+                    osc.start(ctx.currentTime + i * 0.08);
+                    osc.stop(ctx.currentTime + i * 0.08 + 0.25);
+                });
+            } catch (e) { }
+        }
+
         // ==================== DOM REFERENCES ====================
         const balanceEl = document.getElementById('balance');
         const clickPowerEl = document.getElementById('click-power');
@@ -1490,9 +1730,6 @@
         const rebirthModal = document.getElementById('rebirthModal');
         const shopSection = document.getElementById('shopSection');
         const shopReopenNotify = document.getElementById('shopReopenNotify');
-        const levelUpRewardEl = document.getElementById('levelUpReward');
-        const levelUpBonusEl = document.getElementById('levelUpBonus');
-        const levelUpNumberEl = document.getElementById('levelUpNumber');
         const loginOverlay = document.getElementById('loginOverlay');
         const userPanel = document.getElementById('userPanel');
         const userNickDisplay = document.getElementById('userNickDisplay');
@@ -1535,7 +1772,6 @@
         let gameState = getDefaultGameState();
         let currentUser = '';
         let pendingRebirthItem = null;
-        let levelUpQueue = [];
         let saveTimeout = null;
 
         const WORLD2_REQUIRED_BALANCE = 100 * 1e18;
@@ -1615,15 +1851,14 @@
         ];
 
         // ==================== ГЕНЕРАЦИЯ ПРЕДМЕТОВ МИРА 2 ====================
-        // В Мире 2 все предметы в 2 раза дороже и в 3 раза больше дают.
         function generateWorld2Items() {
             return baseShopItems.map(item => {
                 const newItem = {
                     ...item,
                     id: item.id + '_w2',
                     name: '★ ' + item.name + ' (W2)',
-                    cost: Math.floor(item.cost * 2),        // в 2 раза дороже
-                    value: Math.floor(item.value * 3),      // в 3 раза больше эффект
+                    cost: Math.floor(item.cost * 2),
+                    value: Math.floor(item.value * 3),
                     desc: item.desc,
                     world: 2
                 };
@@ -1765,7 +2000,7 @@
         }
         function logout() {
             if (currentUser && firebaseReady) saveToCloud();
-            currentUser = ''; gameState = getDefaultGameState(); levelUpQueue = []; pendingRebirthItem = null;
+            currentUser = ''; gameState = getDefaultGameState(); pendingRebirthItem = null;
             loginOverlay.style.display = 'flex'; userPanel.style.display = 'none'; usernameInput.value = '';
             document.getElementById('adminPanel').classList.remove('active'); adminToggleBtn.style.display = 'none';
             updateSyncStatus('online', 'Облако ✓'); updateUI(); initAchievementsDisplay();
@@ -1819,34 +2054,81 @@
             gameState.experience -= gameState.experienceToNextLevel;
             gameState.level++;
             gameState.experienceToNextLevel = Math.floor(gameState.experienceToNextLevel * 1.5);
-            let reward = 2, bonus = '';
-            if (gameState.level % 10 === 0) { reward += 25; bonus = '🔥 Бонус за 10 уровней: +25 силы клика!'; }
-            else if (gameState.level % 5 === 0) { reward += 10; bonus = '✨ Бонус за 5 уровней: +10 силы клика!'; }
+            let reward = 2;
+            if (gameState.level % 10 === 0) { reward += 25; }
+            else if (gameState.level % 5 === 0) { reward += 10; }
             gameState.clickPower += reward;
-            levelUpQueue.push({ level: gameState.level, reward, bonus });
-            if (levelUpQueue.length === 1) showNextLevelUp();
-        }
-        function showNextLevelUp() {
-            if (levelUpQueue.length === 0) { levelUpModal.classList.add('hidden'); return; }
-            const info = levelUpQueue[0];
-            levelUpRewardEl.textContent = `+${info.reward} к силе клика`;
-            levelUpBonusEl.textContent = info.bonus || '';
-            levelUpNumberEl.textContent = info.level;
-            levelUpModal.classList.remove('hidden');
+            playLevelUpSound();
         }
         function closeLevelUp() {
-            levelUpQueue.shift();
-            if (levelUpQueue.length > 0) showNextLevelUp();
-            else levelUpModal.classList.add('hidden');
-            updateUI(); debouncedSaveToCloud();
+            levelUpModal.classList.add('hidden');
         }
+
+        // ==================== АНИМАЦИЯ КИРКИ ДЛЯ МИРА 2 ====================
+        function createPickaxeEffect(x, y) {
+            const container = document.createElement('div');
+            container.className = 'pickaxe-container';
+            container.style.left = x + 'px';
+            container.style.top = y + 'px';
+            document.body.appendChild(container);
+
+            const pickaxe = document.createElement('div');
+            pickaxe.className = 'pickaxe';
+            pickaxe.textContent = '⛏️';
+            container.appendChild(pickaxe);
+
+            const crystalColors = ['#f5e56b', '#a8e6cf', '#ff8b94', '#b8d8f8', '#d4a5ff', '#ffeaa7', '#ffd700', '#7ec8e3'];
+            for (let i = 0; i < 12; i++) {
+                const shard = document.createElement('div');
+                shard.className = 'crystal-shard';
+                shard.textContent = ['💎', '✨', '💠', '🔹', '🔸', '💠'][Math.floor(Math.random() * 6)];
+                const angle = (Math.PI * 2 * i) / 12 + Math.random() * 0.5;
+                const distance = 40 + Math.random() * 80;
+                shard.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
+                shard.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
+                shard.style.animationDelay = Math.random() * 0.2 + 's';
+                container.appendChild(shard);
+            }
+
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'crystal-sparkle';
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 20 + Math.random() * 60;
+                sparkle.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
+                sparkle.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
+                sparkle.style.animationDelay = Math.random() * 0.15 + 's';
+                sparkle.style.backgroundColor = crystalColors[Math.floor(Math.random() * crystalColors.length)];
+                container.appendChild(sparkle);
+            }
+
+            setTimeout(() => {
+                if (container.parentNode) container.parentNode.removeChild(container);
+            }, 1000);
+        }
+
         document.getElementById('clickBtn').addEventListener('click', (e) => {
             if (!currentUser) return;
             const amount = gameState.clickPower * gameState.multiplier;
             const earned = Math.floor(amount);
             gameState.balance += earned;
             gainExperience(Math.max(1, Math.floor(earned / 10)));
-            createParticle(e.clientX, e.clientY, `+${earned}$`);
+
+            if (gameState.world === 2) {
+                playPickaxeSound();
+                createPickaxeEffect(e.clientX, e.clientY);
+                const moneyText = document.createElement('div');
+                moneyText.className = 'click-effect';
+                moneyText.textContent = `+${earned}$`;
+                moneyText.style.left = e.clientX + 'px';
+                moneyText.style.top = (e.clientY - 80) + 'px';
+                document.body.appendChild(moneyText);
+                setTimeout(() => moneyText.remove(), 1000);
+            } else {
+                playClickSound();
+                createParticle(e.clientX, e.clientY, `+${earned}$`);
+            }
+
             updateUI(); debouncedSaveToCloud();
         });
 
@@ -1864,20 +2146,18 @@
                 alert('Вы уже в Мире 2!');
                 return;
             }
-
-            // ПОЛНЫЙ СБРОС ВСЕГО ПРОГРЕССА ДЛЯ МИРА 2
             gameState.world = 2;
-            gameState.balance = 0;             // баланс = 0
-            gameState.clickPower = 5;          // сила клика = 5
-            gameState.incomePerSec = 0;        // доход = 0
-            gameState.level = 1;               // уровень = 1
+            gameState.balance = 0;
+            gameState.clickPower = 5;
+            gameState.incomePerSec = 0;
+            gameState.level = 1;
             gameState.experience = 0;
             gameState.experienceToNextLevel = 100;
             gameState.unlockedItems = [];
-            gameState.rebirthCount = 0;        // перерождения = 0
-            gameState.multiplier = 1.0;        // множитель = 1
-            gameState.achievements = [];       // достижения сброшены
-
+            gameState.rebirthCount = 0;
+            gameState.multiplier = 1.0;
+            gameState.achievements = [];
+            playRebirthSound();
             updateUI();
             initAchievementsDisplay();
             applyWorldStyle();
@@ -1888,43 +2168,29 @@
         function renderShop() {
             shopSection.classList.remove('hidden');
             shopReopenNotify.style.display = 'none';
-
             const items = getCurrentShopItems();
             const isWorld2 = gameState.world === 2;
-
             shopGrid.innerHTML = '';
-
-            // Если игрок ещё не в Мире 2
             if (!isWorld2) {
-                // Проверяем, выполнены ли условия для покупки Мира 2
                 const conditionsMet = gameState.rebirthCount >= 5 && gameState.balance >= WORLD2_ENTRY_COST;
-
                 if (conditionsMet) {
-                    // Условия выполнены - показываем только кнопку покупки Мира 2
                     const wrapper = document.createElement('div');
                     wrapper.className = 'world2-entry-wrapper';
-
                     const btn = document.createElement('button');
                     btn.className = 'world2-entry-btn';
                     btn.textContent = '⛏️ КУПИТЬ МИР 2 (100 Qi)';
                     btn.onclick = buyWorld2;
                     wrapper.appendChild(btn);
-
                     const hint = document.createElement('div');
                     hint.className = 'hint success';
                     hint.textContent = '✅ Все условия выполнены! Нажмите кнопку чтобы перейти в Мир 2';
                     wrapper.appendChild(hint);
-
                     shopGrid.appendChild(wrapper);
                     return;
                 }
-
-                // Условия НЕ выполнены - показываем все предметы магазина
-                // Сначала показываем информацию о прогрессе к Миру 2
                 const progressDiv = document.createElement('div');
                 progressDiv.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 15px; background: rgba(74,222,128,0.1); border-radius: 15px; border: 2px solid rgba(74,222,128,0.3); margin-bottom: 10px;';
-                progressDiv.innerHTML = `
-                        <div style="font-size: 1.1rem; margin-bottom: 5px;">🌍 Прогресс к Миру 2</div>
+                progressDiv.innerHTML = `<div style="font-size: 1.1rem; margin-bottom: 5px;">🌍 Прогресс к Миру 2</div>
                         <div style="font-size: 0.9rem; color: #aaa;">
                             Перерождений: ${gameState.rebirthCount}/5 ${gameState.rebirthCount >= 5 ? '✅' : '❌'} |
                             Баланс: ${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_ENTRY_COST)} ${gameState.balance >= WORLD2_ENTRY_COST ? '✅' : '❌'}
@@ -1932,33 +2198,38 @@
                         <div style="font-size: 0.8rem; color: #ff6b6b; margin-top: 5px;">
                             ${gameState.rebirthCount < 5 ? `❌ Нужно ещё ${5 - gameState.rebirthCount} перерождений` : ''}
                             ${gameState.balance < WORLD2_ENTRY_COST ? `❌ Не хватает ${formatNumber(WORLD2_ENTRY_COST - gameState.balance)}$` : ''}
-                        </div>
-                    `;
+                        </div>`;
                 shopGrid.appendChild(progressDiv);
-
-                // Показываем все предметы магазина
                 items.forEach(item => {
                     const el = document.createElement('div');
                     el.className = 'shop-item';
                     const canAfford = gameState.balance >= item.cost;
                     if (canAfford) el.classList.add('can-afford'); else el.classList.add('cannot-afford');
-                    const btnClass = item.type === 'rebirth' ? 'item-btn rebirth-btn-type' : 'item-btn';
-                    const onclickHandler = item.type === 'rebirth' ? `openRebirthModal('${item.id}')` : `buyItem('${item.id}')`;
-                    el.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div><button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${item.type === 'rebirth' ? '🔄 Переродиться' : 'Купить'}</button>`;
+                    const isRebirth = item.type === 'rebirth';
+                    const btnClass = isRebirth ? 'item-btn rebirth-btn-type' : 'item-btn';
+                    const onclickHandler = isRebirth ? `openRebirthModal('${item.id}')` : `buyItem('${item.id}')`;
+                    let buttonsHtml = `<button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${isRebirth ? '🔄 Переродиться' : 'Купить'}</button>`;
+                    if (!isRebirth && canAfford) {
+                        buttonsHtml += `<button class="item-btn buy-max-btn" onclick="buyMax('${item.id}')">📦 Купить на все</button>`;
+                    }
+                    el.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div>${buttonsHtml}`;
                     shopGrid.appendChild(el);
                 });
                 return;
             }
-
-            // Если игрок в Мире 2 - показываем только предметы Мира 2
             items.forEach(item => {
                 const el = document.createElement('div');
                 el.className = 'shop-item';
                 const canAfford = gameState.balance >= item.cost;
                 if (canAfford) el.classList.add('can-afford'); else el.classList.add('cannot-afford');
-                const btnClass = item.type === 'rebirth' ? 'item-btn rebirth-btn-type' : 'item-btn';
-                const onclickHandler = item.type === 'rebirth' ? `openRebirthModal('${item.id}')` : `buyItem('${item.id}')`;
-                el.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div><button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${item.type === 'rebirth' ? '🔄 Переродиться' : 'Купить'}</button>`;
+                const isRebirth = item.type === 'rebirth';
+                const btnClass = isRebirth ? 'item-btn rebirth-btn-type' : 'item-btn';
+                const onclickHandler = isRebirth ? `openRebirthModal('${item.id}')` : `buyItem('${item.id}')`;
+                let buttonsHtml = `<button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${isRebirth ? '🔄 Переродиться' : 'Купить'}</button>`;
+                if (!isRebirth && canAfford) {
+                    buttonsHtml += `<button class="item-btn buy-max-btn" onclick="buyMax('${item.id}')">📦 Купить на все</button>`;
+                }
+                el.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div>${buttonsHtml}`;
                 shopGrid.appendChild(el);
             });
         }
@@ -1972,6 +2243,28 @@
             else if (item.type === 'income') gameState.incomePerSec += item.value;
             if (!gameState.unlockedItems.includes(id)) gameState.unlockedItems.push(id);
             gainExperience(Math.floor(item.cost / 20));
+            playBuySound();
+            updateUI(); debouncedSaveToCloud();
+        }
+
+        // Функция покупки на все деньги
+        function buyMax(id) {
+            const items = getCurrentShopItems();
+            const item = items.find(i => i.id === id);
+            if (!item || gameState.balance < item.cost) return;
+
+            const count = Math.floor(gameState.balance / item.cost);
+            if (count <= 0) return;
+
+            const totalCost = count * item.cost;
+            gameState.balance -= totalCost;
+
+            if (item.type === 'click') gameState.clickPower += item.value * count;
+            else if (item.type === 'income') gameState.incomePerSec += item.value * count;
+
+            if (!gameState.unlockedItems.includes(id)) gameState.unlockedItems.push(id);
+            gainExperience(Math.floor(totalCost / 20));
+            playBuySound();
             updateUI(); debouncedSaveToCloud();
         }
 
@@ -1993,12 +2286,12 @@
             gameState.multiplier *= item.value;
             gameState.rebirthCount++;
             gameState.level = 1; gameState.experience = 0; gameState.experienceToNextLevel = 100;
-            gameState.clickPower = 1;
+            gameState.clickPower = (gameState.world === 2) ? 5 : 1;
             gameState.incomePerSec = 0;
             gameState.balance = 0;
             gameState.unlockedItems = [];
-            levelUpQueue = []; levelUpModal.classList.add('hidden');
             pendingRebirthItem = null; rebirthModal.classList.remove('active');
+            playRebirthSound();
             updateUI(); saveToCloud();
         }
         function cancelRebirth() { pendingRebirthItem = null; rebirthModal.classList.remove('active'); }
@@ -2012,17 +2305,13 @@
             multiplierBadge.textContent = 'x' + gameState.multiplier.toFixed(1);
             multiplierDisplay.textContent = 'x' + gameState.multiplier.toFixed(1);
             rebirthCountDisplay.textContent = formatNumber(gameState.rebirthCount);
-
             const progress = Math.min(100, (gameState.balance / WORLD2_REQUIRED_BALANCE) * 100);
             const progressText = (gameState.balance >= WORLD2_REQUIRED_BALANCE) ? '✅ Доступен' : `${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_REQUIRED_BALANCE)} (${progress.toFixed(1)}%)`;
             world2Progress.textContent = progressText;
-
-            const world = gameState.world;
-            worldDisplay.textContent = world + (world === 2 ? ' ⭐' : '');
-
-            const progressPercent = Math.min(100, (gameState.experience / gameState.experienceToNextLevel) * 100);
-            levelProgressEl.style.width = progressPercent + '%';
-            progressTextEl.textContent = Math.floor(progressPercent) + '%';
+            worldDisplay.textContent = gameState.world + (gameState.world === 2 ? ' ⭐' : '');
+            const expPercent = Math.min(100, (gameState.experience / gameState.experienceToNextLevel) * 100);
+            levelProgressEl.style.width = expPercent + '%';
+            progressTextEl.textContent = Math.floor(expPercent) + '%';
             expDisplayEl.textContent = formatNumber(gameState.experience) + ' / ' + formatNumber(gameState.experienceToNextLevel);
             renderShop(); checkAchievements();
         }
@@ -2053,7 +2342,10 @@
                     achievementsList.prepend(div);
                 }
             });
-            if (newUnlock) debouncedSaveToCloud();
+            if (newUnlock) {
+                playAchievementSound();
+                debouncedSaveToCloud();
+            }
         }
 
         function initAchievementsDisplay() {
@@ -2069,7 +2361,6 @@
 
         // ==================== ADMIN ====================
         function toggleAdminPanel() { document.getElementById('adminPanel').classList.toggle('active'); }
-
         function updateUserData(targetNick, updateFn) {
             return new Promise((resolve, reject) => {
                 if (currentUser.toLowerCase() !== 'mikhaigr') { reject('Недостаточно прав'); return; }
@@ -2082,83 +2373,50 @@
                             const newData = getDefaultGameState();
                             newData.username = target;
                             updateFn(newData);
-                            return firebaseDb.ref('users/' + key).set(newData)
-                                .then(() => { resolve(newData); });
+                            return firebaseDb.ref('users/' + key).set(newData).then(() => { resolve(newData); });
                         } else {
                             const data = snapshot.val();
                             updateFn(data);
-                            return firebaseDb.ref('users/' + key).set(data)
-                                .then(() => { resolve(data); });
+                            return firebaseDb.ref('users/' + key).set(data).then(() => { resolve(data); });
                         }
                     })
                     .catch(err => { reject(err); });
             });
         }
-
         function showAdminFeedback(text, isError = false) {
             adminFeedback.textContent = text;
             adminFeedback.className = 'admin-feedback ' + (isError ? 'error' : 'success');
-            setTimeout(() => {
-                adminFeedback.textContent = '';
-                adminFeedback.className = 'admin-feedback';
-            }, 4000);
+            setTimeout(() => { adminFeedback.textContent = ''; adminFeedback.className = 'admin-feedback'; }, 4000);
         }
-
         async function adminSetMoney() {
             const amount = parseInt(adminMoneyAmount.value, 10);
             if (isNaN(amount) || amount < 0) { showAdminFeedback('❌ Введите корректное число', true); return; }
             try {
-                const data = await updateUserData(adminTargetNick.value, d => {
-                    d.balance = (d.balance || 0) + amount;
-                });
+                const data = await updateUserData(adminTargetNick.value, d => { d.balance = (d.balance || 0) + amount; });
                 const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) {
-                    gameState = { ...gameState, ...data };
-                    updateUI();
-                }
+                if (target === currentUser) { gameState = { ...gameState, ...data }; updateUI(); }
                 showAdminFeedback(`✅ Денег выдано: +$${amount}. Новый баланс: $${data.balance}`);
-            } catch (err) {
-                console.error(err);
-                showAdminFeedback('❌ Ошибка: ' + err.message, true);
-            }
+            } catch (err) { console.error(err); showAdminFeedback('❌ Ошибка: ' + err.message, true); }
         }
-
         async function adminSetClickPower() {
             const amount = parseInt(adminClickPowerAmount.value, 10);
             if (isNaN(amount) || amount < 0) { showAdminFeedback('❌ Введите корректное число', true); return; }
             try {
-                const data = await updateUserData(adminTargetNick.value, d => {
-                    d.clickPower = amount;
-                });
+                const data = await updateUserData(adminTargetNick.value, d => { d.clickPower = amount; });
                 const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) {
-                    gameState = { ...gameState, ...data };
-                    updateUI();
-                }
+                if (target === currentUser) { gameState = { ...gameState, ...data }; updateUI(); }
                 showAdminFeedback(`✅ Сила клика установлена: ${amount}`);
-            } catch (err) {
-                console.error(err);
-                showAdminFeedback('❌ Ошибка: ' + err.message, true);
-            }
+            } catch (err) { console.error(err); showAdminFeedback('❌ Ошибка: ' + err.message, true); }
         }
-
         async function adminSetIncome() {
             const amount = parseInt(adminIncomeAmount.value, 10);
             if (isNaN(amount) || amount < 0) { showAdminFeedback('❌ Введите корректное число', true); return; }
             try {
-                const data = await updateUserData(adminTargetNick.value, d => {
-                    d.incomePerSec = amount;
-                });
+                const data = await updateUserData(adminTargetNick.value, d => { d.incomePerSec = amount; });
                 const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) {
-                    gameState = { ...gameState, ...data };
-                    updateUI();
-                }
+                if (target === currentUser) { gameState = { ...gameState, ...data }; updateUI(); }
                 showAdminFeedback(`✅ Авто-доход установлен: ${amount}$/сек`);
-            } catch (err) {
-                console.error(err);
-                showAdminFeedback('❌ Ошибка: ' + err.message, true);
-            }
+            } catch (err) { console.error(err); showAdminFeedback('❌ Ошибка: ' + err.message, true); }
         }
 
         function resetGame() {
