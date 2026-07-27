@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Standoff 2 Clicker • Мир 2 (Minecraft)</title>
 
     <!-- Firebase SDK -->
@@ -74,17 +74,17 @@
                 background: rgba(139, 109, 76, 0.85);
                 border: 6px solid #5d3a1a;
                 border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
-                padding: 20px;
+                padding: 15px;
                 border-radius: 0;
                 box-shadow: inset 0 0 0 4px #3d2b1a;
-                margin-top: 20px;
+                margin-top: 10px;
             }
 
             body.world-2 header {
                 border-bottom: 6px solid #5d3a1a;
                 background: rgba(100, 70, 40, 0.8);
                 border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
-                padding: 20px 0;
+                padding: 15px 0;
             }
 
             body.world-2 h1 {
@@ -92,7 +92,7 @@
                 color: #f5e56b;
                 text-shadow: 4px 4px 0 #3d2b1a, 6px 6px 0 #2d1b0e;
                 letter-spacing: 2px;
-                font-size: 2.2rem;
+                font-size: 1.8rem;
                 animation: none;
             }
 
@@ -101,8 +101,9 @@
                 border: 4px solid #5d3a1a;
                 border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
                 box-shadow: inset 0 0 0 3px #3d2b1a;
-                padding: 15px 20px;
+                padding: 12px 15px;
                 border-radius: 0;
+                gap: 15px;
             }
 
             body.world-2 .stat-value {
@@ -111,6 +112,7 @@
                 -webkit-text-fill-color: #f5e56b;
                 text-shadow: 3px 3px 0 #3d2b1a;
                 filter: none;
+                font-size: 1.8rem;
             }
 
             body.world-2 .shop-section {
@@ -119,6 +121,7 @@
                 border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
                 border-radius: 0;
                 box-shadow: inset 0 0 0 3px #3d2b1a;
+                padding: 15px;
             }
 
             body.world-2 .section-title {
@@ -128,6 +131,7 @@
                 -webkit-text-fill-color: #f5e56b;
                 text-shadow: 3px 3px 0 #3d2b1a;
                 filter: none;
+                font-size: 1.2rem;
             }
 
             body.world-2 .shop-item {
@@ -137,16 +141,19 @@
                 border-radius: 0;
                 box-shadow: inset 0 0 0 2px #3d2b1a;
                 color: #f5e56b;
+                padding: 15px;
             }
 
                 body.world-2 .shop-item .item-name {
                     color: #f5e56b;
                     text-shadow: 2px 2px 0 #3d2b1a;
+                    font-size: 0.9rem;
                 }
 
                 body.world-2 .shop-item .item-cost {
                     color: #f5e56b;
                     filter: none;
+                    font-size: 0.8rem;
                 }
 
             body.world-2 .item-btn {
@@ -155,8 +162,9 @@
                 border: 3px solid #3d2b1a;
                 border-radius: 0;
                 font-family: 'Press Start 2P', monospace;
-                font-size: 0.8rem;
+                font-size: 0.6rem;
                 text-shadow: 2px 2px 0 #2d1b0e;
+                padding: 10px 12px;
             }
 
                 body.world-2 .item-btn:hover {
@@ -178,6 +186,8 @@
                     background: #4a7c3a;
                     color: #f5e56b;
                     border: 3px solid #2d5a1a;
+                    font-size: 0.5rem;
+                    padding: 8px 10px;
                 }
 
                     body.world-2 .item-btn.buy-max-btn:hover {
@@ -191,11 +201,14 @@
                 border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
                 border-radius: 0;
                 box-shadow: inset 0 0 0 3px #3d2b1a;
+                padding: 15px;
             }
 
             body.world-2 .stat-row {
                 border-bottom: 3px solid #5d3a1a;
                 color: #2d1b0e;
+                font-size: 0.8rem;
+                padding: 10px 0;
             }
 
                 body.world-2 .stat-row span:last-child {
@@ -207,7 +220,7 @@
                 background: #3d2b1a;
                 border: 3px solid #5d3a1a;
                 border-radius: 0;
-                height: 30px;
+                height: 25px;
             }
 
             body.world-2 .progress-fill {
@@ -220,11 +233,12 @@
             body.world-2 .progress-text {
                 color: #2d1b0e;
                 text-shadow: 1px 1px 0 #f5e56b;
+                font-size: 0.7rem;
             }
 
             body.world-2 .coin-btn {
-                width: 200px;
-                height: 200px;
+                width: 160px;
+                height: 160px;
                 animation: none;
             }
 
@@ -237,7 +251,7 @@
 
             body.world-2 .coin-btn::before {
                 content: '⛏️';
-                font-size: 5rem;
+                font-size: 4rem;
             }
 
             body.world-2 .coin-btn::after {
@@ -251,6 +265,8 @@
                 border-radius: 0;
                 font-family: 'Press Start 2P', monospace;
                 text-shadow: 2px 2px 0 #3d2b1a;
+                font-size: 0.8rem;
+                padding: 10px 15px;
             }
 
             body.world-2 .sync-status {
@@ -258,6 +274,10 @@
                 border: 3px solid #5d3a1a;
                 border-radius: 0;
                 color: #f5e56b;
+                font-size: 0.6rem;
+                padding: 5px 10px;
+                top: 10px;
+                left: 10px;
             }
 
             body.world-2 .user-nick {
@@ -265,6 +285,8 @@
                 border: 3px solid #5d3a1a;
                 border-radius: 0;
                 color: #f5e56b;
+                font-size: 0.7rem;
+                padding: 5px 12px;
             }
 
             body.world-2 .logout-btn,
@@ -274,8 +296,9 @@
                 border-radius: 0;
                 color: #f5e56b;
                 font-family: 'Press Start 2P', monospace;
-                font-size: 0.7rem;
+                font-size: 0.5rem;
                 box-shadow: none;
+                padding: 5px 12px;
             }
 
                 body.world-2 .logout-btn:hover,
@@ -293,7 +316,7 @@
                 color: #f5e56b;
                 text-shadow: 2px 2px 0 #3d2b1a;
                 font-family: 'Press Start 2P', monospace;
-                font-size: 0.7rem;
+                font-size: 0.5rem;
             }
 
                 body.world-2 .reset-link:hover {
@@ -305,6 +328,8 @@
                 border: 3px solid #5d3a1a;
                 border-radius: 0;
                 color: #f5e56b;
+                padding: 12px;
+                font-size: 0.7rem;
             }
 
                 body.world-2 .achievement-item.unlocked {
@@ -315,10 +340,12 @@
             body.world-2 .achievement-info h4 {
                 color: #f5e56b;
                 text-shadow: 2px 2px 0 #3d2b1a;
+                font-size: 0.8rem;
             }
 
             body.world-2 .achievement-info p {
                 color: #ddd;
+                font-size: 0.6rem;
             }
 
             body.world-2 .level-up-modal .modal-content {
@@ -326,12 +353,14 @@
                 border: 6px solid #f5e56b;
                 border-radius: 0;
                 box-shadow: 0 0 0 6px #3d2b1a;
+                padding: 30px;
             }
 
             body.world-2 .level-up-title {
                 font-family: 'Press Start 2P', monospace;
                 color: #f5e56b;
                 text-shadow: 4px 4px 0 #3d2b1a;
+                font-size: 1.5rem;
             }
 
             body.world-2 .level-up-btn {
@@ -341,6 +370,8 @@
                 font-family: 'Press Start 2P', monospace;
                 color: #f5e56b;
                 text-shadow: 2px 2px 0 #2d1b0e;
+                padding: 12px 30px;
+                font-size: 0.8rem;
             }
 
                 body.world-2 .level-up-btn:hover {
@@ -351,12 +382,16 @@
                 background: rgba(100, 70, 40, 0.95);
                 border: 6px solid #e94560;
                 border-radius: 0;
+                padding: 30px;
+                min-width: auto;
+                width: 90%;
             }
 
             body.world-2 .rebirth-title {
                 font-family: 'Press Start 2P', monospace;
                 color: #f5e56b;
                 text-shadow: 3px 3px 0 #3d2b1a;
+                font-size: 1.2rem;
             }
 
             body.world-2 .rebirth-btn {
@@ -366,6 +401,8 @@
                 font-family: 'Press Start 2P', monospace;
                 color: #f5e56b;
                 text-shadow: 2px 2px 0 #2d1b0e;
+                padding: 10px 20px;
+                font-size: 0.7rem;
             }
 
                 body.world-2 .rebirth-btn:hover {
@@ -380,19 +417,460 @@
                         background: #5a5a5a;
                     }
 
-        @media (max-width: 600px) {
-            body.world-2 h1 {
+            body.world-2 .world2-entry-btn {
+                font-size: 1.2rem;
+                padding: 15px 20px;
+            }
+
+            body.world-2 .world2-entry-wrapper .hint {
+                font-size: 0.8rem;
+            }
+
+        /* ===== АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
                 font-size: 1.5rem;
+                letter-spacing: 3px;
             }
 
-            body.world-2 .coin-btn {
-                width: 150px;
-                height: 150px;
+            .stats-bar {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px 15px;
+                justify-content: space-around;
             }
 
-                body.world-2 .coin-btn::before {
+            .stat-item {
+                flex: 1 1 30%;
+                min-width: 80px;
+            }
+
+            .stat-value {
+                font-size: 1.4rem;
+            }
+
+            .stat-label {
+                font-size: 0.6rem;
+                letter-spacing: 1px;
+            }
+
+            .coin-btn {
+                width: 140px;
+                height: 140px;
+            }
+
+                .coin-btn::before {
                     font-size: 3.5rem;
                 }
+
+            .shop-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .shop-item {
+                padding: 15px;
+            }
+
+            .item-icon {
+                font-size: 2.5rem;
+            }
+
+            .item-name {
+                font-size: 1rem;
+            }
+
+            .item-cost {
+                font-size: 0.9rem;
+            }
+
+            .item-btn {
+                font-size: 0.85rem;
+                padding: 10px 12px;
+            }
+
+                .item-btn.buy-max-btn {
+                    font-size: 0.75rem;
+                    padding: 8px 10px;
+                }
+
+            .user-panel {
+                top: 10px;
+                right: 10px;
+                gap: 5px;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+
+            .user-nick {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+            }
+
+            .logout-btn,
+            .admin-panel-btn {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+            }
+
+            .sync-status {
+                top: 10px;
+                left: 10px;
+                font-size: 0.6rem;
+                padding: 4px 10px;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+
+            .stats-section {
+                padding: 15px;
+            }
+
+            .stat-row {
+                font-size: 0.85rem;
+                padding: 10px 0;
+            }
+
+            .multiplier-badge {
+                top: auto;
+                bottom: 10px;
+                right: 10px;
+                font-size: 0.7rem;
+                padding: 8px 14px;
+            }
+
+            .level-up-modal .modal-content {
+                padding: 25px;
+                margin: 15px;
+            }
+
+            .level-up-title {
+                font-size: 1.8rem;
+            }
+
+            .level-up-btn {
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+
+            .rebirth-modal {
+                padding: 20px;
+                width: 95%;
+            }
+
+            .rebirth-title {
+                font-size: 1.2rem;
+            }
+
+            .rebirth-desc {
+                font-size: 0.9rem;
+            }
+
+            .rebirth-btn {
+                font-size: 0.9rem;
+                padding: 10px 20px;
+            }
+
+            .login-box {
+                padding: 25px;
+                width: 90%;
+                margin: 15px;
+            }
+
+            .admin-panel-container {
+                width: 95%;
+                padding: 20px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .admin-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 5px;
+            }
+
+                .admin-row label {
+                    width: auto;
+                    text-align: left;
+                    font-size: 0.8rem;
+                }
+
+            .admin-controls {
+                flex-direction: column;
+            }
+
+            .admin-btn {
+                padding: 10px;
+                font-size: 0.8rem;
+            }
+
+            .world2-entry-btn {
+                font-size: 1.2rem;
+                padding: 15px 20px;
+            }
+
+            .world2-entry-wrapper .hint {
+                font-size: 0.8rem;
+            }
+
+            .progress-text {
+                font-size: 0.7rem;
+            }
+
+            .achievement-item {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .achievement-icon {
+                font-size: 2rem;
+            }
+
+            .achievement-info h4 {
+                font-size: 0.9rem;
+            }
+
+            .achievement-info p {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.1rem;
+                letter-spacing: 1px;
+            }
+
+            .stat-value {
+                font-size: 1.1rem;
+            }
+
+            .coin-btn {
+                width: 110px;
+                height: 110px;
+            }
+
+                .coin-btn::before {
+                    font-size: 2.8rem;
+                }
+
+            .stats-bar {
+                gap: 5px;
+                padding: 8px 10px;
+            }
+
+            .stat-item {
+                flex: 1 1 45%;
+            }
+
+            .stat-label {
+                font-size: 0.5rem;
+            }
+
+            .user-nick {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+
+            .logout-btn,
+            .admin-panel-btn {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+
+            .sync-status {
+                font-size: 0.5rem;
+                padding: 3px 8px;
+            }
+
+            .shop-item {
+                padding: 12px;
+            }
+
+            .item-name {
+                font-size: 0.85rem;
+            }
+
+            .item-btn {
+                font-size: 0.75rem;
+                padding: 8px 10px;
+            }
+
+                .item-btn.buy-max-btn {
+                    font-size: 0.65rem;
+                    padding: 6px 8px;
+                }
+
+            .multiplier-badge {
+                font-size: 0.6rem;
+                padding: 5px 10px;
+                bottom: 5px;
+                right: 5px;
+            }
+
+            .login-box {
+                padding: 20px;
+            }
+
+                .login-box h2 {
+                    font-size: 1.2rem;
+                }
+
+            .input-group input {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+
+            .login-btn {
+                padding: 12px;
+                font-size: 0.85rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            .world2-entry-btn {
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+        }
+
+        /* ===== СТИЛИ ДЛЯ ЛОГИНА ===== */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #ffd700;
+            text-align: center;
+            width: 360px;
+            max-width: 95%;
+            box-shadow: 0 0 50px rgba(255,215,0,0.3);
+            position: relative;
+        }
+
+            .login-box h2 {
+                color: #fff;
+                margin-bottom: 10px;
+                font-size: 1.8rem;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+
+            .login-box .subtitle {
+                color: #aaa;
+                font-size: 0.8rem;
+                margin-bottom: 25px;
+            }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+            .input-group input {
+                width: 100%;
+                padding: 14px;
+                background: rgba(0,0,0,0.4);
+                border: 1px solid #4ade80;
+                color: white;
+                border-radius: 10px;
+                font-size: 1rem;
+                outline: none;
+                transition: 0.3s;
+            }
+
+                .input-group input:focus {
+                    box-shadow: 0 0 15px rgba(74,222,128,0.5);
+                    border-color: #ffd700;
+                }
+
+                .input-group input::placeholder {
+                    color: #666;
+                }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+            .login-btn:hover {
+                transform: scale(1.02);
+                box-shadow: 0 0 25px rgba(233,69,96,0.6);
+            }
+
+            .login-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .login-error {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+
+        .login-success {
+            color: #4ade80;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+
+        .login-toggle {
+            color: #4ade80;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+            .login-toggle:hover {
+                color: #ffd700;
+                text-shadow: 0 0 10px rgba(255,215,0,0.3);
+            }
+
+        .login-info {
+            color: #666;
+            font-size: 0.7rem;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .login-divider {
+            border: none;
+            border-top: 1px solid rgba(255,215,0,0.2);
+            margin: 20px 0;
         }
 
         /* ===== ОБЩИЕ СТИЛИ ===== */
@@ -444,7 +922,7 @@
         }
 
         .sync-status {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
             display: flex;
@@ -487,13 +965,15 @@
         }
 
         .user-panel {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 20px;
             display: flex;
             gap: 10px;
             align-items: center;
             z-index: 110;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .user-nick {
@@ -1162,80 +1642,6 @@
                     box-shadow: 0 15px 40px rgba(100,100,100,0.7);
                 }
 
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-box {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            padding: 40px;
-            border-radius: 20px;
-            border: 2px solid #ffd700;
-            text-align: center;
-            width: 320px;
-            box-shadow: 0 0 50px rgba(255,215,0,0.3);
-        }
-
-            .login-box h2 {
-                color: #fff;
-                margin-bottom: 20px;
-                font-size: 1.8rem;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-            }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-            .input-group input {
-                width: 100%;
-                padding: 15px;
-                background: rgba(0,0,0,0.3);
-                border: 1px solid #4ade80;
-                color: white;
-                border-radius: 10px;
-                font-size: 1rem;
-                outline: none;
-            }
-
-                .input-group input:focus {
-                    box-shadow: 0 0 15px rgba(74,222,128,0.5);
-                }
-
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(90deg, #e94560, #ff6b6b);
-            border: none;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: 0.3s;
-        }
-
-            .login-btn:hover {
-                transform: scale(1.05);
-                box-shadow: 0 0 20px rgba(233,69,96,0.6);
-            }
-
-        .login-info {
-            color: #aaa;
-            font-size: 0.75rem;
-            margin-top: 15px;
-            line-height: 1.4;
-        }
-
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -1449,31 +1855,31 @@
 
         @media (max-width: 600px) {
             h1 {
-                font-size: 2rem;
-                letter-spacing: 4px;
+                font-size: 1.8rem;
+                letter-spacing: 3px;
             }
 
             .coin-btn {
-                width: 180px;
-                height: 180px;
-                font-size: 3rem;
+                width: 150px;
+                height: 150px;
             }
 
                 .coin-btn::before {
-                    font-size: 4rem;
+                    font-size: 3.5rem;
                 }
 
             .stats-bar {
-                gap: 20px;
-                padding: 20px;
+                gap: 15px;
+                padding: 15px;
             }
 
             .stat-value {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
 
             .shop-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
             }
 
             .rebirth-modal {
@@ -1484,25 +1890,54 @@
 
             .world2-entry-btn {
                 font-size: 1.3rem;
-                padding: 20px;
+                padding: 15px 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="sync-status" id="syncStatus"><div class="sync-dot" id="syncDot"></div><span id="syncText">Инициализация...</span></div>
+
+    <!-- ===== ЛОГИН ===== -->
     <div class="login-overlay" id="loginOverlay">
         <div class="login-box">
-            <h2>Вход в игру</h2>
-            <div class="input-group"><input type="text" id="usernameInput" placeholder="Введите никнейм" autocomplete="off"></div>
-            <button class="login-btn" id="loginBtn" onclick="registerUser()"><span id="loginBtnText">ВОЙТИ В ИГРУ</span><span id="loginBtnSpinner" class="loading-spinner" style="display:none;"></span></button>
+            <h2>⛏️ Вход</h2>
+            <p class="subtitle" id="loginModeText">Войдите в свой аккаунт</p>
+
+            <div class="input-group">
+                <input type="text" id="usernameInput" placeholder="Никнейм" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <input type="password" id="passwordInput" placeholder="Пароль" autocomplete="off">
+            </div>
+            <div class="input-group" id="registerPasswordGroup" style="display:none;">
+                <input type="password" id="passwordConfirmInput" placeholder="Повторите пароль" autocomplete="off">
+            </div>
+
+            <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+                <span id="loginBtnText">ВОЙТИ</span>
+                <span id="loginBtnSpinner" class="loading-spinner" style="display:none;"></span>
+            </button>
+
+            <div id="loginError" class="login-error"></div>
+            <div id="loginSuccess" class="login-success"></div>
+
+            <hr class="login-divider">
+
+            <p>
+                <span id="toggleAuthText">Нет аккаунта? </span>
+                <span class="login-toggle" id="toggleAuthBtn" onclick="toggleAuthMode()">Зарегистрироваться</span>
+            </p>
+
             <p class="login-info">☁️ Прогресс сохраняется в облаке<br>Доступен с любого устройства!</p>
         </div>
     </div>
+
+    <!-- ===== ИГРОВОЙ ИНТЕРФЕЙС ===== -->
     <div class="user-panel" id="userPanel" style="display:none;">
         <span class="user-nick" id="userNickDisplay"></span>
         <button class="admin-panel-btn" id="adminToggleBtn" style="display:none;" onclick="toggleAdminPanel()">🔧 Админ</button>
-        <button class="logout-btn" onclick="logout()">Сменить аккаунт</button>
+        <button class="logout-btn" onclick="logout()">Выйти</button>
     </div>
     <div class="admin-panel-container" id="adminPanel">
         <span class="close-admin" onclick="toggleAdminPanel()">&times;</span>
@@ -1520,8 +1955,9 @@
         <div id="adminFeedback" class="admin-feedback"></div>
         <p style="font-size:0.75rem; color:#aaa; margin-top:15px; text-align:center;">Значения применяются к указанному нику (или к вам, если поле пустое)</p>
     </div>
+
     <div class="container">
-        <header><h1>🔫 Standoff 2 Clicker 🔫</h1><a href="#" onclick="resetGame()" class="reset-link">Сбросить прогресс</a></header>
+        <header><h1>⛏️ Standoff 2 Clicker ⛏️</h1><a href="#" onclick="resetGame()" class="reset-link">Сбросить прогресс</a></header>
         <div class="stats-bar">
             <div class="stat-item"><div class="stat-label">Баланс</div><div class="stat-value" id="balance">$0</div></div>
             <div class="stat-item"><div class="stat-label">Клик</div><div class="stat-value" id="click-power">1</div></div>
@@ -1586,7 +2022,6 @@
             return audioCtx;
         }
 
-        // Звук клика (короткий щелчок)
         function playClickSound() {
             try {
                 const ctx = getAudioContext();
@@ -1601,10 +2036,9 @@
                 gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
                 oscillator.start(ctx.currentTime);
                 oscillator.stop(ctx.currentTime + 0.15);
-            } catch (e) { /* тихо игнорируем */ }
+            } catch (e) { }
         }
 
-        // Звук покупки (приятный динь)
         function playBuySound() {
             try {
                 const ctx = getAudioContext();
@@ -1622,7 +2056,6 @@
             } catch (e) { }
         }
 
-        // Звук перерождения (мощный аккорд)
         function playRebirthSound() {
             try {
                 const ctx = getAudioContext();
@@ -1641,7 +2074,6 @@
             } catch (e) { }
         }
 
-        // Звук повышения уровня (фанфары)
         function playLevelUpSound() {
             try {
                 const ctx = getAudioContext();
@@ -1660,11 +2092,9 @@
             } catch (e) { }
         }
 
-        // Звук кирки для Мира 2
         function playPickaxeSound() {
             try {
                 const ctx = getAudioContext();
-                // Шумовой удар
                 const bufferSize = ctx.sampleRate * 0.1;
                 const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -1680,7 +2110,6 @@
                 noiseGain.connect(ctx.destination);
                 noise.start(ctx.currentTime);
                 noise.stop(ctx.currentTime + 0.15);
-                // Тон
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain);
@@ -1695,7 +2124,6 @@
             } catch (e) { }
         }
 
-        // Звук достижения
         function playAchievementSound() {
             try {
                 const ctx = getAudioContext();
@@ -1734,9 +2162,17 @@
         const userPanel = document.getElementById('userPanel');
         const userNickDisplay = document.getElementById('userNickDisplay');
         const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordConfirmInput = document.getElementById('passwordConfirmInput');
+        const registerPasswordGroup = document.getElementById('registerPasswordGroup');
         const loginBtn = document.getElementById('loginBtn');
         const loginBtnText = document.getElementById('loginBtnText');
         const loginBtnSpinner = document.getElementById('loginBtnSpinner');
+        const loginError = document.getElementById('loginError');
+        const loginSuccess = document.getElementById('loginSuccess');
+        const loginModeText = document.getElementById('loginModeText');
+        const toggleAuthText = document.getElementById('toggleAuthText');
+        const toggleAuthBtn = document.getElementById('toggleAuthBtn');
         const syncDot = document.getElementById('syncDot');
         const syncText = document.getElementById('syncText');
         const adminToggleBtn = document.getElementById('adminToggleBtn');
@@ -1748,6 +2184,8 @@
         const rebirthCountDisplay = document.getElementById('rebirthCountDisplay');
         const worldDisplay = document.getElementById('worldDisplay');
         const world2Progress = document.getElementById('world2Progress');
+
+        let isLoginMode = true; // true = вход, false = регистрация
 
         function updateSyncStatus(status, text) { syncDot.className = 'sync-dot ' + status; syncText.textContent = text; }
 
@@ -1777,7 +2215,7 @@
         const WORLD2_REQUIRED_BALANCE = 100 * 1e18;
         const WORLD2_ENTRY_COST = 100 * 1e18;
 
-        // ==================== БАЗОВЫЕ ПРЕДМЕТЫ МИРА 1 ====================
+        // ==================== ПРЕДМЕТЫ МИРА 1 ====================
         const baseShopItems = [
             { id: 'click_upgrade_1', name: 'Усиленный палец', icon: '👆', cost: 50, type: 'click', value: 2, desc: '+2 к силе клика' },
             { id: 'click_upgrade_2', name: 'Золотой палец', icon: '✨', cost: 300, type: 'click', value: 10, desc: '+10 к силе клика' },
@@ -1850,20 +2288,59 @@
             { id: 'rebirth_13', name: 'Перерождение x100', icon: '🔥', cost: 200000000000, type: 'rebirth', value: 100, desc: 'Сброс прогресса. Доход x100' },
         ];
 
-        // ==================== ГЕНЕРАЦИЯ ПРЕДМЕТОВ МИРА 2 ====================
+        // ==================== НОВЫЕ ПРЕДМЕТЫ МИРА 2 (Minecraft) ====================
         function generateWorld2Items() {
-            return baseShopItems.map(item => {
-                const newItem = {
-                    ...item,
-                    id: item.id + '_w2',
-                    name: '★ ' + item.name + ' (W2)',
-                    cost: Math.floor(item.cost * 2),
-                    value: Math.floor(item.value * 3),
-                    desc: item.desc,
-                    world: 2
-                };
-                return newItem;
-            });
+            return [
+                // Улучшения клика (Minecraft тематика)
+                { id: 'w2_wood_pick', name: 'Деревянная кирка', icon: '🪓', cost: 100, type: 'click', value: 5, desc: '+5 к силе клика' },
+                { id: 'w2_stone_pick', name: 'Каменная кирка', icon: '⛏️', cost: 500, type: 'click', value: 20, desc: '+20 к силе клика' },
+                { id: 'w2_iron_pick', name: 'Железная кирка', icon: '🔨', cost: 2500, type: 'click', value: 80, desc: '+80 к силе клика' },
+                { id: 'w2_gold_pick', name: 'Золотая кирка', icon: '✨', cost: 8000, type: 'click', value: 150, desc: '+150 к силе клика' },
+                { id: 'w2_diamond_pick', name: 'Алмазная кирка', icon: '💎', cost: 30000, type: 'click', value: 400, desc: '+400 к силе клика' },
+                { id: 'w2_netherite_pick', name: 'Незеритовая кирка', icon: '🔥', cost: 150000, type: 'click', value: 1200, desc: '+1,200 к силе клика' },
+                { id: 'w2_enchanted_pick', name: 'Зачарованная кирка', icon: '✨⛏️', cost: 500000, type: 'click', value: 3500, desc: '+3,500 к силе клика' },
+                { id: 'w2_ender_pick', name: 'Эндер-кирка', icon: '🌀', cost: 2000000, type: 'click', value: 10000, desc: '+10,000 к силе клика' },
+                { id: 'w2_obsidian_pick', name: 'Обсидиановая кирка', icon: '🪨', cost: 8000000, type: 'click', value: 35000, desc: '+35,000 к силе клика' },
+                { id: 'w2_crystal_pick', name: 'Кристальная кирка', icon: '💠', cost: 30000000, type: 'click', value: 120000, desc: '+120,000 к силе клика' },
+                { id: 'w2_hero_pick', name: 'Кирка Героя', icon: '⚔️', cost: 120000000, type: 'click', value: 450000, desc: '+450,000 к силе клика' },
+                { id: 'w2_legendary_pick', name: 'Легендарная кирка', icon: '🌟', cost: 500000000, type: 'click', value: 2000000, desc: '+2,000,000 к силе клика' },
+                { id: 'w2_cosmic_pick', name: 'Космическая кирка', icon: '🌌', cost: 2000000000, type: 'click', value: 8000000, desc: '+8,000,000 к силе клика' },
+                { id: 'w2_void_pick', name: 'Кирка Бездны', icon: '🕳️', cost: 8000000000, type: 'click', value: 30000000, desc: '+30,000,000 к силе клика' },
+                { id: 'w2_god_pick', name: 'Кирка Богов', icon: '☀️', cost: 30000000000, type: 'click', value: 150000000, desc: '+150,000,000 к силе клика' },
+
+                // Авто-доход (Minecraft фермы)
+                { id: 'w2_wheat_farm', name: 'Пшеничная ферма', icon: '🌾', cost: 200, type: 'income', value: 8, desc: '+8$/сек' },
+                { id: 'w2_carrot_farm', name: 'Морковная ферма', icon: '🥕', cost: 800, type: 'income', value: 25, desc: '+25$/сек' },
+                { id: 'w2_potato_farm', name: 'Картофельная ферма', icon: '🥔', cost: 3000, type: 'income', value: 70, desc: '+70$/сек' },
+                { id: 'w2_cow_farm', name: 'Коровья ферма', icon: '🐄', cost: 12000, type: 'income', value: 200, desc: '+200$/сек' },
+                { id: 'w2_chicken_farm', name: 'Куриная ферма', icon: '🐔', cost: 40000, type: 'income', value: 600, desc: '+600$/сек' },
+                { id: 'w2_pig_farm', name: 'Свиная ферма', icon: '🐷', cost: 150000, type: 'income', value: 1800, desc: '+1,800$/сек' },
+                { id: 'w2_sheep_farm', name: 'Овечья ферма', icon: '🐑', cost: 500000, type: 'income', value: 5000, desc: '+5,000$/сек' },
+                { id: 'w2_iron_golem', name: 'Железный голем', icon: '🤖', cost: 2000000, type: 'income', value: 15000, desc: '+15,000$/сек' },
+                { id: 'w2_snow_golem', name: 'Снежный голем', icon: '⛄', cost: 7000000, type: 'income', value: 45000, desc: '+45,000$/сек' },
+                { id: 'w2_ender_farm', name: 'Эндер-ферма', icon: '👾', cost: 25000000, type: 'income', value: 150000, desc: '+150,000$/сек' },
+                { id: 'w2_blaze_farm', name: 'Ферма ифритов', icon: '🔥', cost: 90000000, type: 'income', value: 500000, desc: '+500,000$/сек' },
+                { id: 'w2_nether_farm', name: 'Незер-ферма', icon: '🌋', cost: 350000000, type: 'income', value: 2000000, desc: '+2,000,000$/сек' },
+                { id: 'w2_ender_dragon', name: 'Ферма Дракона', icon: '🐉', cost: 1500000000, type: 'income', value: 10000000, desc: '+10,000,000$/сек' },
+                { id: 'w2_wither_farm', name: 'Ферма Визера', icon: '💀', cost: 6000000000, type: 'income', value: 50000000, desc: '+50,000,000$/сек' },
+                { id: 'w2_ancient_city', name: 'Древний город', icon: '🏛️', cost: 25000000000, type: 'income', value: 300000000, desc: '+300,000,000$/сек' },
+                { id: 'w2_end_city', name: 'Эндер-город', icon: '🌆', cost: 120000000000, type: 'income', value: 2000000000, desc: '+2,000,000,000$/сек' },
+
+                // Перерождения (Minecraft стиль)
+                { id: 'w2_rebirth_2', name: 'Возрождение x2', icon: '🔄', cost: 2000, type: 'rebirth', value: 2, desc: 'Сброс прогресса. Доход x2' },
+                { id: 'w2_rebirth_3', name: 'Возрождение x3', icon: '🌀', cost: 8000, type: 'rebirth', value: 3, desc: 'Сброс прогресса. Доход x3' },
+                { id: 'w2_rebirth_4', name: 'Возрождение x4', icon: '⚡', cost: 35000, type: 'rebirth', value: 4, desc: 'Сброс прогресса. Доход x4' },
+                { id: 'w2_rebirth_5', name: 'Возрождение x5', icon: '💎', cost: 150000, type: 'rebirth', value: 5, desc: 'Сброс прогресса. Доход x5' },
+                { id: 'w2_rebirth_6', name: 'Возрождение x6', icon: '🔮', cost: 800000, type: 'rebirth', value: 6, desc: 'Сброс прогресса. Доход x6' },
+                { id: 'w2_rebirth_8', name: 'Возрождение x8', icon: '🌟', cost: 3500000, type: 'rebirth', value: 8, desc: 'Сброс прогресса. Доход x8' },
+                { id: 'w2_rebirth_10', name: 'Возрождение x10', icon: '💫', cost: 15000000, type: 'rebirth', value: 10, desc: 'Сброс прогресса. Доход x10' },
+                { id: 'w2_rebirth_15', name: 'Возрождение x15', icon: '🌠', cost: 70000000, type: 'rebirth', value: 15, desc: 'Сброс прогресса. Доход x15' },
+                { id: 'w2_rebirth_20', name: 'Возрождение x20', icon: '🎆', cost: 300000000, type: 'rebirth', value: 20, desc: 'Сброс прогресса. Доход x20' },
+                { id: 'w2_rebirth_30', name: 'Возрождение x30', icon: '🎇', cost: 1500000000, type: 'rebirth', value: 30, desc: 'Сброс прогресса. Доход x30' },
+                { id: 'w2_rebirth_50', name: 'Возрождение x50', icon: '✨', cost: 8000000000, type: 'rebirth', value: 50, desc: 'Сброс прогресса. Доход x50' },
+                { id: 'w2_rebirth_75', name: 'Возрождение x75', icon: '💥', cost: 40000000000, type: 'rebirth', value: 75, desc: 'Сброс прогресса. Доход x75' },
+                { id: 'w2_rebirth_100', name: 'Возрождение x100', icon: '🔥', cost: 250000000000, type: 'rebirth', value: 100, desc: 'Сброс прогресса. Доход x100' },
+            ];
         }
 
         function getCurrentShopItems() {
@@ -1981,51 +2458,314 @@
             saveTimeout = setTimeout(() => { saveToCloud(); }, 2000);
         }
 
-        // ==================== AUTH ====================
-        function registerUser() {
-            const nick = usernameInput.value.trim();
-            if (!nick) { updateSyncStatus('offline', 'Введите никнейм'); return; }
-            loginBtn.disabled = true; loginBtnText.style.display = 'none'; loginBtnSpinner.style.display = 'inline-block';
-            loadFromCloud(nick, (cloudData) => {
-                if (cloudData) gameState = cloudData;
-                else { gameState = getDefaultGameState(); gameState.username = nick; }
-                currentUser = nick; gameState.username = nick;
-                loginOverlay.style.display = 'none'; userPanel.style.display = 'flex'; userNickDisplay.textContent = nick;
-                shopSection.classList.remove('hidden'); shopReopenNotify.style.display = 'none';
-                saveToCloud(); localStorage.setItem('lastUsername', nick);
-                loginBtn.disabled = false; loginBtnText.style.display = 'inline'; loginBtnSpinner.style.display = 'none';
-                updateUI(); initAchievementsDisplay(); checkAdminAccess();
-                applyWorldStyle();
-            });
+        // ==================== ЛОГИН/РЕГИСТРАЦИЯ ====================
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            if (isLoginMode) {
+                loginModeText.textContent = 'Войдите в свой аккаунт';
+                loginBtnText.textContent = 'ВОЙТИ';
+                toggleAuthText.textContent = 'Нет аккаунта? ';
+                toggleAuthBtn.textContent = 'Зарегистрироваться';
+                registerPasswordGroup.style.display = 'none';
+                passwordConfirmInput.value = '';
+                loginError.textContent = '';
+                loginSuccess.textContent = '';
+            } else {
+                loginModeText.textContent = 'Создайте новый аккаунт';
+                loginBtnText.textContent = 'ЗАРЕГИСТРИРОВАТЬСЯ';
+                toggleAuthText.textContent = 'Уже есть аккаунт? ';
+                toggleAuthBtn.textContent = 'Войти';
+                registerPasswordGroup.style.display = 'block';
+                loginError.textContent = '';
+                loginSuccess.textContent = '';
+            }
         }
-        function logout() {
-            if (currentUser && firebaseReady) saveToCloud();
-            currentUser = ''; gameState = getDefaultGameState(); pendingRebirthItem = null;
-            loginOverlay.style.display = 'flex'; userPanel.style.display = 'none'; usernameInput.value = '';
-            document.getElementById('adminPanel').classList.remove('active'); adminToggleBtn.style.display = 'none';
-            updateSyncStatus('online', 'Облако ✓'); updateUI(); initAchievementsDisplay();
-            shopSection.classList.remove('hidden'); shopReopenNotify.style.display = 'none';
-            applyWorldStyle();
-        }
-        function tryAutoLogin() {
-            const lastUser = localStorage.getItem('lastUsername');
-            if (lastUser && firebaseReady) {
-                loadFromCloud(lastUser, (cloudData) => {
-                    if (cloudData) gameState = cloudData;
-                    else { gameState = getDefaultGameState(); gameState.username = lastUser; }
-                    currentUser = lastUser;
-                    loginOverlay.style.display = 'none'; userPanel.style.display = 'flex'; userNickDisplay.textContent = lastUser;
-                    shopSection.classList.remove('hidden'); shopReopenNotify.style.display = 'none';
-                    updateSyncStatus('online', 'Облако ✓'); updateUI(); initAchievementsDisplay(); checkAdminAccess(); saveToCloud();
+
+        async function handleLogin() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            loginError.textContent = '';
+            loginSuccess.textContent = '';
+
+            if (!username || !password) {
+                loginError.textContent = 'Заполните все поля!';
+                return;
+            }
+
+            if (username.length < 3) {
+                loginError.textContent = 'Никнейм должен быть не менее 3 символов!';
+                return;
+            }
+
+            if (password.length < 4) {
+                loginError.textContent = 'Пароль должен быть не менее 4 символов!';
+                return;
+            }
+
+            if (!isLoginMode) {
+                const confirmPass = passwordConfirmInput.value.trim();
+                if (password !== confirmPass) {
+                    loginError.textContent = 'Пароли не совпадают!';
+                    return;
+                }
+            }
+
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loginBtnSpinner.style.display = 'inline-block';
+
+            try {
+                const key = sanitizeKey(username);
+                const snapshot = await firebaseDb.ref('users/' + key).once('value');
+
+                if (isLoginMode) {
+                    // ===== ВХОД =====
+                    if (!snapshot.exists()) {
+                        loginError.textContent = 'Аккаунт не найден!';
+                        loginBtn.disabled = false;
+                        loginBtnText.style.display = 'inline';
+                        loginBtnSpinner.style.display = 'none';
+                        return;
+                    }
+
+                    const data = snapshot.val();
+                    if (data.password !== password) {
+                        loginError.textContent = 'Неверный пароль!';
+                        loginBtn.disabled = false;
+                        loginBtnText.style.display = 'inline';
+                        loginBtnSpinner.style.display = 'none';
+                        return;
+                    }
+
+                    // Успешный вход
+                    loginSuccess.textContent = '✅ Вход выполнен!';
+                    delete data.password;
+                    gameState = { ...getDefaultGameState(), ...data };
+                    currentUser = username;
+                    gameState.username = username;
+                    loginOverlay.style.display = 'none';
+                    userPanel.style.display = 'flex';
+                    userNickDisplay.textContent = username;
+                    shopSection.classList.remove('hidden');
+                    shopReopenNotify.style.display = 'none';
+                    localStorage.setItem('lastUsername', username);
+                    updateUI();
+                    initAchievementsDisplay();
+                    checkAdminAccess();
                     applyWorldStyle();
-                });
-                return true;
+                    saveToCloud();
+
+                } else {
+                    // ===== РЕГИСТРАЦИЯ =====
+                    if (snapshot.exists()) {
+                        loginError.textContent = 'Этот никнейм уже занят!';
+                        loginBtn.disabled = false;
+                        loginBtnText.style.display = 'inline';
+                        loginBtnSpinner.style.display = 'none';
+                        return;
+                    }
+
+                    // Создаём нового пользователя
+                    const newUser = getDefaultGameState();
+                    newUser.username = username;
+                    newUser.password = password;
+
+                    await firebaseDb.ref('users/' + key).set(newUser);
+
+                    loginSuccess.textContent = '✅ Аккаунт создан!';
+                    delete newUser.password;
+                    gameState = { ...getDefaultGameState(), ...newUser };
+                    currentUser = username;
+                    gameState.username = username;
+                    loginOverlay.style.display = 'none';
+                    userPanel.style.display = 'flex';
+                    userNickDisplay.textContent = username;
+                    shopSection.classList.remove('hidden');
+                    shopReopenNotify.style.display = 'none';
+                    localStorage.setItem('lastUsername', username);
+                    updateUI();
+                    initAchievementsDisplay();
+                    checkAdminAccess();
+                    applyWorldStyle();
+                    saveToCloud();
+                }
+
+            } catch (error) {
+                console.error(error);
+                loginError.textContent = 'Ошибка соединения с сервером!';
+            }
+
+            loginBtn.disabled = false;
+            loginBtnText.style.display = 'inline';
+            loginBtnSpinner.style.display = 'none';
+        }
+
+        // ==================== АВТОВХОД ====================
+        async function tryAutoLogin() {
+            const lastUser = localStorage.getItem('lastUsername');
+            if (!lastUser || !firebaseReady || !firebaseDb) return false;
+
+            try {
+                const key = sanitizeKey(lastUser);
+                const snapshot = await firebaseDb.ref('users/' + key).once('value');
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    delete data.password;
+                    gameState = { ...getDefaultGameState(), ...data };
+                    currentUser = lastUser;
+                    gameState.username = lastUser;
+                    loginOverlay.style.display = 'none';
+                    userPanel.style.display = 'flex';
+                    userNickDisplay.textContent = lastUser;
+                    shopSection.classList.remove('hidden');
+                    shopReopenNotify.style.display = 'none';
+                    updateSyncStatus('online', 'Облако ✓');
+                    updateUI();
+                    initAchievementsDisplay();
+                    checkAdminAccess();
+                    applyWorldStyle();
+                    saveToCloud();
+                    return true;
+                }
+            } catch (e) {
+                console.error('Автовход не удался:', e);
             }
             return false;
         }
+
+        function logout() {
+            if (currentUser && firebaseReady) saveToCloud();
+            currentUser = '';
+            gameState = getDefaultGameState();
+            pendingRebirthItem = null;
+            loginOverlay.style.display = 'flex';
+            userPanel.style.display = 'none';
+            usernameInput.value = '';
+            passwordInput.value = '';
+            passwordConfirmInput.value = '';
+            document.getElementById('adminPanel').classList.remove('active');
+            adminToggleBtn.style.display = 'none';
+            loginError.textContent = '';
+            loginSuccess.textContent = '';
+            if (!isLoginMode) toggleAuthMode();
+            updateSyncStatus('online', 'Облако ✓');
+            updateUI();
+            initAchievementsDisplay();
+            shopSection.classList.remove('hidden');
+            shopReopenNotify.style.display = 'none';
+            applyWorldStyle();
+        }
+
+        // ==================== АДМИН ====================
         function checkAdminAccess() {
-            if (currentUser.toLowerCase() === 'mikhaigr') adminToggleBtn.style.display = 'inline-block';
-            else adminToggleBtn.style.display = 'none';
+            if (currentUser.toLowerCase() === 'mikhaigr') {
+                adminToggleBtn.style.display = 'inline-block';
+            } else {
+                adminToggleBtn.style.display = 'none';
+            }
+        }
+
+        function toggleAdminPanel() {
+            document.getElementById('adminPanel').classList.toggle('active');
+        }
+
+        function updateUserData(targetNick, updateFn) {
+            return new Promise((resolve, reject) => {
+                if (currentUser.toLowerCase() !== 'mikhaigr') {
+                    reject('Недостаточно прав');
+                    return;
+                }
+                const target = targetNick.trim() || currentUser;
+                if (!firebaseReady || !firebaseDb) {
+                    reject('Firebase не готов');
+                    return;
+                }
+                const key = sanitizeKey(target);
+                firebaseDb.ref('users/' + key).once('value')
+                    .then(snapshot => {
+                        if (!snapshot.exists()) {
+                            const newData = getDefaultGameState();
+                            newData.username = target;
+                            updateFn(newData);
+                            return firebaseDb.ref('users/' + key).set(newData).then(() => { resolve(newData); });
+                        } else {
+                            const data = snapshot.val();
+                            updateFn(data);
+                            return firebaseDb.ref('users/' + key).set(data).then(() => { resolve(data); });
+                        }
+                    })
+                    .catch(err => { reject(err); });
+            });
+        }
+
+        function showAdminFeedback(text, isError = false) {
+            adminFeedback.textContent = text;
+            adminFeedback.className = 'admin-feedback ' + (isError ? 'error' : 'success');
+            setTimeout(() => {
+                adminFeedback.textContent = '';
+                adminFeedback.className = 'admin-feedback';
+            }, 4000);
+        }
+
+        async function adminSetMoney() {
+            const amount = parseInt(adminMoneyAmount.value, 10);
+            if (isNaN(amount) || amount < 0) {
+                showAdminFeedback('❌ Введите корректное число', true);
+                return;
+            }
+            try {
+                const data = await updateUserData(adminTargetNick.value, d => { d.balance = (d.balance || 0) + amount; });
+                const target = adminTargetNick.value.trim() || currentUser;
+                if (target === currentUser) {
+                    gameState = { ...gameState, ...data };
+                    updateUI();
+                }
+                showAdminFeedback(`✅ Денег выдано: +$${amount}. Новый баланс: $${data.balance}`);
+            } catch (err) {
+                console.error(err);
+                showAdminFeedback('❌ Ошибка: ' + err.message, true);
+            }
+        }
+
+        async function adminSetClickPower() {
+            const amount = parseInt(adminClickPowerAmount.value, 10);
+            if (isNaN(amount) || amount < 0) {
+                showAdminFeedback('❌ Введите корректное число', true);
+                return;
+            }
+            try {
+                const data = await updateUserData(adminTargetNick.value, d => { d.clickPower = amount; });
+                const target = adminTargetNick.value.trim() || currentUser;
+                if (target === currentUser) {
+                    gameState = { ...gameState, ...data };
+                    updateUI();
+                }
+                showAdminFeedback(`✅ Сила клика установлена: ${amount}`);
+            } catch (err) {
+                console.error(err);
+                showAdminFeedback('❌ Ошибка: ' + err.message, true);
+            }
+        }
+
+        async function adminSetIncome() {
+            const amount = parseInt(adminIncomeAmount.value, 10);
+            if (isNaN(amount) || amount < 0) {
+                showAdminFeedback('❌ Введите корректное число', true);
+                return;
+            }
+            try {
+                const data = await updateUserData(adminTargetNick.value, d => { d.incomePerSec = amount; });
+                const target = adminTargetNick.value.trim() || currentUser;
+                if (target === currentUser) {
+                    gameState = { ...gameState, ...data };
+                    updateUI();
+                }
+                showAdminFeedback(`✅ Авто-доход установлен: ${amount}$/сек`);
+            } catch (err) {
+                console.error(err);
+                showAdminFeedback('❌ Ошибка: ' + err.message, true);
+            }
         }
 
         // ==================== СТИЛЬ МИРА ====================
@@ -2044,22 +2784,25 @@
             const effectiveAmount = Math.floor(baseAmount * gameState.multiplier);
             gameState.balance += effectiveAmount;
             gainExperience(Math.max(1, Math.floor(effectiveAmount / 5)));
-            updateUI(); debouncedSaveToCloud();
+            updateUI();
+            debouncedSaveToCloud();
         }
+
         function gainExperience(amount) {
             gameState.experience += amount;
             while (gameState.experience >= gameState.experienceToNextLevel) levelUp();
         }
+
         function levelUp() {
             gameState.experience -= gameState.experienceToNextLevel;
             gameState.level++;
             gameState.experienceToNextLevel = Math.floor(gameState.experienceToNextLevel * 1.5);
             let reward = 2;
-            if (gameState.level % 10 === 0) { reward += 25; }
-            else if (gameState.level % 5 === 0) { reward += 10; }
+            if (gameState.level % 10 === 0) { reward += 25; } else if (gameState.level % 5 === 0) { reward += 10; }
             gameState.clickPower += reward;
             playLevelUpSound();
         }
+
         function closeLevelUp() {
             levelUpModal.classList.add('hidden');
         }
@@ -2129,7 +2872,8 @@
                 createParticle(e.clientX, e.clientY, `+${earned}$`);
             }
 
-            updateUI(); debouncedSaveToCloud();
+            updateUI();
+            debouncedSaveToCloud();
         });
 
         // ==================== ПОКУПКА МИРА 2 ====================
@@ -2204,13 +2948,14 @@
                     const el = document.createElement('div');
                     el.className = 'shop-item';
                     const canAfford = gameState.balance >= item.cost;
-                    if (canAfford) el.classList.add('can-afford'); else el.classList.add('cannot-afford');
+                    if (canAfford) el.classList.add('can-afford');
+                    else el.classList.add('cannot-afford');
                     const isRebirth = item.type === 'rebirth';
                     const btnClass = isRebirth ? 'item-btn rebirth-btn-type' : 'item-btn';
                     const onclickHandler = isRebirth ? `openRebirthModal('${item.id}')` : `buyItem('${item.id}')`;
                     let buttonsHtml = `<button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${isRebirth ? '🔄 Переродиться' : 'Купить'}</button>`;
                     if (!isRebirth && canAfford) {
-                        buttonsHtml += `<button class="item-btn buy-max-btn" onclick="buyMax('${item.id}')">📦 Купить на все</button>`;
+                        buttonsHtml += `<button class="item-btn buy-max-btn" onclick="buyMax('${item.id}')">📦 На все</button>`;
                     }
                     el.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div>${buttonsHtml}`;
                     shopGrid.appendChild(el);
@@ -2221,13 +2966,14 @@
                 const el = document.createElement('div');
                 el.className = 'shop-item';
                 const canAfford = gameState.balance >= item.cost;
-                if (canAfford) el.classList.add('can-afford'); else el.classList.add('cannot-afford');
+                if (canAfford) el.classList.add('can-afford');
+                else el.classList.add('cannot-afford');
                 const isRebirth = item.type === 'rebirth';
                 const btnClass = isRebirth ? 'item-btn rebirth-btn-type' : 'item-btn';
                 const onclickHandler = isRebirth ? `openRebirthModal('${item.id}')` : `buyItem('${item.id}')`;
-                let buttonsHtml = `<button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${isRebirth ? '🔄 Переродиться' : 'Купить'}</button>`;
+                let buttonsHtml = `<button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${isRebirth ? '🔄 Возродиться' : 'Купить'}</button>`;
                 if (!isRebirth && canAfford) {
-                    buttonsHtml += `<button class="item-btn buy-max-btn" onclick="buyMax('${item.id}')">📦 Купить на все</button>`;
+                    buttonsHtml += `<button class="item-btn buy-max-btn" onclick="buyMax('${item.id}')">📦 На все</button>`;
                 }
                 el.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div>${buttonsHtml}`;
                 shopGrid.appendChild(el);
@@ -2244,10 +2990,10 @@
             if (!gameState.unlockedItems.includes(id)) gameState.unlockedItems.push(id);
             gainExperience(Math.floor(item.cost / 20));
             playBuySound();
-            updateUI(); debouncedSaveToCloud();
+            updateUI();
+            debouncedSaveToCloud();
         }
 
-        // Функция покупки на все деньги
         function buyMax(id) {
             const items = getCurrentShopItems();
             const item = items.find(i => i.id === id);
@@ -2265,7 +3011,8 @@
             if (!gameState.unlockedItems.includes(id)) gameState.unlockedItems.push(id);
             gainExperience(Math.floor(totalCost / 20));
             playBuySound();
-            updateUI(); debouncedSaveToCloud();
+            updateUI();
+            debouncedSaveToCloud();
         }
 
         function openRebirthModal(itemId) {
@@ -2274,27 +3021,42 @@
             if (!item || gameState.balance < item.cost) return;
             pendingRebirthItem = item;
             const newMultiplier = gameState.multiplier * item.value;
-            if (newMultiplier > 1e308) { alert('Слишком большой множитель!'); return; }
+            if (newMultiplier > 1e308) {
+                alert('Слишком большой множитель!');
+                return;
+            }
             document.getElementById('rebirthMultiplier').textContent = newMultiplier.toLocaleString();
             rebirthModal.classList.add('active');
         }
+
         function confirmRebirth() {
             if (!pendingRebirthItem) return;
             const item = pendingRebirthItem;
-            if (gameState.balance < item.cost) { rebirthModal.classList.remove('active'); return; }
+            if (gameState.balance < item.cost) {
+                rebirthModal.classList.remove('active');
+                return;
+            }
             gameState.balance -= item.cost;
             gameState.multiplier *= item.value;
             gameState.rebirthCount++;
-            gameState.level = 1; gameState.experience = 0; gameState.experienceToNextLevel = 100;
+            gameState.level = 1;
+            gameState.experience = 0;
+            gameState.experienceToNextLevel = 100;
             gameState.clickPower = (gameState.world === 2) ? 5 : 1;
             gameState.incomePerSec = 0;
             gameState.balance = 0;
             gameState.unlockedItems = [];
-            pendingRebirthItem = null; rebirthModal.classList.remove('active');
+            pendingRebirthItem = null;
+            rebirthModal.classList.remove('active');
             playRebirthSound();
-            updateUI(); saveToCloud();
+            updateUI();
+            saveToCloud();
         }
-        function cancelRebirth() { pendingRebirthItem = null; rebirthModal.classList.remove('active'); }
+
+        function cancelRebirth() {
+            pendingRebirthItem = null;
+            rebirthModal.classList.remove('active');
+        }
 
         function updateUI() {
             const effectiveIncome = Math.floor(gameState.incomePerSec * gameState.multiplier);
@@ -2313,21 +3075,30 @@
             levelProgressEl.style.width = expPercent + '%';
             progressTextEl.textContent = Math.floor(expPercent) + '%';
             expDisplayEl.textContent = formatNumber(gameState.experience) + ' / ' + formatNumber(gameState.experienceToNextLevel);
-            renderShop(); checkAchievements();
+            renderShop();
+            checkAchievements();
         }
 
         function formatNumber(num) {
             if (num < 1000) return Math.floor(num).toLocaleString();
             const suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'UDc', 'DDc', 'TDc', 'QaDc', 'QiDc', 'SxDc', 'SpDc', 'OcDc', 'NoDc', 'Vg'];
-            let tier = 0, n = num;
-            while (n >= 1000 && tier < suffixes.length - 1) { n /= 1000; tier++; }
+            let tier = 0,
+                n = num;
+            while (n >= 1000 && tier < suffixes.length - 1) {
+                n /= 1000;
+                tier++;
+            }
             return tier < suffixes.length ? n.toFixed(2) + suffixes[tier] : n.toExponential(2);
         }
 
         function createParticle(x, y, text) {
-            const p = document.createElement('div'); p.className = 'click-effect'; p.textContent = text;
-            p.style.left = x + 'px'; p.style.top = (y - 50) + 'px';
-            document.body.appendChild(p); setTimeout(() => p.remove(), 1000);
+            const p = document.createElement('div');
+            p.className = 'click-effect';
+            p.textContent = text;
+            p.style.left = x + 'px';
+            p.style.top = (y - 50) + 'px';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 1000);
         }
 
         function checkAchievements() {
@@ -2359,85 +3130,57 @@
             });
         }
 
-        // ==================== ADMIN ====================
-        function toggleAdminPanel() { document.getElementById('adminPanel').classList.toggle('active'); }
-        function updateUserData(targetNick, updateFn) {
-            return new Promise((resolve, reject) => {
-                if (currentUser.toLowerCase() !== 'mikhaigr') { reject('Недостаточно прав'); return; }
-                const target = targetNick.trim() || currentUser;
-                if (!firebaseReady || !firebaseDb) { reject('Firebase не готов'); return; }
-                const key = sanitizeKey(target);
-                firebaseDb.ref('users/' + key).once('value')
-                    .then(snapshot => {
-                        if (!snapshot.exists()) {
-                            const newData = getDefaultGameState();
-                            newData.username = target;
-                            updateFn(newData);
-                            return firebaseDb.ref('users/' + key).set(newData).then(() => { resolve(newData); });
-                        } else {
-                            const data = snapshot.val();
-                            updateFn(data);
-                            return firebaseDb.ref('users/' + key).set(data).then(() => { resolve(data); });
-                        }
-                    })
-                    .catch(err => { reject(err); });
-            });
-        }
-        function showAdminFeedback(text, isError = false) {
-            adminFeedback.textContent = text;
-            adminFeedback.className = 'admin-feedback ' + (isError ? 'error' : 'success');
-            setTimeout(() => { adminFeedback.textContent = ''; adminFeedback.className = 'admin-feedback'; }, 4000);
-        }
-        async function adminSetMoney() {
-            const amount = parseInt(adminMoneyAmount.value, 10);
-            if (isNaN(amount) || amount < 0) { showAdminFeedback('❌ Введите корректное число', true); return; }
-            try {
-                const data = await updateUserData(adminTargetNick.value, d => { d.balance = (d.balance || 0) + amount; });
-                const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) { gameState = { ...gameState, ...data }; updateUI(); }
-                showAdminFeedback(`✅ Денег выдано: +$${amount}. Новый баланс: $${data.balance}`);
-            } catch (err) { console.error(err); showAdminFeedback('❌ Ошибка: ' + err.message, true); }
-        }
-        async function adminSetClickPower() {
-            const amount = parseInt(adminClickPowerAmount.value, 10);
-            if (isNaN(amount) || amount < 0) { showAdminFeedback('❌ Введите корректное число', true); return; }
-            try {
-                const data = await updateUserData(adminTargetNick.value, d => { d.clickPower = amount; });
-                const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) { gameState = { ...gameState, ...data }; updateUI(); }
-                showAdminFeedback(`✅ Сила клика установлена: ${amount}`);
-            } catch (err) { console.error(err); showAdminFeedback('❌ Ошибка: ' + err.message, true); }
-        }
-        async function adminSetIncome() {
-            const amount = parseInt(adminIncomeAmount.value, 10);
-            if (isNaN(amount) || amount < 0) { showAdminFeedback('❌ Введите корректное число', true); return; }
-            try {
-                const data = await updateUserData(adminTargetNick.value, d => { d.incomePerSec = amount; });
-                const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) { gameState = { ...gameState, ...data }; updateUI(); }
-                showAdminFeedback(`✅ Авто-доход установлен: ${amount}$/сек`);
-            } catch (err) { console.error(err); showAdminFeedback('❌ Ошибка: ' + err.message, true); }
-        }
-
         function resetGame() {
             if (!currentUser) return;
             if (confirm('Вы уверены? Весь прогресс этого аккаунта будет удалён (включая облако)!')) {
-                gameState = getDefaultGameState(); gameState.username = currentUser;
-                updateUI(); initAchievementsDisplay(); saveToCloud();
+                gameState = getDefaultGameState();
+                gameState.username = currentUser;
+                updateUI();
+                initAchievementsDisplay();
+                saveToCloud();
                 applyWorldStyle();
             }
         }
 
-        function init() {
-            if (!tryAutoLogin()) {
-                loginOverlay.style.display = 'flex'; userPanel.style.display = 'none';
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        async function init() {
+            // Проверяем, есть ли уже аккаунт админа
+            if (firebaseReady && firebaseDb) {
+                try {
+                    const adminKey = sanitizeKey('mikhaigr');
+                    const snapshot = await firebaseDb.ref('users/' + adminKey).once('value');
+                    if (!snapshot.exists()) {
+                        // Создаём админа
+                        const adminData = getDefaultGameState();
+                        adminData.username = 'mikhaigr';
+                        adminData.password = '27102015';
+                        await firebaseDb.ref('users/' + adminKey).set(adminData);
+                        console.log('✅ Администратор создан: mikhaigr');
+                    }
+                } catch (e) {
+                    console.error('Ошибка создания админа:', e);
+                }
+            }
+
+            const autoLogged = await tryAutoLogin();
+            if (!autoLogged) {
+                loginOverlay.style.display = 'flex';
+                userPanel.style.display = 'none';
                 updateSyncStatus('online', 'Облако ✓');
             }
             renderShop();
             setInterval(() => { if (currentUser && gameState.incomePerSec > 0) addIncome(gameState.incomePerSec); }, 1000);
             setInterval(() => { if (currentUser && firebaseReady) saveToCloud(); }, 30000);
             setInterval(checkAchievements, 2000);
+
+            // Enter для входа
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && loginOverlay.style.display !== 'none') {
+                    handleLogin();
+                }
+            });
         }
+
         init();
     </script>
 </body>
