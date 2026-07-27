@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Standoff 2 Clicker Ultimate • Firebase Cloud</title>
+    <title>Standoff 2 Clicker • Мир 2 (Minecraft)</title>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
 
+    <!-- Пиксельный шрифт Minecraft -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
     <style>
+        /* ===== БАЗОВЫЕ СТИЛИ (Мир 1) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -23,6 +27,7 @@
             min-height: 100vh;
             color: #fff;
             overflow-x: hidden;
+            transition: background 0.8s ease, font-family 0.8s ease;
         }
 
             body::before {
@@ -36,6 +41,7 @@
                 background-size: 50px 50px;
                 animation: gridMove 20s linear infinite;
                 pointer-events: none;
+                transition: opacity 0.8s ease;
             }
 
         @keyframes gridMove {
@@ -48,6 +54,337 @@
             }
         }
 
+        /* ===== МИР 2 (Minecraft) ===== */
+        body.world-2 {
+            font-family: 'Press Start 2P', monospace;
+            background: #7c9c6e;
+            background-image: linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%), linear-gradient(-45deg, rgba(0,0,0,0.1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.1) 75%), linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.1) 75%);
+            background-size: 60px 60px;
+            background-color: #7c9c6e;
+            color: #2d1b0e;
+            image-rendering: pixelated;
+        }
+
+            body.world-2::before {
+                opacity: 0;
+                background-image: none;
+            }
+
+            body.world-2 .container {
+                background: rgba(139, 109, 76, 0.85);
+                border: 6px solid #5d3a1a;
+                border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
+                padding: 20px;
+                border-radius: 0;
+                box-shadow: inset 0 0 0 4px #3d2b1a;
+                margin-top: 20px;
+            }
+
+            body.world-2 header {
+                border-bottom: 6px solid #5d3a1a;
+                background: rgba(100, 70, 40, 0.8);
+                border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
+                padding: 20px 0;
+            }
+
+            body.world-2 h1 {
+                font-family: 'Press Start 2P', monospace;
+                color: #f5e56b;
+                text-shadow: 4px 4px 0 #3d2b1a, 6px 6px 0 #2d1b0e;
+                letter-spacing: 2px;
+                font-size: 2.2rem;
+                animation: none;
+            }
+
+            body.world-2 .stats-bar {
+                background: rgba(139, 109, 76, 0.7);
+                border: 4px solid #5d3a1a;
+                border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
+                box-shadow: inset 0 0 0 3px #3d2b1a;
+                padding: 15px 20px;
+                border-radius: 0;
+            }
+
+            body.world-2 .stat-value {
+                background: #f5e56b;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: #f5e56b;
+                text-shadow: 3px 3px 0 #3d2b1a;
+                filter: none;
+            }
+
+            body.world-2 .shop-section {
+                background: rgba(139, 109, 76, 0.7);
+                border: 4px solid #5d3a1a;
+                border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
+                border-radius: 0;
+                box-shadow: inset 0 0 0 3px #3d2b1a;
+            }
+
+            body.world-2 .section-title {
+                font-family: 'Press Start 2P', monospace;
+                background: #f5e56b;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: #f5e56b;
+                text-shadow: 3px 3px 0 #3d2b1a;
+                filter: none;
+            }
+
+            body.world-2 .shop-item {
+                background: rgba(100, 70, 40, 0.9);
+                border: 4px solid #5d3a1a;
+                border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 10px) 30;
+                border-radius: 0;
+                box-shadow: inset 0 0 0 2px #3d2b1a;
+                color: #f5e56b;
+            }
+
+                body.world-2 .shop-item .item-name {
+                    color: #f5e56b;
+                    text-shadow: 2px 2px 0 #3d2b1a;
+                }
+
+                body.world-2 .shop-item .item-cost {
+                    color: #f5e56b;
+                    filter: none;
+                }
+
+            body.world-2 .item-btn {
+                background: #5d3a1a;
+                color: #f5e56b;
+                border: 3px solid #3d2b1a;
+                border-radius: 0;
+                font-family: 'Press Start 2P', monospace;
+                font-size: 0.8rem;
+                text-shadow: 2px 2px 0 #2d1b0e;
+            }
+
+                body.world-2 .item-btn:hover {
+                    background: #7c5c3a;
+                    transform: scale(1.02);
+                    box-shadow: 0 0 0 3px #f5e56b;
+                }
+
+                body.world-2 .item-btn.rebirth-btn-type {
+                    background: #8b3a3a;
+                    color: #f5e56b;
+                }
+
+                    body.world-2 .item-btn.rebirth-btn-type:hover {
+                        background: #a55a5a;
+                    }
+
+            body.world-2 .stats-section {
+                background: rgba(139, 109, 76, 0.7);
+                border: 4px solid #5d3a1a;
+                border-image: repeating-linear-gradient(45deg, #8b6d4c, #5d3a1a 20px) 30;
+                border-radius: 0;
+                box-shadow: inset 0 0 0 3px #3d2b1a;
+            }
+
+            body.world-2 .stat-row {
+                border-bottom: 3px solid #5d3a1a;
+                color: #2d1b0e;
+            }
+
+                body.world-2 .stat-row span:last-child {
+                    color: #f5e56b;
+                    text-shadow: 2px 2px 0 #3d2b1a;
+                }
+
+            body.world-2 .progress-bar {
+                background: #3d2b1a;
+                border: 3px solid #5d3a1a;
+                border-radius: 0;
+                height: 30px;
+            }
+
+            body.world-2 .progress-fill {
+                background: #f5e56b;
+                border-radius: 0;
+                box-shadow: none;
+                background-image: repeating-linear-gradient(45deg, #f5e56b, #d4c04a 10px);
+            }
+
+            body.world-2 .progress-text {
+                color: #2d1b0e;
+                text-shadow: 1px 1px 0 #f5e56b;
+            }
+
+            body.world-2 .coin-btn {
+                width: 200px;
+                height: 200px;
+                animation: none;
+            }
+
+            body.world-2 .coin-btn-inner {
+                background: radial-gradient(circle at 30% 30%, #f5e56b, #b8962b);
+                box-shadow: 0 8px 0 #5d3a1a, inset 0 -8px 0 #3d2b1a;
+                border: 6px solid #3d2b1a;
+                border-radius: 50%;
+            }
+
+            body.world-2 .coin-btn::before {
+                content: '⛏️';
+                font-size: 5rem;
+            }
+
+            body.world-2 .coin-btn::after {
+                content: none;
+            }
+
+            body.world-2 .multiplier-badge {
+                background: #f5e56b;
+                color: #2d1b0e;
+                border: 4px solid #3d2b1a;
+                border-radius: 0;
+                font-family: 'Press Start 2P', monospace;
+                text-shadow: 2px 2px 0 #3d2b1a;
+            }
+
+            body.world-2 .sync-status {
+                background: rgba(100, 70, 40, 0.9);
+                border: 3px solid #5d3a1a;
+                border-radius: 0;
+                color: #f5e56b;
+            }
+
+            body.world-2 .user-nick {
+                background: rgba(100, 70, 40, 0.9);
+                border: 3px solid #5d3a1a;
+                border-radius: 0;
+                color: #f5e56b;
+            }
+
+            body.world-2 .logout-btn,
+            body.world-2 .admin-panel-btn {
+                background: #5d3a1a;
+                border: 3px solid #3d2b1a;
+                border-radius: 0;
+                color: #f5e56b;
+                font-family: 'Press Start 2P', monospace;
+                font-size: 0.7rem;
+                box-shadow: none;
+            }
+
+                body.world-2 .logout-btn:hover,
+                body.world-2 .admin-panel-btn:hover {
+                    background: #7c5c3a;
+                    transform: scale(1.02);
+                    box-shadow: 0 0 0 3px #f5e56b;
+                }
+
+            body.world-2 .admin-panel-btn {
+                background: #8b6d4c;
+            }
+
+            body.world-2 .reset-link {
+                color: #f5e56b;
+                text-shadow: 2px 2px 0 #3d2b1a;
+                font-family: 'Press Start 2P', monospace;
+                font-size: 0.7rem;
+            }
+
+                body.world-2 .reset-link:hover {
+                    color: #ffaa00;
+                }
+
+            body.world-2 .achievement-item {
+                background: rgba(100, 70, 40, 0.8);
+                border: 3px solid #5d3a1a;
+                border-radius: 0;
+                color: #f5e56b;
+            }
+
+                body.world-2 .achievement-item.unlocked {
+                    border-left: 6px solid #f5e56b;
+                    background: rgba(139, 109, 76, 0.9);
+                }
+
+            body.world-2 .achievement-info h4 {
+                color: #f5e56b;
+                text-shadow: 2px 2px 0 #3d2b1a;
+            }
+
+            body.world-2 .achievement-info p {
+                color: #ddd;
+            }
+
+            body.world-2 .level-up-modal .modal-content {
+                background: rgba(100, 70, 40, 0.95);
+                border: 6px solid #f5e56b;
+                border-radius: 0;
+                box-shadow: 0 0 0 6px #3d2b1a;
+            }
+
+            body.world-2 .level-up-title {
+                font-family: 'Press Start 2P', monospace;
+                color: #f5e56b;
+                text-shadow: 4px 4px 0 #3d2b1a;
+            }
+
+            body.world-2 .level-up-btn {
+                background: #5d3a1a;
+                border: 3px solid #3d2b1a;
+                border-radius: 0;
+                font-family: 'Press Start 2P', monospace;
+                color: #f5e56b;
+                text-shadow: 2px 2px 0 #2d1b0e;
+            }
+
+                body.world-2 .level-up-btn:hover {
+                    background: #7c5c3a;
+                }
+
+            body.world-2 .rebirth-modal {
+                background: rgba(100, 70, 40, 0.95);
+                border: 6px solid #e94560;
+                border-radius: 0;
+            }
+
+            body.world-2 .rebirth-title {
+                font-family: 'Press Start 2P', monospace;
+                color: #f5e56b;
+                text-shadow: 3px 3px 0 #3d2b1a;
+            }
+
+            body.world-2 .rebirth-btn {
+                background: #5d3a1a;
+                border: 3px solid #3d2b1a;
+                border-radius: 0;
+                font-family: 'Press Start 2P', monospace;
+                color: #f5e56b;
+                text-shadow: 2px 2px 0 #2d1b0e;
+            }
+
+                body.world-2 .rebirth-btn:hover {
+                    background: #7c5c3a;
+                }
+
+                body.world-2 .rebirth-btn.cancel {
+                    background: #3d3d3d;
+                }
+
+                    body.world-2 .rebirth-btn.cancel:hover {
+                        background: #5a5a5a;
+                    }
+
+        @media (max-width: 600px) {
+            body.world-2 h1 {
+                font-size: 1.5rem;
+            }
+
+            body.world-2 .coin-btn {
+                width: 150px;
+                height: 150px;
+            }
+
+                body.world-2 .coin-btn::before {
+                    font-size: 3.5rem;
+                }
+        }
+
+        /* ===== ОБЩИЕ СТИЛИ ===== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -224,7 +561,6 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 50px;
-            position: relative;
             perspective: 1000px;
         }
 
@@ -927,15 +1263,6 @@
             display: none;
         }
 
-        .rebirth-limit-msg {
-            text-align: center;
-            padding: 20px;
-            color: #e94560;
-            font-size: 1.1rem;
-            font-weight: bold;
-            display: none;
-        }
-
         @keyframes pulseText {
             0%, 100% {
                 opacity: 0.6;
@@ -961,6 +1288,61 @@
             .admin-feedback.error {
                 color: #e94560;
             }
+
+        .world2-entry-btn {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 25px 40px;
+            background: linear-gradient(135deg, #4ade80, #2d9e5a);
+            border: none;
+            color: #000;
+            font-weight: bold;
+            border-radius: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 0 40px rgba(74,222,128,0.5);
+            transition: 0.3s;
+            display: block;
+            text-align: center;
+            font-family: inherit;
+        }
+
+            .world2-entry-btn:hover:not(:disabled) {
+                transform: scale(1.05);
+                box-shadow: 0 0 60px rgba(74,222,128,0.8);
+            }
+
+            .world2-entry-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                transform: none;
+                box-shadow: none;
+            }
+
+        .world2-entry-wrapper {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px 10px;
+            background: linear-gradient(145deg, rgba(74,222,128,0.15) 0%, rgba(20,20,30,0.95) 100%);
+            border-radius: 30px;
+            border: 3px solid rgba(74,222,128,0.4);
+            box-shadow: 0 0 60px rgba(74,222,128,0.2);
+        }
+
+            .world2-entry-wrapper .hint {
+                margin-top: 15px;
+                font-size: 1.1rem;
+                color: #aaa;
+            }
+
+                .world2-entry-wrapper .hint.success {
+                    color: #4ade80;
+                }
+
+                .world2-entry-wrapper .hint.error {
+                    color: #ff6b6b;
+                }
 
         @media (max-width: 600px) {
             h1 {
@@ -995,6 +1377,11 @@
                 min-width: auto;
                 width: 90%;
                 padding: 25px;
+            }
+
+            .world2-entry-btn {
+                font-size: 1.3rem;
+                padding: 20px;
             }
         }
     </style>
@@ -1041,7 +1428,6 @@
         <div class="multiplier-badge" id="multiplierBadge">x1.0</div>
         <div class="shop-section" id="shopSection">
             <h2 class="section-title">🛒 Магазин улучшений</h2>
-            <div class="rebirth-limit-msg" id="rebirthLimitMsg">🔒 Достигнут лимит перерождений (10,000)</div>
             <div class="shop-grid" id="shopGrid"></div>
             <div class="shop-reopen-notify" id="shopReopenNotify" style="display:none;">🔓 Магазин откроется на <strong>уровне 3</strong> после перерождения!</div>
         </div>
@@ -1052,6 +1438,8 @@
             <div class="progress-bar"><div class="progress-fill" id="levelProgress" style="width: 0%;"></div><div class="progress-text" id="progressText">0%</div></div>
             <div class="stat-row"><span>Множитель:</span><span id="multiplierDisplay">x1.0</span></div>
             <div class="stat-row"><span>🔄 Перерождений:</span><span id="rebirthCountDisplay">0</span></div>
+            <div class="stat-row"><span>🌍 Прогресс к Миру 2:</span><span id="world2Progress">0 / 100 Qi</span></div>
+            <div class="stat-row"><span>🌍 Мир:</span><span id="worldDisplay">1</span></div>
             <div style="text-align: center; margin-top: 30px;">
                 <h3 style="color:#fff; text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">🏆 Достижения</h3>
                 <div id="achievementsList"></div>
@@ -1102,7 +1490,6 @@
         const rebirthModal = document.getElementById('rebirthModal');
         const shopSection = document.getElementById('shopSection');
         const shopReopenNotify = document.getElementById('shopReopenNotify');
-        const rebirthLimitMsg = document.getElementById('rebirthLimitMsg');
         const levelUpRewardEl = document.getElementById('levelUpReward');
         const levelUpBonusEl = document.getElementById('levelUpBonus');
         const levelUpNumberEl = document.getElementById('levelUpNumber');
@@ -1122,6 +1509,8 @@
         const adminIncomeAmount = document.getElementById('adminIncomeAmount');
         const adminFeedback = document.getElementById('adminFeedback');
         const rebirthCountDisplay = document.getElementById('rebirthCountDisplay');
+        const worldDisplay = document.getElementById('worldDisplay');
+        const world2Progress = document.getElementById('world2Progress');
 
         function updateSyncStatus(status, text) { syncDot.className = 'sync-dot ' + status; syncText.textContent = text; }
 
@@ -1139,7 +1528,8 @@
                 balance: 0, clickPower: 1, incomePerSec: 0, level: 1,
                 experience: 0, experienceToNextLevel: 100, multiplier: 1.0,
                 unlockedItems: [], achievements: [], username: '',
-                rebirthCount: 0, shopHiddenUntilLevel: 0, lastUpdated: Date.now()
+                rebirthCount: 0, shopHiddenUntilLevel: 0, lastUpdated: Date.now(),
+                world: 1
             };
         }
         let gameState = getDefaultGameState();
@@ -1147,10 +1537,12 @@
         let pendingRebirthItem = null;
         let levelUpQueue = [];
         let saveTimeout = null;
-        const REBIRTH_LIMIT = 10000;
 
-        // ==================== SHOP ITEMS ====================
-        const shopItems = [
+        const WORLD2_REQUIRED_BALANCE = 100 * 1e18;
+        const WORLD2_ENTRY_COST = 100 * 1e18;
+
+        // ==================== БАЗОВЫЕ ПРЕДМЕТЫ МИРА 1 ====================
+        const baseShopItems = [
             { id: 'click_upgrade_1', name: 'Усиленный палец', icon: '👆', cost: 50, type: 'click', value: 2, desc: '+2 к силе клика' },
             { id: 'click_upgrade_2', name: 'Золотой палец', icon: '✨', cost: 300, type: 'click', value: 10, desc: '+10 к силе клика' },
             { id: 'skin_akr762', name: 'AKR-762', icon: '🔫', cost: 1500, type: 'click', value: 50, desc: '+50 к силе клика' },
@@ -1222,7 +1614,32 @@
             { id: 'rebirth_13', name: 'Перерождение x100', icon: '🔥', cost: 200000000000, type: 'rebirth', value: 100, desc: 'Сброс прогресса. Доход x100' },
         ];
 
-        // ==================== ACHIEVEMENTS (150) ====================
+        // ==================== ГЕНЕРАЦИЯ ПРЕДМЕТОВ МИРА 2 ====================
+        // В Мире 2 все предметы в 2 раза дороже и в 3 раза больше дают.
+        function generateWorld2Items() {
+            return baseShopItems.map(item => {
+                const newItem = {
+                    ...item,
+                    id: item.id + '_w2',
+                    name: '★ ' + item.name + ' (W2)',
+                    cost: Math.floor(item.cost * 2),        // в 2 раза дороже
+                    value: Math.floor(item.value * 3),      // в 3 раза больше эффект
+                    desc: item.desc,
+                    world: 2
+                };
+                return newItem;
+            });
+        }
+
+        function getCurrentShopItems() {
+            if (gameState.world === 2) {
+                return generateWorld2Items();
+            } else {
+                return baseShopItems;
+            }
+        }
+
+        // ==================== ACHIEVEMENTS ====================
         const achievements = [
             { id: 'bal_100', name: 'Сотня', icon: '💰', desc: 'Накопите $100', condition: () => gameState.balance >= 100 },
             { id: 'bal_1k', name: 'Тысяча', icon: '💵', desc: 'Накопите $1,000', condition: () => gameState.balance >= 1000 },
@@ -1293,7 +1710,8 @@
 
         function getTotalSpent() {
             let spent = 0;
-            shopItems.forEach(item => { if (gameState.unlockedItems.includes(item.id)) spent += item.cost; });
+            const items = getCurrentShopItems();
+            items.forEach(item => { if (gameState.unlockedItems.includes(item.id)) spent += item.cost; });
             return spent;
         }
 
@@ -1342,6 +1760,7 @@
                 saveToCloud(); localStorage.setItem('lastUsername', nick);
                 loginBtn.disabled = false; loginBtnText.style.display = 'inline'; loginBtnSpinner.style.display = 'none';
                 updateUI(); initAchievementsDisplay(); checkAdminAccess();
+                applyWorldStyle();
             });
         }
         function logout() {
@@ -1351,6 +1770,7 @@
             document.getElementById('adminPanel').classList.remove('active'); adminToggleBtn.style.display = 'none';
             updateSyncStatus('online', 'Облако ✓'); updateUI(); initAchievementsDisplay();
             shopSection.classList.remove('hidden'); shopReopenNotify.style.display = 'none';
+            applyWorldStyle();
         }
         function tryAutoLogin() {
             const lastUser = localStorage.getItem('lastUsername');
@@ -1362,6 +1782,7 @@
                     loginOverlay.style.display = 'none'; userPanel.style.display = 'flex'; userNickDisplay.textContent = lastUser;
                     shopSection.classList.remove('hidden'); shopReopenNotify.style.display = 'none';
                     updateSyncStatus('online', 'Облако ✓'); updateUI(); initAchievementsDisplay(); checkAdminAccess(); saveToCloud();
+                    applyWorldStyle();
                 });
                 return true;
             }
@@ -1370,6 +1791,16 @@
         function checkAdminAccess() {
             if (currentUser.toLowerCase() === 'mikhaigr') adminToggleBtn.style.display = 'inline-block';
             else adminToggleBtn.style.display = 'none';
+        }
+
+        // ==================== СТИЛЬ МИРА ====================
+        function applyWorldStyle() {
+            const body = document.body;
+            if (gameState.world === 2) {
+                body.classList.add('world-2');
+            } else {
+                body.classList.remove('world-2');
+            }
         }
 
         // ==================== GAME LOGIC ====================
@@ -1418,16 +1849,109 @@
             createParticle(e.clientX, e.clientY, `+${earned}$`);
             updateUI(); debouncedSaveToCloud();
         });
+
+        // ==================== ПОКУПКА МИРА 2 ====================
+        function buyWorld2() {
+            if (gameState.rebirthCount < 5) {
+                alert('Требуется 5 перерождений!');
+                return;
+            }
+            if (gameState.balance < WORLD2_ENTRY_COST) {
+                alert(`Недостаточно средств! Нужно ${formatNumber(WORLD2_ENTRY_COST)}$`);
+                return;
+            }
+            if (gameState.world === 2) {
+                alert('Вы уже в Мире 2!');
+                return;
+            }
+
+            // ПОЛНЫЙ СБРОС ВСЕГО ПРОГРЕССА ДЛЯ МИРА 2
+            gameState.world = 2;
+            gameState.balance = 0;             // баланс = 0
+            gameState.clickPower = 5;          // сила клика = 5
+            gameState.incomePerSec = 0;        // доход = 0
+            gameState.level = 1;               // уровень = 1
+            gameState.experience = 0;
+            gameState.experienceToNextLevel = 100;
+            gameState.unlockedItems = [];
+            gameState.rebirthCount = 0;        // перерождения = 0
+            gameState.multiplier = 1.0;        // множитель = 1
+            gameState.achievements = [];       // достижения сброшены
+
+            updateUI();
+            initAchievementsDisplay();
+            applyWorldStyle();
+            saveToCloud();
+            alert('🎉 Добро пожаловать в Мир 2!\nВсе улучшения теперь в 2 раза дороже и дают в 3 раза больше!\nВесь прогресс сброшен!');
+        }
+
         function renderShop() {
             shopSection.classList.remove('hidden');
             shopReopenNotify.style.display = 'none';
 
-            const limitReached = gameState.rebirthCount >= REBIRTH_LIMIT;
-            rebirthLimitMsg.style.display = limitReached ? 'block' : 'none';
+            const items = getCurrentShopItems();
+            const isWorld2 = gameState.world === 2;
 
             shopGrid.innerHTML = '';
-            shopItems.forEach(item => {
-                if (limitReached && item.type === 'rebirth') return;
+
+            // Если игрок ещё не в Мире 2
+            if (!isWorld2) {
+                // Проверяем, выполнены ли условия для покупки Мира 2
+                const conditionsMet = gameState.rebirthCount >= 5 && gameState.balance >= WORLD2_ENTRY_COST;
+
+                if (conditionsMet) {
+                    // Условия выполнены - показываем только кнопку покупки Мира 2
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'world2-entry-wrapper';
+
+                    const btn = document.createElement('button');
+                    btn.className = 'world2-entry-btn';
+                    btn.textContent = '⛏️ КУПИТЬ МИР 2 (100 Qi)';
+                    btn.onclick = buyWorld2;
+                    wrapper.appendChild(btn);
+
+                    const hint = document.createElement('div');
+                    hint.className = 'hint success';
+                    hint.textContent = '✅ Все условия выполнены! Нажмите кнопку чтобы перейти в Мир 2';
+                    wrapper.appendChild(hint);
+
+                    shopGrid.appendChild(wrapper);
+                    return;
+                }
+
+                // Условия НЕ выполнены - показываем все предметы магазина
+                // Сначала показываем информацию о прогрессе к Миру 2
+                const progressDiv = document.createElement('div');
+                progressDiv.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 15px; background: rgba(74,222,128,0.1); border-radius: 15px; border: 2px solid rgba(74,222,128,0.3); margin-bottom: 10px;';
+                progressDiv.innerHTML = `
+                        <div style="font-size: 1.1rem; margin-bottom: 5px;">🌍 Прогресс к Миру 2</div>
+                        <div style="font-size: 0.9rem; color: #aaa;">
+                            Перерождений: ${gameState.rebirthCount}/5 ${gameState.rebirthCount >= 5 ? '✅' : '❌'} |
+                            Баланс: ${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_ENTRY_COST)} ${gameState.balance >= WORLD2_ENTRY_COST ? '✅' : '❌'}
+                        </div>
+                        <div style="font-size: 0.8rem; color: #ff6b6b; margin-top: 5px;">
+                            ${gameState.rebirthCount < 5 ? `❌ Нужно ещё ${5 - gameState.rebirthCount} перерождений` : ''}
+                            ${gameState.balance < WORLD2_ENTRY_COST ? `❌ Не хватает ${formatNumber(WORLD2_ENTRY_COST - gameState.balance)}$` : ''}
+                        </div>
+                    `;
+                shopGrid.appendChild(progressDiv);
+
+                // Показываем все предметы магазина
+                items.forEach(item => {
+                    const el = document.createElement('div');
+                    el.className = 'shop-item';
+                    const canAfford = gameState.balance >= item.cost;
+                    if (canAfford) el.classList.add('can-afford'); else el.classList.add('cannot-afford');
+                    const btnClass = item.type === 'rebirth' ? 'item-btn rebirth-btn-type' : 'item-btn';
+                    const onclickHandler = item.type === 'rebirth' ? `openRebirthModal('${item.id}')` : `buyItem('${item.id}')`;
+                    el.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-cost">$${formatNumber(item.cost)}</div><div class="item-desc">${item.desc}</div><button class="${btnClass}" onclick="${onclickHandler}" ${!canAfford ? 'disabled' : ''}>${item.type === 'rebirth' ? '🔄 Переродиться' : 'Купить'}</button>`;
+                    shopGrid.appendChild(el);
+                });
+                return;
+            }
+
+            // Если игрок в Мире 2 - показываем только предметы Мира 2
+            items.forEach(item => {
                 const el = document.createElement('div');
                 el.className = 'shop-item';
                 const canAfford = gameState.balance >= item.cost;
@@ -1438,8 +1962,10 @@
                 shopGrid.appendChild(el);
             });
         }
+
         function buyItem(id) {
-            const item = shopItems.find(i => i.id === id);
+            const items = getCurrentShopItems();
+            const item = items.find(i => i.id === id);
             if (!item || gameState.balance < item.cost) return;
             gameState.balance -= item.cost;
             if (item.type === 'click') gameState.clickPower += item.value;
@@ -1448,18 +1974,18 @@
             gainExperience(Math.floor(item.cost / 20));
             updateUI(); debouncedSaveToCloud();
         }
+
         function openRebirthModal(itemId) {
-            if (gameState.rebirthCount >= REBIRTH_LIMIT) return;
-            const item = shopItems.find(i => i.id === itemId);
+            const items = getCurrentShopItems();
+            const item = items.find(i => i.id === itemId);
             if (!item || gameState.balance < item.cost) return;
             pendingRebirthItem = item;
             const newMultiplier = gameState.multiplier * item.value;
-            if (newMultiplier > 1000000) return;
+            if (newMultiplier > 1e308) { alert('Слишком большой множитель!'); return; }
             document.getElementById('rebirthMultiplier').textContent = newMultiplier.toLocaleString();
             rebirthModal.classList.add('active');
         }
         function confirmRebirth() {
-            if (gameState.rebirthCount >= REBIRTH_LIMIT) { rebirthModal.classList.remove('active'); return; }
             if (!pendingRebirthItem) return;
             const item = pendingRebirthItem;
             if (gameState.balance < item.cost) { rebirthModal.classList.remove('active'); return; }
@@ -1467,12 +1993,16 @@
             gameState.multiplier *= item.value;
             gameState.rebirthCount++;
             gameState.level = 1; gameState.experience = 0; gameState.experienceToNextLevel = 100;
-            gameState.clickPower = 1; gameState.incomePerSec = 0; gameState.balance = 0; gameState.unlockedItems = [];
+            gameState.clickPower = 1;
+            gameState.incomePerSec = 0;
+            gameState.balance = 0;
+            gameState.unlockedItems = [];
             levelUpQueue = []; levelUpModal.classList.add('hidden');
             pendingRebirthItem = null; rebirthModal.classList.remove('active');
             updateUI(); saveToCloud();
         }
         function cancelRebirth() { pendingRebirthItem = null; rebirthModal.classList.remove('active'); }
+
         function updateUI() {
             const effectiveIncome = Math.floor(gameState.incomePerSec * gameState.multiplier);
             balanceEl.textContent = '$' + formatNumber(Math.floor(gameState.balance));
@@ -1481,13 +2011,22 @@
             levelEl.textContent = gameState.level;
             multiplierBadge.textContent = 'x' + gameState.multiplier.toFixed(1);
             multiplierDisplay.textContent = 'x' + gameState.multiplier.toFixed(1);
-            rebirthCountDisplay.textContent = gameState.rebirthCount;
+            rebirthCountDisplay.textContent = formatNumber(gameState.rebirthCount);
+
+            const progress = Math.min(100, (gameState.balance / WORLD2_REQUIRED_BALANCE) * 100);
+            const progressText = (gameState.balance >= WORLD2_REQUIRED_BALANCE) ? '✅ Доступен' : `${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_REQUIRED_BALANCE)} (${progress.toFixed(1)}%)`;
+            world2Progress.textContent = progressText;
+
+            const world = gameState.world;
+            worldDisplay.textContent = world + (world === 2 ? ' ⭐' : '');
+
             const progressPercent = Math.min(100, (gameState.experience / gameState.experienceToNextLevel) * 100);
             levelProgressEl.style.width = progressPercent + '%';
             progressTextEl.textContent = Math.floor(progressPercent) + '%';
             expDisplayEl.textContent = formatNumber(gameState.experience) + ' / ' + formatNumber(gameState.experienceToNextLevel);
             renderShop(); checkAchievements();
         }
+
         function formatNumber(num) {
             if (num < 1000) return Math.floor(num).toLocaleString();
             const suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'UDc', 'DDc', 'TDc', 'QaDc', 'QiDc', 'SxDc', 'SpDc', 'OcDc', 'NoDc', 'Vg'];
@@ -1495,11 +2034,13 @@
             while (n >= 1000 && tier < suffixes.length - 1) { n /= 1000; tier++; }
             return tier < suffixes.length ? n.toFixed(2) + suffixes[tier] : n.toExponential(2);
         }
+
         function createParticle(x, y, text) {
             const p = document.createElement('div'); p.className = 'click-effect'; p.textContent = text;
             p.style.left = x + 'px'; p.style.top = (y - 50) + 'px';
             document.body.appendChild(p); setTimeout(() => p.remove(), 1000);
         }
+
         function checkAchievements() {
             let newUnlock = false;
             achievements.forEach(ach => {
@@ -1514,6 +2055,7 @@
             });
             if (newUnlock) debouncedSaveToCloud();
         }
+
         function initAchievementsDisplay() {
             achievementsList.innerHTML = '';
             achievements.forEach(ach => {
@@ -1525,10 +2067,9 @@
             });
         }
 
-        // ==================== ADMIN (исправлен, без alert) ====================
+        // ==================== ADMIN ====================
         function toggleAdminPanel() { document.getElementById('adminPanel').classList.toggle('active'); }
 
-        // Вспомогательная функция для обновления данных пользователя
         function updateUserData(targetNick, updateFn) {
             return new Promise((resolve, reject) => {
                 if (currentUser.toLowerCase() !== 'mikhaigr') { reject('Недостаточно прав'); return; }
@@ -1625,6 +2166,7 @@
             if (confirm('Вы уверены? Весь прогресс этого аккаунта будет удалён (включая облако)!')) {
                 gameState = getDefaultGameState(); gameState.username = currentUser;
                 updateUI(); initAchievementsDisplay(); saveToCloud();
+                applyWorldStyle();
             }
         }
 
