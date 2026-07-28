@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Standoff 2 Clicker • Мир 3 (Roblox)</title>
+    <title>🎮 Standoff 2 Clicker • Мир 3 (Roblox)</title>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
@@ -13,11 +13,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js">
     </script>
 
-    <!-- Пиксельный шрифт Minecraft (оставлен для совместимости) -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <style>
-        /* ===== БАЗОВЫЕ СТИЛИ (сохранены из оригинала) ===== */
+        /* ===== БАЗОВЫЕ СТИЛИ ===== */
         * {
             margin: 0;
             padding: 0;
@@ -35,249 +34,250 @@
             user-select: none;
         }
 
-            body.world-2 {
-                font-family: 'Press Start 2P', monospace;
-                background: #7c9c6e;
-                background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%), linear-gradient(-45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.1) 75%), linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.1) 75%);
-                background-size: 60px 60px;
-                background-color: #7c9c6e;
-                color: #2d1b0e;
-                image-rendering: pixelated;
-                cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="0" y="0" width="32" height="32" fill="%233d2b1a" stroke="%235d3a1a" stroke-width="2"/><rect x="4" y="4" width="24" height="24" fill="%23a8d8a8" stroke="%235d3a1a" stroke-width="1"/><rect x="8" y="8" width="16" height="16" fill="%238bc34a" stroke="%235d3a1a" stroke-width="1"/><rect x="12" y="12" width="8" height="8" fill="%237cb342" stroke="%235d3a1a" stroke-width="1"/></svg>') 16 16, auto;
-            }
+        body.world-2 {
+            font-family: 'Press Start 2P', monospace;
+            background: #7c9c6e;
+            background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%), linear-gradient(-45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.1) 75%), linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.1) 75%);
+            background-size: 60px 60px;
+            background-color: #7c9c6e;
+            color: #2d1b0e;
+            image-rendering: pixelated;
+        }
 
-            body.world-3 {
-                font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif;
-                background: #1a1a2e;
-                background-image: radial-gradient(circle at 20% 30%, #4a4a8a 0%, #1a1a2e 70%);
-                color: #fff;
-                image-rendering: auto;
-                cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="0" y="0" width="32" height="32" fill="%23000000" stroke="%23ffffff" stroke-width="2" rx="4"/><circle cx="16" cy="16" r="12" fill="%23ffd700" stroke="%23ffaa00" stroke-width="2"/><text x="14" y="22" font-size="16" fill="%23ffffff" font-weight="bold" text-anchor="middle">O</text></svg>') 16 16, auto;
-            }
+        body.world-3 {
+            font-family: 'Fredoka One', 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+            background: #1a1a2e;
+            background-image: radial-gradient(ellipse at 30% 20%, #4a4a8a 0%, #1a1a2e 50%, #0d0d1a 100%);
+            color: #fff;
+            image-rendering: auto;
+        }
 
-                body.world-3 .coin-btn {
-                    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="0" y="0" width="32" height="32" fill="%23000000" stroke="%23ffd700" stroke-width="2" rx="4"/><circle cx="16" cy="16" r="12" fill="%234a90d9" stroke="%23ffd700" stroke-width="2"/><text x="16" y="22" font-size="18" fill="%23ffffff" font-weight="bold" text-anchor="middle">R</text></svg>') 16 16, pointer;
-                }
+        body.world-3 .container {
+            background: rgba(26, 26, 46, 0.85);
+            border: 8px solid #00bfff;
+            border-radius: 24px;
+            box-shadow: 0 0 80px rgba(0, 191, 255, 0.15), inset 0 0 80px rgba(0, 191, 255, 0.05);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            margin-top: 10px;
+        }
 
-                /* ===== СТИЛИ МИРА 3 (ROBLOX) ===== */
-                body.world-3 .container {
-                    background: rgba(26, 26, 46, 0.92);
-                    border: 6px solid #ffd700;
-                    border-radius: 20px;
-                    box-shadow: 0 0 60px rgba(255, 215, 0, 0.2), inset 0 0 60px rgba(74, 144, 217, 0.1);
-                    padding: 20px;
-                    backdrop-filter: blur(5px);
-                    margin-top: 10px;
-                }
+        body.world-3 header {
+            border-bottom: 4px solid #00bfff;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px 16px 0 0;
+            padding: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
 
-                body.world-3 header {
-                    border-bottom: 4px solid #ffd700;
-                    background: rgba(0, 0, 0, 0.3);
-                    border-radius: 15px 15px 0 0;
-                    padding: 20px 0;
-                    position: relative;
-                    overflow: hidden;
-                }
+        body.world-3 header::after {
+            content: '🎮 ROBLOX STUDIO';
+            position: absolute;
+            top: 8px;
+            right: 20px;
+            font-size: 0.6rem;
+            color: #00bfff;
+            opacity: 0.5;
+            letter-spacing: 6px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 700;
+        }
 
-                    body.world-3 header::after {
-                        content: '🎮 ROBLOX';
-                        position: absolute;
-                        top: 5px;
-                        right: 20px;
-                        font-size: 0.7rem;
-                        color: #ffd700;
-                        opacity: 0.6;
-                        letter-spacing: 4px;
-                    }
+        body.world-3 h1 {
+            font-family: 'Fredoka One', 'Comic Sans MS', cursive;
+            color: #00bfff;
+            text-shadow: 0 0 30px rgba(0, 191, 255, 0.4), 0 4px 0 #0066aa, 0 8px 0 #003366;
+            letter-spacing: 3px;
+            font-size: 2.4rem;
+            animation: none;
+            transform: skew(-3deg);
+        }
 
-                body.world-3 h1 {
-                    font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
-                    color: #ffd700;
-                    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 4px 0 #8b6d4c, 0 8px 0 #5d3a1a;
-                    letter-spacing: 2px;
-                    font-size: 2.2rem;
-                    animation: none;
-                    transform: skew(-5deg);
-                }
+        body.world-3 .stats-bar {
+            background: rgba(0, 0, 0, 0.5);
+            border: 3px solid #00bfff;
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0, 191, 255, 0.1), inset 0 0 40px rgba(0, 191, 255, 0.05);
+            padding: 20px 30px;
+            gap: 20px;
+        }
 
-                body.world-3 .stats-bar {
-                    background: rgba(0, 0, 0, 0.4);
-                    border: 3px solid #ffd700;
-                    border-radius: 15px;
-                    box-shadow: 0 0 30px rgba(255, 215, 0, 0.1), inset 0 0 30px rgba(74, 144, 217, 0.1);
-                    padding: 20px 30px;
-                    gap: 20px;
-                }
+        body.world-3 .stat-value {
+            background: linear-gradient(180deg, #00bfff 0%, #0088cc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 25px rgba(0, 191, 255, 0.3));
+            font-size: 2.2rem;
+            font-family: 'Fredoka One', cursive;
+        }
 
-                body.world-3 .stat-value {
-                    background: linear-gradient(180deg, #ffd700 0%, #ffaa00 100%);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
-                    font-size: 2.2rem;
-                    font-family: 'Comic Sans MS', cursive;
-                }
+        body.world-3 .stat-label {
+            color: #88ccff;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
 
-                body.world-3 .shop-section {
-                    background: rgba(0, 0, 0, 0.3);
-                    border: 3px solid #ffd700;
-                    border-radius: 15px;
-                    box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
-                    padding: 20px;
-                }
+        body.world-3 .shop-section {
+            background: rgba(0, 0, 0, 0.4);
+            border: 3px solid #00bfff;
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0, 191, 255, 0.1);
+            padding: 20px;
+        }
 
-                body.world-3 .section-title {
-                    font-family: 'Comic Sans MS', cursive;
-                    background: #ffd700;
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: #ffd700;
-                    text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-                    filter: none;
-                    font-size: 1.8rem;
-                    letter-spacing: 2px;
-                }
+        body.world-3 .section-title {
+            font-family: 'Fredoka One', cursive;
+            color: #00bfff;
+            text-shadow: 0 0 30px rgba(0, 191, 255, 0.2);
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+        }
 
-                body.world-3 .shop-item {
-                    background: rgba(0, 0, 0, 0.5);
-                    border: 3px solid #4a90d9;
-                    border-radius: 15px;
-                    box-shadow: 0 0 20px rgba(74, 144, 217, 0.2);
-                    padding: 20px;
-                    transition: all 0.3s ease;
-                }
+        body.world-3 .shop-item {
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid #0066aa;
+            border-radius: 16px;
+            box-shadow: 0 0 25px rgba(0, 102, 170, 0.15);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
 
-                    body.world-3 .shop-item:hover {
-                        transform: scale(1.02);
-                        border-color: #ffd700;
-                        box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
-                    }
+        body.world-3 .shop-item:hover {
+            transform: scale(1.03) translateY(-3px);
+            border-color: #00bfff;
+            box-shadow: 0 0 50px rgba(0, 191, 255, 0.25);
+        }
 
-                    body.world-3 .shop-item .item-name {
-                        color: #fff;
-                        font-family: 'Comic Sans MS', cursive;
-                        font-size: 1.2rem;
-                        text-shadow: none;
-                    }
+        body.world-3 .shop-item .item-name {
+            color: #fff;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            text-shadow: none;
+        }
 
-                    body.world-3 .shop-item .item-cost {
-                        color: #ffd700;
-                        filter: none;
-                        font-size: 1.1rem;
-                    }
+        body.world-3 .shop-item .item-cost {
+            color: #00bfff;
+            filter: none;
+            font-size: 1.1rem;
+        }
 
-                body.world-3 .item-btn {
-                    background: linear-gradient(135deg, #4a90d9, #357abd);
-                    color: #fff;
-                    border: none;
-                    border-radius: 10px;
-                    font-family: 'Comic Sans MS', cursive;
-                    font-size: 1rem;
-                    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-                    padding: 12px 20px;
-                    box-shadow: 0 4px 0 #2a5a8a;
-                    transition: all 0.1s ease;
-                }
+        body.world-3 .shop-item .item-desc {
+            color: #88aacc;
+            font-size: 0.85rem;
+        }
 
-                    body.world-3 .item-btn:hover {
-                        transform: translateY(-2px);
-                        box-shadow: 0 6px 0 #2a5a8a;
-                        background: linear-gradient(135deg, #5aa0e9, #458bcb);
-                    }
+        body.world-3 .item-btn {
+            background: linear-gradient(135deg, #00bfff, #0066aa);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            padding: 12px 20px;
+            box-shadow: 0 4px 0 #003366;
+            transition: all 0.1s ease;
+            letter-spacing: 1px;
+        }
 
-                    body.world-3 .item-btn:active {
-                        transform: translateY(4px);
-                        box-shadow: 0 0px 0 #2a5a8a;
-                    }
+        body.world-3 .item-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #003366;
+            background: linear-gradient(135deg, #33ccff, #0088dd);
+        }
 
-                    body.world-3 .item-btn.rebirth-btn-type {
-                        background: linear-gradient(135deg, #e94560, #b8304f);
-                        box-shadow: 0 4px 0 #7a1a2a;
-                    }
+        body.world-3 .item-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #003366;
+        }
 
-                        body.world-3 .item-btn.rebirth-btn-type:hover {
-                            background: linear-gradient(135deg, #ff5a7a, #d04060);
-                            box-shadow: 0 6px 0 #7a1a2a;
-                        }
+        body.world-3 .item-btn.rebirth-btn-type {
+            background: linear-gradient(135deg, #ff6b6b, #cc3333);
+            box-shadow: 0 4px 0 #881111;
+        }
 
-                    body.world-3 .item-btn.buy-max-btn {
-                        background: linear-gradient(135deg, #4ade80, #2d9e5a);
-                        box-shadow: 0 4px 0 #1a6a3a;
-                        font-size: 0.8rem;
-                        padding: 8px 12px;
-                    }
+        body.world-3 .item-btn.rebirth-btn-type:hover {
+            background: linear-gradient(135deg, #ff8888, #dd4444);
+            box-shadow: 0 6px 0 #881111;
+        }
 
-                        body.world-3 .item-btn.buy-max-btn:hover {
-                            background: linear-gradient(135deg, #5af090, #3dae6a);
-                            box-shadow: 0 6px 0 #1a6a3a;
-                        }
+        body.world-3 .item-btn.buy-max-btn {
+            background: linear-gradient(135deg, #ffd700, #cc9900);
+            box-shadow: 0 4px 0 #886600;
+            color: #000;
+        }
 
-                body.world-3 .stats-section {
-                    background: rgba(0, 0, 0, 0.3);
-                    border: 3px solid #4a90d9;
-                    border-radius: 15px;
-                    padding: 20px;
-                    box-shadow: 0 0 30px rgba(74, 144, 217, 0.1);
-                }
+        body.world-3 .item-btn.buy-max-btn:hover {
+            background: linear-gradient(135deg, #ffed4a, #ddaa00);
+            box-shadow: 0 6px 0 #886600;
+        }
 
-                body.world-3 .stat-row {
-                    border-bottom: 2px solid rgba(74, 144, 217, 0.3);
-                    color: #ddd;
-                    padding: 12px 0;
-                    font-family: 'Comic Sans MS', cursive;
-                }
+        body.world-3 .stats-section {
+            background: rgba(0, 0, 0, 0.4);
+            border: 3px solid #0066aa;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 0 40px rgba(0, 102, 170, 0.1);
+        }
 
-                    body.world-3 .stat-row span:last-child {
-                        color: #ffd700;
-                        text-shadow: none;
-                    }
+        body.world-3 .stat-row {
+            border-bottom: 2px solid rgba(0, 102, 170, 0.2);
+            color: #bbddff;
+            padding: 12px 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-                body.world-3 .progress-bar {
-                    background: rgba(0, 0, 0, 0.5);
-                    border: 2px solid #4a90d9;
-                    border-radius: 10px;
-                    height: 25px;
-                }
+        body.world-3 .stat-row span:last-child {
+            color: #00bfff;
+            text-shadow: none;
+            font-weight: 700;
+        }
 
-                body.world-3 .progress-fill {
-                    background: linear-gradient(90deg, #4a90d9, #ffd700);
-                    border-radius: 10px;
-                    box-shadow: 0 0 20px rgba(74, 144, 217, 0.5);
-                }
+        body.world-3 .progress-bar {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #0066aa;
+            border-radius: 12px;
+            height: 25px;
+        }
 
-                body.world-3 .progress-text {
-                    color: #fff;
-                    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
-                    font-family: 'Comic Sans MS', cursive;
-                    font-size: 0.8rem;
-                }
+        body.world-3 .progress-fill {
+            background: linear-gradient(90deg, #0066aa, #00bfff);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 191, 255, 0.4);
+        }
 
-                body.world-3 .coin-btn {
-                    width: 200px;
-                    height: 200px;
-                    animation: floatRoblox 2s ease-in-out infinite;
-                }
+        body.world-3 .progress-text {
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        body.world-3 .coin-btn {
+            width: 200px;
+            height: 200px;
+            animation: floatRoblox 2.5s ease-in-out infinite;
+        }
 
         @keyframes floatRoblox {
-            0%, 100% {
-                transform: translateY(0) rotate(-5deg);
-            }
-
-            50% {
-                transform: translateY(-15px) rotate(5deg);
-            }
+            0%, 100% { transform: translateY(0) rotate(-5deg) scale(1); }
+            50% { transform: translateY(-20px) rotate(5deg) scale(1.05); }
         }
 
         body.world-3 .coin-btn-inner {
-            background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
-            box-shadow: 0 10px 0 #8b6d4c, inset 0 -10px 20px rgba(0, 0, 0, 0.3);
-            border: 6px solid #8b6d4c;
+            background: radial-gradient(circle at 30% 30%, #00bfff, #0066aa);
+            box-shadow: 0 12px 0 #003366, inset 0 -15px 30px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 191, 255, 0.2);
+            border: 6px solid #003366;
             border-radius: 50%;
             transition: all 0.1s ease;
         }
 
         body.world-3 .coin-btn:active .coin-btn-inner {
-            transform: scale(0.95);
-            box-shadow: 0 5px 0 #8b6d4c, inset 0 -10px 20px rgba(0, 0, 0, 0.3);
+            transform: scale(0.92);
+            box-shadow: 0 6px 0 #003366, inset 0 -15px 30px rgba(0, 0, 0, 0.3);
         }
 
         body.world-3 .coin-btn::before {
@@ -286,390 +286,253 @@
         }
 
         body.world-3 .multiplier-badge {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #1a1a2e;
-            border: 4px solid #8b6d4c;
-            border-radius: 15px;
-            font-family: 'Comic Sans MS', cursive;
-            text-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
-            font-size: 1rem;
-            padding: 12px 20px;
+            background: linear-gradient(135deg, #00bfff, #0066aa);
+            color: #fff;
+            border: 4px solid #003366;
+            border-radius: 16px;
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            font-size: 1.1rem;
+            padding: 12px 24px;
             max-width: 90vw;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 40px rgba(0, 191, 255, 0.2);
         }
 
-        body.world-3 .sync-status {
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #4a90d9;
-            border-radius: 10px;
-            color: #ffd700;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 0.7rem;
-            padding: 6px 12px;
-            top: 10px;
-            left: 10px;
-        }
-
-        body.world-3 .user-nick {
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #ffd700;
-            border-radius: 10px;
-            color: #ffd700;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 0.9rem;
-            padding: 6px 16px;
-        }
-
-        body.world-3 .logout-btn,
-        body.world-3 .admin-panel-btn {
-            background: linear-gradient(135deg, #e94560, #b8304f);
+        body.world-3 .world2-entry-btn {
+            font-size: 1.6rem;
+            padding: 20px 30px;
+            background: linear-gradient(135deg, #00bfff, #0066aa);
+            color: #fff;
             border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 0.8rem;
-            box-shadow: 0 4px 0 #7a1a2a;
-            padding: 6px 16px;
+            border-radius: 16px;
+            font-family: 'Fredoka One', cursive;
+            box-shadow: 0 6px 0 #003366;
             transition: all 0.1s ease;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
         }
 
-            body.world-3 .logout-btn:hover,
-            body.world-3 .admin-panel-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 0 #7a1a2a;
-            }
-
-            body.world-3 .logout-btn:active,
-            body.world-3 .admin-panel-btn:active {
-                transform: translateY(4px);
-                box-shadow: 0 0px 0 #7a1a2a;
-            }
-
-        body.world-3 .admin-panel-btn {
-            background: linear-gradient(135deg, #4a90d9, #357abd);
-            box-shadow: 0 4px 0 #2a5a8a;
+        body.world-3 .world2-entry-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 0 #003366;
+            background: linear-gradient(135deg, #33ccff, #0088dd);
         }
 
-            body.world-3 .admin-panel-btn:hover {
-                box-shadow: 0 6px 0 #2a5a8a;
-            }
-
-        body.world-3 .reset-link {
-            color: #ffd700;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 0.8rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        body.world-3 .world2-entry-btn:active:not(:disabled) {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 #003366;
         }
 
-            body.world-3 .reset-link:hover {
-                color: #ffaa00;
-                text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            }
-
-        body.world-3 .achievement-item {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #4a90d9;
-            border-radius: 12px;
-            color: #fff;
-            padding: 15px;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+        body.world-3 .world2-entry-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 0 #003366;
         }
 
-            body.world-3 .achievement-item.unlocked {
-                border-left: 6px solid #ffd700;
-                background: rgba(255, 215, 0, 0.1);
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
-            }
-
-        body.world-3 .achievement-info h4 {
-            color: #ffd700;
-            text-shadow: none;
-            font-size: 1rem;
+        body.world-3 .chest-btn {
+            background: radial-gradient(circle at 30% 30%, #ffd700, #cc9900);
+            border: 4px solid #886600;
+            border-radius: 16px;
+            box-shadow: 0 8px 0 #664400, 0 0 40px rgba(255, 215, 0, 0.2);
+            animation: none;
+            width: 70px;
+            height: 70px;
+            font-size: 2.4rem;
         }
 
-        body.world-3 .achievement-info p {
-            color: #aaa;
-            font-size: 0.8rem;
+        body.world-3 .chest-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 0 #664400, 0 0 60px rgba(255, 215, 0, 0.4);
+        }
+
+        body.world-3 .chest-btn:active {
+            transform: scale(0.92);
+            box-shadow: 0 3px 0 #664400;
         }
 
         body.world-3 .level-up-modal .modal-content {
-            background: linear-gradient(145deg, #1a1a2e, #2a2a4e);
-            border: 4px solid #ffd700;
-            border-radius: 20px;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(145deg, #1a1a2e, #2a2a5e);
+            border: 4px solid #00bfff;
+            border-radius: 24px;
+            box-shadow: 0 0 80px rgba(0, 191, 255, 0.25);
             padding: 40px;
         }
 
         body.world-3 .level-up-title {
-            font-family: 'Comic Sans MS', cursive;
-            color: #ffd700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            font-size: 2rem;
+            font-family: 'Fredoka One', cursive;
+            color: #00bfff;
+            text-shadow: 0 0 40px rgba(0, 191, 255, 0.4);
+            font-size: 2.2rem;
         }
 
         body.world-3 .level-up-btn {
-            background: linear-gradient(135deg, #4a90d9, #357abd);
+            background: linear-gradient(135deg, #00bfff, #0066aa);
             border: none;
-            border-radius: 12px;
-            font-family: 'Comic Sans MS', cursive;
+            border-radius: 14px;
+            font-family: 'Fredoka One', cursive;
             color: #fff;
-            box-shadow: 0 4px 0 #2a5a8a;
+            box-shadow: 0 4px 0 #003366;
             padding: 16px 40px;
             font-size: 1.2rem;
             transition: all 0.1s ease;
         }
 
-            body.world-3 .level-up-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 0 #2a5a8a;
-            }
-
-            body.world-3 .level-up-btn:active {
-                transform: translateY(4px);
-                box-shadow: 0 0px 0 #2a5a8a;
-            }
-
-        body.world-3 .rebirth-modal {
-            background: rgba(26, 26, 46, 0.98);
-            border: 4px solid #e94560;
-            border-radius: 20px;
-            padding: 40px;
-            min-width: auto;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 0 60px rgba(233, 69, 96, 0.3);
+        body.world-3 .level-up-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #003366;
         }
 
-        body.world-3 .rebirth-title {
-            font-family: 'Comic Sans MS', cursive;
-            color: #ffd700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-            font-size: 1.8rem;
+        body.world-3 .level-up-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #003366;
         }
 
-        body.world-3 .rebirth-btn {
-            background: linear-gradient(135deg, #4a90d9, #357abd);
+        body.world-3 .reset-link {
+            color: #00bfff;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.8rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            opacity: 0.7;
+        }
+
+        body.world-3 .reset-link:hover {
+            color: #33ccff;
+            text-shadow: 0 0 30px rgba(0, 191, 255, 0.3);
+            opacity: 1;
+        }
+
+        body.world-3 .sync-status {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00bfff;
+            border-radius: 12px;
+            color: #00bfff;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.7rem;
+            padding: 6px 14px;
+            top: 10px;
+            left: 10px;
+            font-weight: 600;
+        }
+
+        body.world-3 .user-nick {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00bfff;
+            border-radius: 12px;
+            color: #00bfff;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.9rem;
+            padding: 6px 18px;
+            font-weight: 700;
+        }
+
+        body.world-3 .logout-btn,
+        body.world-3 .admin-panel-btn {
+            background: linear-gradient(135deg, #ff6b6b, #cc3333);
             border: none;
             border-radius: 12px;
-            font-family: 'Comic Sans MS', cursive;
             color: #fff;
-            box-shadow: 0 4px 0 #2a5a8a;
-            padding: 12px 28px;
-            font-size: 1rem;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 0 #881111;
+            padding: 6px 18px;
             transition: all 0.1s ease;
-            margin: 5px;
+            font-weight: 600;
         }
 
-            body.world-3 .rebirth-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 0 #2a5a8a;
-            }
-
-            body.world-3 .rebirth-btn:active {
-                transform: translateY(4px);
-                box-shadow: 0 0px 0 #2a5a8a;
-            }
-
-            body.world-3 .rebirth-btn.cancel {
-                background: linear-gradient(135deg, #555, #777);
-                box-shadow: 0 4px 0 #444;
-            }
-
-                body.world-3 .rebirth-btn.cancel:hover {
-                    box-shadow: 0 6px 0 #444;
-                }
-
-        body.world-3 .world2-entry-btn {
-            font-size: 1.6rem;
-            padding: 20px 30px;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #1a1a2e;
-            border: none;
-            border-radius: 15px;
-            font-family: 'Comic Sans MS', cursive;
-            box-shadow: 0 6px 0 #8b6d4c;
-            transition: all 0.1s ease;
-            text-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+        body.world-3 .logout-btn:hover,
+        body.world-3 .admin-panel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #881111;
         }
 
-            body.world-3 .world2-entry-btn:hover:not(:disabled) {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 0 #8b6d4c;
-            }
-
-            body.world-3 .world2-entry-btn:active:not(:disabled) {
-                transform: translateY(6px);
-                box-shadow: 0 0px 0 #8b6d4c;
-            }
-
-            body.world-3 .world2-entry-btn:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-                transform: none;
-                box-shadow: 0 4px 0 #8b6d4c;
-            }
-
-        body.world-3 .world2-entry-wrapper .hint {
-            font-size: 1rem;
-            font-family: 'Comic Sans MS', cursive;
-            color: #aaa;
+        body.world-3 .logout-btn:active,
+        body.world-3 .admin-panel-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881111;
         }
 
-            body.world-3 .world2-entry-wrapper .hint.success {
-                color: #4ade80;
-            }
+        body.world-3 .admin-panel-btn {
+            background: linear-gradient(135deg, #00bfff, #0066aa);
+            box-shadow: 0 4px 0 #003366;
+        }
 
-            body.world-3 .world2-entry-wrapper .hint.error {
-                color: #ff6b6b;
-            }
-
-        body.world-3 .settings-panel label {
-            color: #ddd;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 0.9rem;
+        body.world-3 .admin-panel-btn:hover {
+            box-shadow: 0 6px 0 #003366;
         }
 
         body.world-3 .skill-card {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #4a90d9;
-            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #0066aa;
+            border-radius: 14px;
             padding: 15px;
         }
 
         body.world-3 .skill-name {
-            font-family: 'Comic Sans MS', cursive;
+            font-family: 'Fredoka One', cursive;
             font-size: 0.9rem;
-            color: #ffd700;
+            color: #00bfff;
         }
 
         body.world-3 .skill-desc {
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 0.8rem;
-            color: #aaa;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.75rem;
+            color: #88aacc;
         }
 
-        body.world-3 .chest-btn {
-            background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
-            border: 4px solid #8b6d4c;
-            border-radius: 15px;
-            box-shadow: 0 6px 0 #5d3a1a, 0 0 30px rgba(255, 215, 0, 0.3);
-            animation: none;
-            width: 65px;
-            height: 65px;
-            font-size: 2.2rem;
-        }
-
-            body.world-3 .chest-btn:hover {
-                transform: scale(1.05);
-                box-shadow: 0 6px 0 #5d3a1a, 0 0 50px rgba(255, 215, 0, 0.5);
-            }
-
-            body.world-3 .chest-btn:active {
-                transform: scale(0.95);
-                box-shadow: 0 2px 0 #5d3a1a;
-            }
-
-        body.world-3 .luck-timer {
-            border-color: #ffd700;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 12px;
-            font-family: 'Comic Sans MS', cursive;
-            border: 2px solid #4a90d9;
-        }
-
-            body.world-3 .luck-timer .luck-time {
-                color: #ffd700;
-            }
-
-        body.world-3 .mini-game-modal {
-            border-color: #ffd700;
-            background: rgba(26, 26, 46, 0.98);
-            border-radius: 20px;
-            border: 4px solid #4a90d9;
-        }
-
-            body.world-3 .mini-game-modal .game-title {
-                color: #ffd700;
-                font-family: 'Comic Sans MS', cursive;
-            }
-
-            body.world-3 .mini-game-modal .game-btn.primary {
-                background: linear-gradient(135deg, #4a90d9, #357abd);
-                color: #fff;
-                border: none;
-                border-radius: 10px;
-                box-shadow: 0 4px 0 #2a5a8a;
-                font-family: 'Comic Sans MS', cursive;
-            }
-
-        body.world-3 .investment-section {
-            border-color: #4a90d9;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-        }
-
-        body.world-3 .investment-item .inv-btn {
-            background: linear-gradient(135deg, #4a90d9, #357abd);
-            color: #fff;
+        body.world-3 .skill-btn {
+            background: linear-gradient(135deg, #00bfff, #0066aa);
             border: none;
-            border-radius: 8px;
-            box-shadow: 0 3px 0 #2a5a8a;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 0.8rem;
-            padding: 6px 16px;
+            border-radius: 10px;
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            box-shadow: 0 3px 0 #003366;
+            padding: 8px 16px;
+            font-size: 0.85rem;
             transition: all 0.1s ease;
         }
 
-            body.world-3 .investment-item .inv-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 0 #2a5a8a;
-            }
-
-            body.world-3 .investment-item .inv-btn:active {
-                transform: translateY(3px);
-                box-shadow: 0 0px 0 #2a5a8a;
-            }
-
-        body.world-3 .prestige-section {
-            border-color: #e94560;
-            border-radius: 12px;
-            background: rgba(233, 69, 96, 0.05);
+        body.world-3 .skill-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #003366;
         }
 
-        body.world-3 .prestige-btn {
-            background: linear-gradient(135deg, #e94560, #b8304f);
-            border: none;
-            border-radius: 12px;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 1rem;
+        body.world-3 .skill-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        body.world-3 .achievement-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #0066aa;
+            border-radius: 14px;
             color: #fff;
-            box-shadow: 0 4px 0 #7a1a2a;
-            transition: all 0.1s ease;
+            padding: 15px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.9rem;
         }
 
-            body.world-3 .prestige-btn:hover:not(:disabled) {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 0 #7a1a2a;
-            }
+        body.world-3 .achievement-item.unlocked {
+            border-left: 6px solid #ffd700;
+            background: rgba(255, 215, 0, 0.08);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
+        }
 
-            body.world-3 .prestige-btn:active:not(:disabled) {
-                transform: translateY(4px);
-                box-shadow: 0 0px 0 #7a1a2a;
-            }
-
-        body.world-3 .click-effect {
+        body.world-3 .achievement-info h4 {
             color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.5);
-            font-family: 'Comic Sans MS', cursive;
-            font-weight: bold;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1rem;
         }
 
-        /* ===== ОСТАЛЬНЫЕ СТИЛИ (сохранены из оригинала) ===== */
+        body.world-3 .achievement-info p {
+            color: #88aacc;
+            font-size: 0.8rem;
+        }
+
+        /* ===== СТИЛИ ДЛЯ ВСЕХ МИРОВ ===== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -687,16 +550,16 @@
             position: relative;
         }
 
-            header::after {
-                content: '';
-                position: absolute;
-                bottom: -4px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 200px;
-                height: 4px;
-                background: linear-gradient(90deg, transparent, #e94560, transparent);
-            }
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+        }
 
         h1 {
             font-size: 3rem;
@@ -708,13 +571,8 @@
         }
 
         @keyframes glowPulse {
-            0%, 100% {
-                text-shadow: 0 0 20px rgba(233, 69, 96, 0.8), 0 0 40px rgba(233, 69, 96, 0.5);
-            }
-
-            50% {
-                text-shadow: 0 0 30px rgba(233, 69, 96, 1), 0 0 60px rgba(233, 69, 96, 0.7);
-            }
+            0%, 100% { text-shadow: 0 0 20px rgba(233, 69, 96, 0.8), 0 0 40px rgba(233, 69, 96, 0.5); }
+            50% { text-shadow: 0 0 30px rgba(233, 69, 96, 1), 0 0 60px rgba(233, 69, 96, 0.7); }
         }
 
         .sync-status {
@@ -740,24 +598,19 @@
             animation: syncPulse 2s infinite;
         }
 
-            .sync-dot.offline {
-                background: #e94560;
-                animation: none;
-            }
+        .sync-dot.offline {
+            background: #e94560;
+            animation: none;
+        }
 
-            .sync-dot.syncing {
-                background: #ffd700;
-                animation: syncPulse 0.5s infinite;
-            }
+        .sync-dot.syncing {
+            background: #ffd700;
+            animation: syncPulse 0.5s infinite;
+        }
 
         @keyframes syncPulse {
-            0%, 100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         .user-panel {
@@ -797,11 +650,11 @@
             box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
         }
 
-            .logout-btn:hover,
-            .admin-panel-btn:hover {
-                transform: scale(1.05);
-                box-shadow: 0 6px 25px rgba(233, 69, 96, 0.6);
-            }
+        .logout-btn:hover,
+        .admin-panel-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(233, 69, 96, 0.6);
+        }
 
         .admin-panel-btn {
             background: linear-gradient(135deg, #ffd700, #b8860b);
@@ -874,18 +727,13 @@
             user-select: none;
         }
 
-            .coin-btn.no-animations {
-                animation: none;
-            }
+        .coin-btn.no-animations {
+            animation: none;
+        }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0) rotateY(0deg);
-            }
-
-            50% {
-                transform: translateY(-20px) rotateY(180deg);
-            }
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            50% { transform: translateY(-20px) rotateY(180deg); }
         }
 
         .coin-btn-inner {
@@ -934,13 +782,8 @@
         }
 
         @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .coin-btn:hover .coin-btn-inner {
@@ -967,7 +810,6 @@
                 opacity: 1;
                 transform: translateY(0) scale(1) rotate(0deg);
             }
-
             100% {
                 opacity: 0;
                 transform: translateY(-150px) scale(2) rotate(360deg);
@@ -983,9 +825,9 @@
             box-shadow: 0 10px 40px rgba(74, 222, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
-            .shop-section.hidden {
-                display: none;
-            }
+        .shop-section.hidden {
+            display: none;
+        }
 
         .section-title {
             font-size: 1.8rem;
@@ -1020,16 +862,16 @@
             font-size: 0.9rem;
         }
 
-            .shop-tab:hover {
-                background: rgba(30, 30, 40, 0.8);
-                color: #fff;
-            }
+        .shop-tab:hover {
+            background: rgba(30, 30, 40, 0.8);
+            color: #fff;
+        }
 
-            .shop-tab.active {
-                background: rgba(74, 222, 128, 0.2);
-                color: #4ade80;
-                border-color: #4ade80;
-            }
+        .shop-tab.active {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            border-color: #4ade80;
+        }
 
         .shop-grid {
             display: grid;
@@ -1047,31 +889,31 @@
             overflow: hidden;
         }
 
-            .shop-item::before {
-                content: '';
-                position: absolute;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: linear-gradient(45deg, transparent, rgba(74, 222, 128, 0.1), transparent);
-                transform: rotate(45deg);
-                transition: all 0.6s ease;
-            }
+        .shop-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(74, 222, 128, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
 
-            .shop-item:hover::before {
-                left: 100%;
-            }
+        .shop-item:hover::before {
+            left: 100%;
+        }
 
-            .shop-item.can-afford {
-                border-color: #4ade80;
-                box-shadow: 0 0 30px rgba(74, 222, 128, 0.2), inset 0 1px 0 rgba(74, 222, 128, 0.2);
-            }
+        .shop-item.can-afford {
+            border-color: #4ade80;
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.2), inset 0 1px 0 rgba(74, 222, 128, 0.2);
+        }
 
-            .shop-item.cannot-afford {
-                opacity: 0.5;
-                filter: grayscale(0.5);
-            }
+        .shop-item.cannot-afford {
+            opacity: 0.5;
+            filter: grayscale(0.5);
+        }
 
         .item-icon {
             font-size: 4rem;
@@ -1121,38 +963,38 @@
             letter-spacing: 1px;
         }
 
-            .item-btn.rebirth-btn-type {
-                background: #e94560;
-                color: #fff;
-            }
+        .item-btn.rebirth-btn-type {
+            background: #e94560;
+            color: #fff;
+        }
 
-            .item-btn.buy-max-btn {
-                background: linear-gradient(135deg, #4a90d9, #357abd);
-                color: #fff;
-                font-size: 0.9rem;
-                padding: 8px;
-            }
+        .item-btn.buy-max-btn {
+            background: linear-gradient(135deg, #4a90d9, #357abd);
+            color: #fff;
+            font-size: 0.9rem;
+            padding: 8px;
+        }
 
-                .item-btn.buy-max-btn:hover {
-                    background: linear-gradient(135deg, #5aa0e9, #458bcb);
-                    box-shadow: 0 5px 20px rgba(74, 144, 217, 0.5);
-                }
+        .item-btn.buy-max-btn:hover {
+            background: linear-gradient(135deg, #5aa0e9, #458bcb);
+            box-shadow: 0 5px 20px rgba(74, 144, 217, 0.5);
+        }
 
-            .item-btn:hover {
-                transform: scale(1.03);
-                box-shadow: 0 5px 20px rgba(74, 222, 128, 0.4);
-            }
+        .item-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 20px rgba(74, 222, 128, 0.4);
+        }
 
-            .item-btn.rebirth-btn-type:hover {
-                box-shadow: 0 5px 20px rgba(233, 69, 96, 0.5);
-            }
+        .item-btn.rebirth-btn-type:hover {
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.5);
+        }
 
-            .item-btn:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-                transform: none;
-                box-shadow: none;
-            }
+        .item-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
 
         .stats-section {
             background: linear-gradient(145deg, rgba(30, 30, 40, 0.8) 0%, rgba(20, 20, 30, 0.9) 100%);
@@ -1207,16 +1049,16 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at center, rgba(233, 69, 96, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%);
+            background: radial-gradient(circle at center, rgba(0, 191, 255, 0.6) 0%, rgba(0, 0, 0, 0.95) 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
 
-            .level-up-modal.hidden {
-                display: none;
-            }
+        .level-up-modal.hidden {
+            display: none;
+        }
 
         .modal-content {
             background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
@@ -1234,7 +1076,6 @@
                 transform: scale(1);
                 box-shadow: 0 0 80px rgba(255, 215, 0, 0.5);
             }
-
             50% {
                 transform: scale(1.05);
                 box-shadow: 0 0 120px rgba(255, 215, 0, 0.7);
@@ -1271,9 +1112,9 @@
             color: #fff;
         }
 
-            .level-up-stats span {
-                color: #ffd700;
-            }
+        .level-up-stats span {
+            color: #ffd700;
+        }
 
         .level-up-btn {
             background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
@@ -1288,10 +1129,10 @@
             transition: all 0.3s ease;
         }
 
-            .level-up-btn:hover {
-                transform: scale(1.05) translateY(-5px);
-                box-shadow: 0 15px 50px rgba(233, 69, 96, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            }
+        .level-up-btn:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 15px 50px rgba(233, 69, 96, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
 
         .multiplier-badge {
             position: fixed;
@@ -1311,10 +1152,10 @@
             text-overflow: ellipsis;
         }
 
-            .multiplier-badge.active-skill {
-                transform: scale(1.2);
-                box-shadow: 0 10px 60px rgba(255, 215, 0, 0.8);
-            }
+        .multiplier-badge.active-skill {
+            transform: scale(1.2);
+            box-shadow: 0 10px 60px rgba(255, 215, 0, 0.8);
+        }
 
         .achievement-item {
             background: linear-gradient(145deg, rgba(30, 30, 40, 0.8) 0%, rgba(20, 20, 30, 0.9) 100%);
@@ -1329,12 +1170,12 @@
             transition: all 0.4s ease;
         }
 
-            .achievement-item.unlocked {
-                opacity: 1;
-                background: linear-gradient(145deg, rgba(74, 222, 128, 0.1) 0%, rgba(30, 30, 40, 0.9) 100%);
-                border-left: 4px solid #4ade80;
-                box-shadow: 0 5px 15px rgba(74, 222, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            }
+        .achievement-item.unlocked {
+            opacity: 1;
+            background: linear-gradient(145deg, rgba(74, 222, 128, 0.1) 0%, rgba(30, 30, 40, 0.9) 100%);
+            border-left: 4px solid #4ade80;
+            box-shadow: 0 5px 15px rgba(74, 222, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
 
         .achievement-icon {
             font-size: 3rem;
@@ -1343,13 +1184,8 @@
         }
 
         @keyframes popIn {
-            from {
-                transform: scale(0);
-            }
-
-            to {
-                transform: scale(1);
-            }
+            from { transform: scale(0); }
+            to { transform: scale(1); }
         }
 
         .achievement-info h4 {
@@ -1379,17 +1215,16 @@
             min-width: 350px;
         }
 
-            .rebirth-modal.active {
-                display: block;
-                animation: fadeIn 0.5s ease;
-            }
+        .rebirth-modal.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translate(-50%, -40%);
             }
-
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%);
@@ -1422,19 +1257,19 @@
             margin: 5px;
         }
 
-            .rebirth-btn:hover {
-                transform: scale(1.05);
-                box-shadow: 0 15px 40px rgba(233, 69, 96, 0.7);
-            }
+        .rebirth-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.7);
+        }
 
-            .rebirth-btn.cancel {
-                background: linear-gradient(135deg, #555 0%, #777 100%);
-                box-shadow: 0 10px 30px rgba(100, 100, 100, 0.5);
-            }
+        .rebirth-btn.cancel {
+            background: linear-gradient(135deg, #555 0%, #777 100%);
+            box-shadow: 0 10px 30px rgba(100, 100, 100, 0.5);
+        }
 
-                .rebirth-btn.cancel:hover {
-                    box-shadow: 0 15px 40px rgba(100, 100, 100, 0.7);
-                }
+        .rebirth-btn.cancel:hover {
+            box-shadow: 0 15px 40px rgba(100, 100, 100, 0.7);
+        }
 
         .loading-spinner {
             display: inline-block;
@@ -1448,9 +1283,7 @@
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         .admin-panel-container {
@@ -1458,56 +1291,66 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 420px;
-            background: rgba(10, 20, 30, 0.95);
-            border: 2px solid #ffd700;
+            width: 480px;
+            max-width: 95vw;
+            background: rgba(10, 20, 30, 0.97);
+            border: 3px solid #ffd700;
             padding: 30px;
             z-index: 3000;
             display: none;
-            box-shadow: 0 0 100px rgba(255, 215, 0, 0.4);
-            border-radius: 15px;
+            box-shadow: 0 0 120px rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
             max-height: 90vh;
             overflow-y: auto;
         }
 
-            .admin-panel-container.active {
-                display: block;
-                animation: fadeIn 0.3s ease;
-            }
+        .admin-panel-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
 
         .admin-header {
             color: #ffd700;
             font-size: 1.5rem;
             margin-bottom: 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+            padding-bottom: 12px;
         }
 
         .admin-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 12px;
+            flex-wrap: wrap;
         }
 
-            .admin-row label {
-                width: 120px;
-                font-size: 0.9rem;
-                color: #ddd;
-                text-align: right;
-            }
+        .admin-row label {
+            min-width: 120px;
+            font-size: 0.9rem;
+            color: #ddd;
+            text-align: right;
+            font-weight: 600;
+        }
 
-            .admin-row input {
-                flex: 1;
-                padding: 10px;
-                background: rgba(0, 0, 0, 0.4);
-                border: 1px solid #ffd700;
-                color: white;
-                border-radius: 8px;
-                outline: none;
-                font-size: 0.95rem;
-            }
+        .admin-row input {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 14px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            color: white;
+            border-radius: 10px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        .admin-row input:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
 
         .admin-controls {
             display: flex;
@@ -1518,30 +1361,55 @@
         }
 
         .admin-btn {
-            background: #ffd700;
-            color: black;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            color: #000;
             border: none;
-            padding: 12px 18px;
-            font-weight: bold;
+            padding: 12px 22px;
+            font-weight: 700;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 0.9rem;
             transition: 0.3s;
             white-space: nowrap;
+            box-shadow: 0 4px 0 #886600;
         }
 
-            .admin-btn:hover {
-                background: white;
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-            }
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #886600;
+            background: linear-gradient(135deg, #ffed4a, #ddaa00);
+        }
+
+        .admin-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #886600;
+        }
+
+        .admin-btn.danger {
+            background: linear-gradient(135deg, #ff6b6b, #cc3333);
+            box-shadow: 0 4px 0 #881111;
+            color: #fff;
+        }
+
+        .admin-btn.danger:hover {
+            background: linear-gradient(135deg, #ff8888, #dd4444);
+            box-shadow: 0 6px 0 #881111;
+        }
 
         .close-admin {
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 12px;
+            right: 18px;
             color: #fff;
             cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .close-admin:hover {
+            opacity: 1;
+            transform: rotate(90deg);
         }
 
         .reset-link {
@@ -1554,10 +1422,10 @@
             transition: 0.3s;
         }
 
-            .reset-link:hover {
-                color: #e94560;
-                text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
-            }
+        .reset-link:hover {
+            color: #e94560;
+            text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+        }
 
         .world2-entry-btn {
             width: 100%;
@@ -1578,17 +1446,17 @@
             font-family: inherit;
         }
 
-            .world2-entry-btn:hover:not(:disabled) {
-                transform: scale(1.05);
-                box-shadow: 0 0 60px rgba(74, 222, 128, 0.8);
-            }
+        .world2-entry-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(74, 222, 128, 0.8);
+        }
 
-            .world2-entry-btn:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-                transform: none;
-                box-shadow: none;
-            }
+        .world2-entry-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
 
         .world2-entry-wrapper {
             grid-column: 1 / -1;
@@ -1600,21 +1468,21 @@
             box-shadow: 0 0 60px rgba(74, 222, 128, 0.2);
         }
 
-            .world2-entry-wrapper .hint {
-                margin-top: 15px;
-                font-size: 1.1rem;
-                color: #aaa;
-            }
+        .world2-entry-wrapper .hint {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #aaa;
+        }
 
-                .world2-entry-wrapper .hint.success {
-                    color: #4ade80;
-                }
+        .world2-entry-wrapper .hint.success {
+            color: #4ade80;
+        }
 
-                .world2-entry-wrapper .hint.error {
-                    color: #ff6b6b;
-                }
+        .world2-entry-wrapper .hint.error {
+            color: #ff6b6b;
+        }
 
-        /* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ СКИЛЛОВ, ИНВЕСТИЦИЙ И Т.Д. ===== */
+        /* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ===== */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -1631,14 +1499,14 @@
             transition: 0.3s;
         }
 
-            .skill-card.available {
-                border-color: #4ade80;
-            }
+        .skill-card.available {
+            border-color: #4ade80;
+        }
 
-            .skill-card.cooldown {
-                border-color: #e94560;
-                opacity: 0.6;
-            }
+        .skill-card.cooldown {
+            border-color: #e94560;
+            opacity: 0.6;
+        }
 
         .skill-icon {
             font-size: 2.5rem;
@@ -1670,16 +1538,16 @@
             font-size: 0.85rem;
         }
 
-            .skill-btn:hover:not(:disabled) {
-                transform: scale(1.05);
-                box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
-            }
+        .skill-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+        }
 
-            .skill-btn:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-                transform: none;
-            }
+        .skill-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         .skill-cooldown {
             font-size: 0.7rem;
@@ -1709,22 +1577,22 @@
             transition: 0.3s;
         }
 
-            .skin-option:hover {
-                transform: scale(1.1);
-                border-color: #4ade80;
-            }
+        .skin-option:hover {
+            transform: scale(1.1);
+            border-color: #4ade80;
+        }
 
-            .skin-option.active {
-                border-color: #ffd700;
-                background: rgba(255, 215, 0, 0.2);
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            }
+        .skin-option.active {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
 
-            .skin-option.locked {
-                opacity: 0.3;
-                cursor: not-allowed;
-                filter: grayscale(1);
-            }
+        .skin-option.locked {
+            opacity: 0.3;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
 
         .settings-panel {
             display: flex;
@@ -1733,38 +1601,41 @@
             margin: 10px 0;
         }
 
-            .settings-panel label {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                color: #aaa;
-                cursor: pointer;
-                font-size: 0.9rem;
-            }
-
-                .settings-panel label input[type="checkbox"] {
-                    width: 18px;
-                    height: 18px;
-                    cursor: pointer;
-                }
-
-        .admin-feedback {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
+        .settings-panel label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
 
-            .admin-feedback.success {
-                color: #4ade80;
-                background: rgba(74, 222, 128, 0.1);
-            }
+        .settings-panel label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
 
-            .admin-feedback.error {
-                color: #e94560;
-                background: rgba(233, 69, 96, 0.1);
-            }
+        .admin-feedback {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            min-height: 40px;
+        }
+
+        .admin-feedback.success {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.12);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+
+        .admin-feedback.error {
+            color: #ff6b6b;
+            background: rgba(233, 69, 96, 0.12);
+            border: 1px solid rgba(233, 69, 96, 0.2);
+        }
 
         .leaderboard-section {
             margin-top: 20px;
@@ -1782,20 +1653,20 @@
             font-size: 0.9rem;
         }
 
-            .leaderboard-item .lb-rank {
-                color: #ffd700;
-                font-weight: bold;
-                min-width: 30px;
-            }
+        .leaderboard-item .lb-rank {
+            color: #ffd700;
+            font-weight: bold;
+            min-width: 30px;
+        }
 
-            .leaderboard-item .lb-name {
-                flex: 1;
-                margin-left: 10px;
-            }
+        .leaderboard-item .lb-name {
+            flex: 1;
+            margin-left: 10px;
+        }
 
-            .leaderboard-item .lb-score {
-                color: #4ade80;
-            }
+        .leaderboard-item .lb-score {
+            color: #4ade80;
+        }
 
         .investment-section {
             margin-top: 20px;
@@ -1815,50 +1686,50 @@
             gap: 10px;
         }
 
-            .investment-item .inv-info {
-                flex: 1;
-                min-width: 120px;
-            }
+        .investment-item .inv-info {
+            flex: 1;
+            min-width: 120px;
+        }
 
-            .investment-item .inv-name {
-                font-weight: bold;
-                font-size: 0.95rem;
-            }
+        .investment-item .inv-name {
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
 
-            .investment-item .inv-desc {
-                font-size: 0.8rem;
-                color: #aaa;
-            }
+        .investment-item .inv-desc {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
 
-            .investment-item .inv-btn {
-                padding: 6px 16px;
-                border: none;
-                border-radius: 8px;
-                background: #4ade80;
-                color: #000;
-                font-weight: bold;
-                cursor: pointer;
-                transition: 0.3s;
-                font-size: 0.85rem;
-            }
+        .investment-item .inv-btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #4ade80;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
 
-                .investment-item .inv-btn:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
-                }
+        .investment-item .inv-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+        }
 
-                .investment-item .inv-btn:disabled {
-                    opacity: 0.4;
-                    cursor: not-allowed;
-                    transform: none;
-                }
+        .investment-item .inv-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-            .investment-item .inv-level {
-                font-size: 0.8rem;
-                color: #ffd700;
-                min-width: 60px;
-                text-align: right;
-            }
+        .investment-item .inv-level {
+            font-size: 0.8rem;
+            color: #ffd700;
+            min-width: 60px;
+            text-align: right;
+        }
 
         .prestige-section {
             margin-top: 20px;
@@ -1882,16 +1753,16 @@
             box-shadow: 0 5px 20px rgba(233, 69, 96, 0.3);
         }
 
-            .prestige-btn:hover:not(:disabled) {
-                transform: scale(1.02);
-                box-shadow: 0 5px 40px rgba(233, 69, 96, 0.6);
-            }
+        .prestige-btn:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 5px 40px rgba(233, 69, 96, 0.6);
+        }
 
-            .prestige-btn:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-                transform: none;
-            }
+        .prestige-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         .prestige-info {
             text-align: center;
@@ -1900,10 +1771,10 @@
             color: #aaa;
         }
 
-            .prestige-info .prestige-bonus {
-                color: #ffd700;
-                font-weight: bold;
-            }
+        .prestige-info .prestige-bonus {
+            color: #ffd700;
+            font-weight: bold;
+        }
 
         .stats-grid {
             display: grid;
@@ -1911,541 +1782,13 @@
             gap: 5px 20px;
         }
 
-            .stats-grid .stat-row {
-                padding: 8px 0;
-                border-bottom: none;
-                font-size: 0.9rem;
-            }
-
-        /* ===== АДАПТИВНОСТЬ ===== */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-                letter-spacing: 3px;
-            }
-
-            .stats-bar {
-                gap: 10px;
-                padding: 12px 15px;
-                flex-wrap: wrap;
-                justify-content: space-around;
-            }
-
-            .stat-item {
-                flex: 1 1 30%;
-                min-width: 80px;
-            }
-
-            .stat-value {
-                font-size: 1.4rem;
-            }
-
-            .stat-label {
-                font-size: 0.6rem;
-                letter-spacing: 1px;
-            }
-
-            .coin-btn {
-                width: 140px;
-                height: 140px;
-            }
-
-                .coin-btn::before {
-                    font-size: 3.5rem;
-                }
-
-            .shop-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .shop-item {
-                padding: 15px;
-            }
-
-            .item-icon {
-                font-size: 2.5rem;
-            }
-
-            .item-name {
-                font-size: 1rem;
-            }
-
-            .item-cost {
-                font-size: 0.9rem;
-            }
-
-            .item-btn {
-                font-size: 0.85rem;
-                padding: 10px 12px;
-            }
-
-                .item-btn.buy-max-btn {
-                    font-size: 0.75rem;
-                    padding: 8px 10px;
-                }
-
-            .user-panel {
-                top: 10px;
-                right: 10px;
-                gap: 5px;
-                flex-wrap: wrap;
-                justify-content: flex-end;
-            }
-
-            .user-nick {
-                font-size: 0.7rem;
-                padding: 4px 10px;
-            }
-
-            .logout-btn,
-            .admin-panel-btn {
-                font-size: 0.7rem;
-                padding: 4px 10px;
-            }
-
-            .sync-status {
-                top: 10px;
-                left: 10px;
-                font-size: 0.6rem;
-                padding: 4px 10px;
-            }
-
-            .section-title {
-                font-size: 1.2rem;
-            }
-
-            .stats-section {
-                padding: 15px;
-            }
-
-            .stat-row {
-                font-size: 0.85rem;
-                padding: 10px 0;
-            }
-
-            .multiplier-badge {
-                top: auto;
-                bottom: 10px;
-                right: 10px;
-                font-size: 0.7rem;
-                padding: 8px 14px;
-                max-width: 90vw;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .level-up-modal .modal-content {
-                padding: 25px;
-                margin: 15px;
-            }
-
-            .level-up-title {
-                font-size: 1.8rem;
-            }
-
-            .level-up-btn {
-                padding: 15px 30px;
-                font-size: 1rem;
-            }
-
-            .rebirth-modal {
-                padding: 20px;
-                width: 95%;
-            }
-
-            .rebirth-title {
-                font-size: 1.2rem;
-            }
-
-            .rebirth-desc {
-                font-size: 0.9rem;
-            }
-
-            .rebirth-btn {
-                font-size: 0.9rem;
-                padding: 10px 20px;
-            }
-
-            .login-box {
-                padding: 25px;
-                width: 90%;
-                margin: 15px;
-            }
-
-            .admin-panel-container {
-                width: 95%;
-                padding: 20px;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
-
-            .admin-row {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 5px;
-            }
-
-                .admin-row label {
-                    width: auto;
-                    text-align: left;
-                    font-size: 0.8rem;
-                }
-
-            .admin-controls {
-                flex-direction: column;
-            }
-
-            .admin-btn {
-                padding: 10px;
-                font-size: 0.8rem;
-            }
-
-            .world2-entry-btn {
-                font-size: 1.2rem;
-                padding: 15px 20px;
-            }
-
-            .world2-entry-wrapper .hint {
-                font-size: 0.8rem;
-            }
-
-            .progress-text {
-                font-size: 0.7rem;
-            }
-
-            .achievement-item {
-                padding: 12px;
-                gap: 12px;
-            }
-
-            .achievement-icon {
-                font-size: 2rem;
-            }
-
-            .achievement-info h4 {
-                font-size: 0.9rem;
-            }
-
-            .achievement-info p {
-                font-size: 0.75rem;
-            }
-
-            .shop-tabs {
-                flex-wrap: wrap;
-                gap: 5px;
-            }
-
-            .shop-tab {
-                padding: 8px 12px;
-                font-size: 0.7rem;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .chest-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 2rem;
-                bottom: 70px;
-                right: 10px;
-            }
-
-            .luck-timer {
-                bottom: 140px;
-                right: 10px;
-                padding: 8px 12px;
-                font-size: 0.7rem;
-            }
-
-            .combo-display {
-                font-size: 1.5rem;
-                bottom: 80px;
-            }
-
-                .combo-display .combo-count {
-                    font-size: 2rem;
-                }
-
-            .mini-game-modal {
-                padding: 20px;
-                min-width: auto;
-                width: 95%;
-            }
-
-            .event-notification {
-                padding: 20px;
-                width: 90%;
-            }
-
-                .event-notification .event-icon {
-                    font-size: 3rem;
-                }
-
-                .event-notification .event-title {
-                    font-size: 1.2rem;
-                }
-
-                .event-notification .event-desc {
-                    font-size: 0.9rem;
-                }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            body.world-3 .coin-btn {
-                width: 140px;
-                height: 140px;
-            }
-
-                body.world-3 .coin-btn::before {
-                    font-size: 3.5rem;
-                }
-
-            body.world-3 h1 {
-                font-size: 1.6rem;
-            }
-
-            body.world-3 .stat-value {
-                font-size: 1.6rem;
-            }
-
-            body.world-3 .section-title {
-                font-size: 1.3rem;
-            }
-
-            body.world-3 .world2-entry-btn {
-                font-size: 1.2rem;
-                padding: 15px 20px;
-            }
-
-            body.world-3 .multiplier-badge {
-                font-size: 0.8rem;
-                padding: 8px 14px;
-            }
+        .stats-grid .stat-row {
+            padding: 8px 0;
+            border-bottom: none;
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 400px) {
-            h1 {
-                font-size: 1.1rem;
-                letter-spacing: 1px;
-            }
-
-            .stat-value {
-                font-size: 1.1rem;
-            }
-
-            .coin-btn {
-                width: 110px;
-                height: 110px;
-            }
-
-                .coin-btn::before {
-                    font-size: 2.8rem;
-                }
-
-            .stats-bar {
-                gap: 5px;
-                padding: 8px 10px;
-            }
-
-            .stat-item {
-                flex: 1 1 45%;
-            }
-
-            .stat-label {
-                font-size: 0.5rem;
-            }
-
-            .user-nick {
-                font-size: 0.6rem;
-                padding: 3px 8px;
-            }
-
-            .logout-btn,
-            .admin-panel-btn {
-                font-size: 0.6rem;
-                padding: 3px 8px;
-            }
-
-            .sync-status {
-                font-size: 0.5rem;
-                padding: 3px 8px;
-            }
-
-            .shop-item {
-                padding: 12px;
-            }
-
-            .item-name {
-                font-size: 0.85rem;
-            }
-
-            .item-btn {
-                font-size: 0.75rem;
-                padding: 8px 10px;
-            }
-
-                .item-btn.buy-max-btn {
-                    font-size: 0.65rem;
-                    padding: 6px 8px;
-                }
-
-            .multiplier-badge {
-                font-size: 0.6rem;
-                padding: 5px 10px;
-                bottom: 5px;
-                right: 5px;
-                max-width: 85vw;
-            }
-
-            .login-box {
-                padding: 20px;
-            }
-
-                .login-box h2 {
-                    font-size: 1.2rem;
-                }
-
-            .input-group input {
-                padding: 10px;
-                font-size: 0.85rem;
-            }
-
-            .login-btn {
-                padding: 12px;
-                font-size: 0.85rem;
-            }
-
-            .section-title {
-                font-size: 1rem;
-            }
-
-            .world2-entry-btn {
-                font-size: 1rem;
-                padding: 12px 15px;
-            }
-
-            .shop-tab {
-                padding: 6px 10px;
-                font-size: 0.6rem;
-            }
-
-            .chest-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.5rem;
-                bottom: 60px;
-                right: 8px;
-            }
-
-            .luck-timer {
-                bottom: 120px;
-                right: 8px;
-                padding: 5px 10px;
-                font-size: 0.6rem;
-            }
-
-            .combo-display {
-                font-size: 1.2rem;
-                bottom: 70px;
-            }
-
-                .combo-display .combo-count {
-                    font-size: 1.6rem;
-                }
-
-            body.world-3 .coin-btn {
-                width: 100px;
-                height: 100px;
-            }
-
-                body.world-3 .coin-btn::before {
-                    font-size: 2.5rem;
-                }
-
-            body.world-3 h1 {
-                font-size: 1.2rem;
-            }
-
-            body.world-3 .stat-value {
-                font-size: 1.2rem;
-            }
-
-            body.world-3 .section-title {
-                font-size: 1rem;
-            }
-
-            body.world-3 .multiplier-badge {
-                font-size: 0.6rem;
-                padding: 5px 10px;
-            }
-        }
-
-        /* ===== НОВЫЕ УНИКАЛЬНЫЕ ФИЧИ (СОБЫТИЯ, КОМБО, СУНДУКИ) ===== */
-
-        /* Уведомления о событиях */
-        .event-notification {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 30px 40px;
-            border-radius: 20px;
-            border: 3px solid #ffd700;
-            z-index: 9999;
-            text-align: center;
-            animation: eventPop 0.5s ease-out;
-            pointer-events: none;
-            max-width: 90vw;
-        }
-
-            .event-notification .event-icon {
-                font-size: 4rem;
-                display: block;
-                margin-bottom: 10px;
-            }
-
-            .event-notification .event-title {
-                font-size: 1.5rem;
-                color: #ffd700;
-                font-weight: bold;
-            }
-
-            .event-notification .event-desc {
-                font-size: 1rem;
-                color: #ddd;
-                margin-top: 5px;
-            }
-
-        @keyframes eventPop {
-            0% {
-                transform: translate(-50%, -50%) scale(0) rotate(-10deg);
-                opacity: 0;
-            }
-
-            50% {
-                transform: translate(-50%, -50%) scale(1.2) rotate(2deg);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translate(-50%, -50%) scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        /* Счётчик комбо */
+        /* ===== КОМБО И СУНДУК ===== */
         .combo-display {
             position: fixed;
             bottom: 100px;
@@ -2461,16 +1804,15 @@
             pointer-events: none;
         }
 
-            .combo-display.active {
-                opacity: 1;
-            }
+        .combo-display.active {
+            opacity: 1;
+        }
 
-            .combo-display .combo-count {
-                color: #ffd700;
-                font-size: 2.5rem;
-            }
+        .combo-display .combo-count {
+            color: #ffd700;
+            font-size: 2.5rem;
+        }
 
-        /* Бонусный сундук */
         .chest-btn {
             position: fixed;
             bottom: 80px;
@@ -2491,42 +1833,61 @@
             animation: chestPulse 2s ease-in-out infinite;
         }
 
-            .chest-btn:hover {
-                transform: scale(1.1);
-                box-shadow: 0 5px 50px rgba(255, 215, 0, 0.8);
-            }
-
-            .chest-btn:active {
-                transform: scale(0.9);
-            }
-
-            .chest-btn .cooldown-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-                background: rgba(0, 0, 0, 0.7);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.2rem;
-                color: #fff;
-                font-weight: bold;
-            }
-
-        @keyframes chestPulse {
-            0%, 100% {
-                box-shadow: 0 5px 30px rgba(255, 215, 0, 0.5);
-            }
-
-            50% {
-                box-shadow: 0 5px 60px rgba(255, 215, 0, 0.8);
-            }
+        .chest-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 50px rgba(255, 215, 0, 0.8);
         }
 
-        /* Мини-игра "Угадай число" */
+        .chest-btn:active {
+            transform: scale(0.9);
+        }
+
+        .chest-btn .cooldown-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        @keyframes chestPulse {
+            0%, 100% { box-shadow: 0 5px 30px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 5px 60px rgba(255, 215, 0, 0.8); }
+        }
+
+        .luck-timer {
+            position: fixed;
+            bottom: 160px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 18px;
+            border-radius: 15px;
+            border: 2px solid #ff6b6b;
+            z-index: 55;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .luck-timer .luck-time {
+            font-size: 1.2rem;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .luck-timer .luck-bonus {
+            color: #ffd700;
+            font-size: 0.9rem;
+        }
+
         .mini-game-modal {
             position: fixed;
             top: 50%;
@@ -2544,104 +1905,78 @@
             box-shadow: 0 0 100px rgba(74, 222, 128, 0.3);
         }
 
-            .mini-game-modal.active {
-                display: block;
-                animation: fadeIn 0.3s ease;
-            }
-
-            .mini-game-modal .game-title {
-                font-size: 1.5rem;
-                color: #4ade80;
-                margin-bottom: 15px;
-            }
-
-            .mini-game-modal .game-hint {
-                font-size: 1rem;
-                color: #aaa;
-                margin-bottom: 10px;
-            }
-
-            .mini-game-modal .game-input {
-                padding: 12px 20px;
-                font-size: 1.2rem;
-                border-radius: 10px;
-                border: 2px solid #4ade80;
-                background: rgba(0, 0, 0, 0.5);
-                color: #fff;
-                width: 80%;
-                max-width: 200px;
-                text-align: center;
-                outline: none;
-            }
-
-                .mini-game-modal .game-input:focus {
-                    border-color: #ffd700;
-                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-                }
-
-            .mini-game-modal .game-btn {
-                padding: 12px 30px;
-                margin: 10px 5px;
-                border: none;
-                border-radius: 10px;
-                font-size: 1rem;
-                font-weight: bold;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-
-                .mini-game-modal .game-btn:hover {
-                    transform: scale(1.05);
-                }
-
-                .mini-game-modal .game-btn.primary {
-                    background: #4ade80;
-                    color: #000;
-                }
-
-                .mini-game-modal .game-btn.danger {
-                    background: #e94560;
-                    color: #fff;
-                }
-
-            .mini-game-modal .game-feedback {
-                margin-top: 10px;
-                font-size: 1.1rem;
-                min-height: 30px;
-            }
-
-            .mini-game-modal .game-attempts {
-                font-size: 0.9rem;
-                color: #888;
-            }
-
-        /* Событие "Удача дня" */
-        .luck-timer {
-            position: fixed;
-            bottom: 160px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 12px 18px;
-            border-radius: 15px;
-            border: 2px solid #ff6b6b;
-            z-index: 55;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #aaa;
+        .mini-game-modal.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
         }
 
-            .luck-timer .luck-time {
-                font-size: 1.2rem;
-                color: #ff6b6b;
-                font-weight: bold;
-            }
+        .mini-game-modal .game-title {
+            font-size: 1.5rem;
+            color: #4ade80;
+            margin-bottom: 15px;
+        }
 
-            .luck-timer .luck-bonus {
-                color: #ffd700;
-                font-size: 0.9rem;
-            }
+        .mini-game-modal .game-hint {
+            font-size: 1rem;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
 
-        /* ===== Стили для логина ===== */
+        .mini-game-modal .game-input {
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            border: 2px solid #4ade80;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            width: 80%;
+            max-width: 200px;
+            text-align: center;
+            outline: none;
+        }
+
+        .mini-game-modal .game-input:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .mini-game-modal .game-btn {
+            padding: 12px 30px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .mini-game-modal .game-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .mini-game-modal .game-btn.primary {
+            background: #4ade80;
+            color: #000;
+        }
+
+        .mini-game-modal .game-btn.danger {
+            background: #e94560;
+            color: #fff;
+        }
+
+        .mini-game-modal .game-feedback {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            min-height: 30px;
+        }
+
+        .mini-game-modal .game-attempts {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* ===== ЛОГИН ===== */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -2666,38 +2001,38 @@
             text-align: center;
         }
 
-            .login-box h2 {
-                font-size: 2rem;
-                color: #ffd700;
-                margin-bottom: 5px;
-            }
+        .login-box h2 {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
 
-            .login-box .subtitle {
-                color: #aaa;
-                margin-bottom: 20px;
-                font-size: 0.9rem;
-            }
+        .login-box .subtitle {
+            color: #aaa;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
 
         .input-group {
             margin-bottom: 15px;
         }
 
-            .input-group input {
-                width: 100%;
-                padding: 14px 18px;
-                border-radius: 12px;
-                border: 2px solid rgba(255, 215, 0, 0.3);
-                background: rgba(0, 0, 0, 0.4);
-                color: #fff;
-                font-size: 1rem;
-                outline: none;
-                transition: 0.3s;
-            }
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
 
-                .input-group input:focus {
-                    border-color: #ffd700;
-                    box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
-                }
+        .input-group input:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
 
         .login-btn {
             width: 100%;
@@ -2717,16 +2052,16 @@
             gap: 10px;
         }
 
-            .login-btn:hover {
-                transform: scale(1.02);
-                box-shadow: 0 8px 40px rgba(255, 215, 0, 0.5);
-            }
+        .login-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 40px rgba(255, 215, 0, 0.5);
+        }
 
-            .login-btn:disabled {
-                opacity: 0.6;
-                cursor: not-allowed;
-                transform: none;
-            }
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         .login-error {
             color: #e94560;
@@ -2755,15 +2090,113 @@
             transition: 0.3s;
         }
 
-            .login-toggle:hover {
-                text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            }
+        .login-toggle:hover {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
 
         .login-info {
             margin-top: 15px;
             color: #666;
             font-size: 0.8rem;
             line-height: 1.6;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            h1 { font-size: 1.5rem; letter-spacing: 3px; }
+            .stats-bar { gap: 10px; padding: 12px 15px; flex-wrap: wrap; justify-content: space-around; }
+            .stat-item { flex: 1 1 30%; min-width: 80px; }
+            .stat-value { font-size: 1.4rem; }
+            .stat-label { font-size: 0.6rem; letter-spacing: 1px; }
+            .coin-btn { width: 140px; height: 140px; }
+            .coin-btn::before { font-size: 3.5rem; }
+            .shop-grid { grid-template-columns: 1fr; gap: 12px; }
+            .shop-item { padding: 15px; }
+            .item-icon { font-size: 2.5rem; }
+            .item-name { font-size: 1rem; }
+            .item-cost { font-size: 0.9rem; }
+            .item-btn { font-size: 0.85rem; padding: 10px 12px; }
+            .item-btn.buy-max-btn { font-size: 0.75rem; padding: 8px 10px; }
+            .user-panel { top: 10px; right: 10px; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+            .user-nick { font-size: 0.7rem; padding: 4px 10px; }
+            .logout-btn, .admin-panel-btn { font-size: 0.7rem; padding: 4px 10px; }
+            .sync-status { top: 10px; left: 10px; font-size: 0.6rem; padding: 4px 10px; }
+            .section-title { font-size: 1.2rem; }
+            .stats-section { padding: 15px; }
+            .stat-row { font-size: 0.85rem; padding: 10px 0; }
+            .multiplier-badge { top: auto; bottom: 10px; right: 10px; font-size: 0.7rem; padding: 8px 14px; max-width: 90vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .level-up-modal .modal-content { padding: 25px; margin: 15px; }
+            .level-up-title { font-size: 1.8rem; }
+            .level-up-btn { padding: 15px 30px; font-size: 1rem; }
+            .rebirth-modal { padding: 20px; width: 95%; }
+            .rebirth-title { font-size: 1.2rem; }
+            .rebirth-desc { font-size: 0.9rem; }
+            .rebirth-btn { font-size: 0.9rem; padding: 10px 20px; }
+            .login-box { padding: 25px; width: 90%; margin: 15px; }
+            .admin-panel-container { width: 95%; padding: 20px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+            .admin-row { flex-direction: column; align-items: stretch; gap: 5px; }
+            .admin-row label { width: auto; text-align: left; font-size: 0.8rem; }
+            .admin-controls { flex-direction: column; }
+            .admin-btn { padding: 10px; font-size: 0.8rem; }
+            .world2-entry-btn { font-size: 1.2rem; padding: 15px 20px; }
+            .world2-entry-wrapper .hint { font-size: 0.8rem; }
+            .progress-text { font-size: 0.7rem; }
+            .achievement-item { padding: 12px; gap: 12px; }
+            .achievement-icon { font-size: 2rem; }
+            .achievement-info h4 { font-size: 0.9rem; }
+            .achievement-info p { font-size: 0.75rem; }
+            .shop-tabs { flex-wrap: wrap; gap: 5px; }
+            .shop-tab { padding: 8px 12px; font-size: 0.7rem; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .chest-btn { width: 55px; height: 55px; font-size: 2rem; bottom: 70px; right: 10px; }
+            .luck-timer { bottom: 140px; right: 10px; padding: 8px 12px; font-size: 0.7rem; }
+            .combo-display { font-size: 1.5rem; bottom: 80px; }
+            .combo-display .combo-count { font-size: 2rem; }
+            .mini-game-modal { padding: 20px; min-width: auto; width: 95%; }
+            .stats-grid { grid-template-columns: 1fr; }
+            body.world-3 .coin-btn { width: 140px; height: 140px; }
+            body.world-3 .coin-btn::before { font-size: 3.5rem; }
+            body.world-3 h1 { font-size: 1.6rem; }
+            body.world-3 .stat-value { font-size: 1.6rem; }
+            body.world-3 .section-title { font-size: 1.3rem; }
+            body.world-3 .world2-entry-btn { font-size: 1.2rem; padding: 15px 20px; }
+            body.world-3 .multiplier-badge { font-size: 0.8rem; padding: 8px 14px; }
+        }
+
+        @media (max-width: 400px) {
+            h1 { font-size: 1.1rem; letter-spacing: 1px; }
+            .stat-value { font-size: 1.1rem; }
+            .coin-btn { width: 110px; height: 110px; }
+            .coin-btn::before { font-size: 2.8rem; }
+            .stats-bar { gap: 5px; padding: 8px 10px; }
+            .stat-item { flex: 1 1 45%; }
+            .stat-label { font-size: 0.5rem; }
+            .user-nick { font-size: 0.6rem; padding: 3px 8px; }
+            .logout-btn, .admin-panel-btn { font-size: 0.6rem; padding: 3px 8px; }
+            .sync-status { font-size: 0.5rem; padding: 3px 8px; }
+            .shop-item { padding: 12px; }
+            .item-name { font-size: 0.85rem; }
+            .item-btn { font-size: 0.75rem; padding: 8px 10px; }
+            .item-btn.buy-max-btn { font-size: 0.65rem; padding: 6px 8px; }
+            .multiplier-badge { font-size: 0.6rem; padding: 5px 10px; bottom: 5px; right: 5px; max-width: 85vw; }
+            .login-box { padding: 20px; }
+            .login-box h2 { font-size: 1.2rem; }
+            .input-group input { padding: 10px; font-size: 0.85rem; }
+            .login-btn { padding: 12px; font-size: 0.85rem; }
+            .section-title { font-size: 1rem; }
+            .world2-entry-btn { font-size: 1rem; padding: 12px 15px; }
+            .shop-tab { padding: 6px 10px; font-size: 0.6rem; }
+            .chest-btn { width: 45px; height: 45px; font-size: 1.5rem; bottom: 60px; right: 8px; }
+            .luck-timer { bottom: 120px; right: 8px; padding: 5px 10px; font-size: 0.6rem; }
+            .combo-display { font-size: 1.2rem; bottom: 70px; }
+            .combo-display .combo-count { font-size: 1.6rem; }
+            body.world-3 .coin-btn { width: 100px; height: 100px; }
+            body.world-3 .coin-btn::before { font-size: 2.5rem; }
+            body.world-3 h1 { font-size: 1.2rem; }
+            body.world-3 .stat-value { font-size: 1.2rem; }
+            body.world-3 .section-title { font-size: 1rem; }
+            body.world-3 .multiplier-badge { font-size: 0.6rem; padding: 5px 10px; }
         }
     </style>
 </head>
@@ -2795,22 +2228,38 @@
         <button class="logout-btn" onclick="logout()">Выйти</button>
     </div>
 
-    <!-- ===== АДМИН ПАНЕЛЬ ===== -->
+    <!-- ===== АДМИН ПАНЕЛЬ (ИСПРАВЛЕНА) ===== -->
     <div class="admin-panel-container" id="adminPanel">
         <span class="close-admin" onclick="toggleAdminPanel()">&times;</span>
-        <h3 class="admin-header">⚠️ АДМИН ПАНЕЛЬ</h3>
-        <p style="text-align:center; color:#aaa; margin-bottom:20px;">Выдача ресурсов любому игроку</p>
-        <div class="admin-row"><label>Ник:</label><input type="text" id="adminTargetNick" placeholder="Оставьте пустым для себя"></div>
-        <div class="admin-row"><label>💰 Деньги:</label><input type="number" id="adminMoneyAmount" value="1000000" step="1" min="0"></div>
-        <div class="admin-row"><label>👆 Сила клика:</label><input type="number" id="adminClickPowerAmount" value="50" step="1" min="0"></div>
-        <div class="admin-row"><label>🤖 Доход/сек:</label><input type="number" id="adminIncomeAmount" value="100" step="1" min="0"></div>
+        <h3 class="admin-header">⚡ АДМИН ПАНЕЛЬ</h3>
+        <p style="text-align:center; color:#888; margin-bottom:18px; font-size:0.85rem;">Выдача ресурсов любому игроку (по нику)</p>
+        
+        <div class="admin-row">
+            <label>👤 Игрок:</label>
+            <input type="text" id="adminTargetNick" placeholder="Никнейм игрока (пусто = себе)">
+        </div>
+        <div class="admin-row">
+            <label>💰 Деньги:</label>
+            <input type="number" id="adminMoneyAmount" value="1000000" step="1" min="0">
+        </div>
+        <div class="admin-row">
+            <label>👆 Сила клика:</label>
+            <input type="number" id="adminClickPowerAmount" value="50" step="1" min="0">
+        </div>
+        <div class="admin-row">
+            <label>🤖 Доход/сек:</label>
+            <input type="number" id="adminIncomeAmount" value="100" step="1" min="0">
+        </div>
+        
         <div class="admin-controls">
             <button class="admin-btn" onclick="adminSetMoney()">💰 Выдать деньги</button>
-            <button class="admin-btn" onclick="adminSetClickPower()">👆 Установить силу</button>
-            <button class="admin-btn" onclick="adminSetIncome()">🤖 Установить доход</button>
+            <button class="admin-btn" onclick="adminSetClickPower()">👆 Сила клика</button>
+            <button class="admin-btn" onclick="adminSetIncome()">🤖 Доход/сек</button>
+            <button class="admin-btn danger" onclick="adminResetUser()">🗑️ Сбросить</button>
         </div>
+        
         <div id="adminFeedback" class="admin-feedback"></div>
-        <p style="font-size:0.75rem; color:#aaa; margin-top:15px; text-align:center;">Значения применяются к указанному нику (или к вам, если поле пустое)</p>
+        <p style="font-size:0.7rem; color:#555; margin-top:15px; text-align:center;">Значения применяются к указанному нику (или к вам, если поле пустое)</p>
     </div>
 
     <!-- ===== ОСНОВНОЙ КОНТЕЙНЕР ===== -->
@@ -2841,7 +2290,7 @@
             🔥 <span class="combo-count" id="comboCount">0</span>x комбо!
         </div>
 
-        <!-- МИНИ-ИГРА "УГАДАЙ ЧИСЛО" -->
+        <!-- МИНИ-ИГРА -->
         <div class="mini-game-modal" id="miniGameModal">
             <div class="game-title">🎯 Угадай число!</div>
             <div class="game-hint">Угадай число от 1 до 100. Приз: <strong style="color:#ffd700;">x2 к доходу на 30 сек</strong></div>
@@ -3016,7 +2465,7 @@
                 gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
                 osc.start(ctx.currentTime);
                 osc.stop(ctx.currentTime + 0.15);
-            } catch (e) { }
+            } catch (e) {}
         }
 
         function playBuySound() {
@@ -3034,7 +2483,7 @@
                 gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
                 osc.start(ctx.currentTime);
                 osc.stop(ctx.currentTime + 0.3);
-            } catch (e) { }
+            } catch (e) {}
         }
 
         function playRebirthSound() {
@@ -3053,7 +2502,7 @@
                     osc.start(ctx.currentTime + i * 0.1);
                     osc.stop(ctx.currentTime + 0.8);
                 });
-            } catch (e) { }
+            } catch (e) {}
         }
 
         function playLevelUpSound() {
@@ -3072,7 +2521,7 @@
                     osc.start(ctx.currentTime + i * 0.12);
                     osc.stop(ctx.currentTime + i * 0.12 + 0.3);
                 });
-            } catch (e) { }
+            } catch (e) {}
         }
 
         function playPickaxeSound() {
@@ -3105,26 +2554,7 @@
                 gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
                 osc.start(ctx.currentTime);
                 osc.stop(ctx.currentTime + 0.12);
-            } catch (e) { }
-        }
-
-        function playAchievementSound() {
-            if (!soundEnabled) return;
-            try {
-                const ctx = getAudioContext();
-                [800, 1000, 1200, 1600].forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
-                    gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.08);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.25);
-                    osc.start(ctx.currentTime + i * 0.08);
-                    osc.stop(ctx.currentTime + i * 0.08 + 0.25);
-                });
-            } catch (e) { }
+            } catch (e) {}
         }
 
         function playChestSound() {
@@ -3144,7 +2574,7 @@
                     osc.start(ctx.currentTime + i * 0.08);
                     osc.stop(ctx.currentTime + i * 0.08 + 0.15);
                 });
-            } catch (e) { }
+            } catch (e) {}
         }
 
         // ==================== DOM REFERENCES ====================
@@ -3215,6 +2645,7 @@
         const peakClicksDisplay = document.getElementById('peakClicksDisplay');
         const investmentsList = document.getElementById('investmentsList');
 
+        // ==================== ПЕРЕМЕННЫЕ ====================
         let isLoginMode = true;
         let currentTab = 'all';
         let skillTimers = {};
@@ -3225,7 +2656,6 @@
         let chestCooldown = 0;
         let chestTimer = null;
         let luckBonusMultiplier = 1;
-        let luckTimerInterval = null;
         let gameSecretNumber = 0;
         let gameAttemptsLeft = 7;
         let gameWon = false;
@@ -3242,9 +2672,7 @@
             rainbow: { icon: '🌈', label: 'Радуга', unlocked: false, cost: 500000000 },
         };
 
-        // ==================== НОВЫЕ УНИКАЛЬНЫЕ ФИЧИ ====================
-
-        // 1. СИСТЕМА КОМБО
+        // ==================== СИСТЕМА КОМБО ====================
         function addCombo() {
             comboCountValue++;
             if (comboCountValue > 1) {
@@ -3271,7 +2699,7 @@
             }
         }
 
-        // 2. СИСТЕМА СУНДУКОВ
+        // ==================== СУНДУК ====================
         function openChest() {
             if (chestCooldown > 0) return;
             if (!currentUser) return;
@@ -3352,12 +2780,10 @@
                         gameState.multiplier /= 3;
                         updateUI();
                     }, 30000);
-                    playAchievementSound();
                     break;
             }
 
             gameState.chestsOpened = (gameState.chestsOpened || 0) + 1;
-            showEventNotification('🎁 Сундук открыт!', message, '🎁');
             updateUI();
             debouncedSaveToCloud();
         }
@@ -3391,7 +2817,7 @@
             }
         }, 1000);
 
-        // 3. МИНИ-ИГРА
+        // ==================== МИНИ-ИГРА ====================
         function startMiniGame() {
             if (miniGameActive) return;
             gameSecretNumber = Math.floor(Math.random() * 100) + 1;
@@ -3426,14 +2852,12 @@
                 gameInput.disabled = true;
                 gameState.multiplier *= 2;
                 gameState.gamesWon = (gameState.gamesWon || 0) + 1;
-                showEventNotification('🎯 Победа!', 'x2 к доходу на 30 секунд!', '🏆');
                 setTimeout(() => {
                     gameState.multiplier /= 2;
                     updateUI();
                 }, 30000);
                 updateUI();
                 debouncedSaveToCloud();
-                playAchievementSound();
                 setTimeout(() => { closeMiniGame(); }, 3000);
                 return;
             }
@@ -3459,7 +2883,7 @@
             gameInput.disabled = true;
         }
 
-        // 4. ИНВЕСТИЦИИ
+        // ==================== ИНВЕСТИЦИИ ====================
         const investments = [
             { id: 'inv_stocks', name: '📈 Акции', desc: 'Пассивный доход', baseCost: 5000, incomePerLevel: 2, maxLevel: 50 },
             { id: 'inv_bonds', name: '🏦 Облигации', desc: 'Надёжный доход', baseCost: 10000, incomePerLevel: 5, maxLevel: 40 },
@@ -3479,15 +2903,15 @@
                 const div = document.createElement('div');
                 div.className = 'investment-item';
                 div.innerHTML = `
-                                <div class="inv-info">
-                                    <div class="inv-name">${inv.name}</div>
-                                    <div class="inv-desc">${inv.desc} | +${inv.incomePerLevel}$/сек за уровень</div>
-                                </div>
-                                <div class="inv-level">Ур. ${level}/${inv.maxLevel}</div>
-                                <button class="inv-btn" ${!canBuy ? 'disabled' : ''} onclick="buyInvestment('${inv.id}')">
-                                    Купить $${formatNumber(cost)}
-                                </button>
-                            `;
+                            <div class="inv-info">
+                                <div class="inv-name">${inv.name}</div>
+                                <div class="inv-desc">${inv.desc} | +${inv.incomePerLevel}$/сек за уровень</div>
+                            </div>
+                            <div class="inv-level">Ур. ${level}/${inv.maxLevel}</div>
+                            <button class="inv-btn" ${!canBuy ? 'disabled' : ''} onclick="buyInvestment('${inv.id}')">
+                                Купить $${formatNumber(cost)}
+                            </button>
+                        `;
                 investmentsList.appendChild(div);
             });
         }
@@ -3510,14 +2934,11 @@
             debouncedSaveToCloud();
         }
 
-        // 5. ПРЕСТИЖ
+        // ==================== ПРЕСТИЖ ====================
         function doPrestige() {
             if (!currentUser) return;
             const required = getPrestigeRequirement();
-            if (gameState.balance < required) {
-                showEventNotification('⚠️ Недостаточно средств', `Нужно ${formatNumber(required)}$`, '💔');
-                return;
-            }
+            if (gameState.balance < required) return;
 
             if (confirm(`Подняться на уровень престижа?\nБаланс: ${formatNumber(gameState.balance)}$\nНовый множитель: x${gameState.prestigeMultiplier + 0.5}\nВсё остальное сбрасывается!`)) {
                 gameState.balance = 0;
@@ -3532,7 +2953,6 @@
                 gameState.prestigeMultiplier = (gameState.prestigeMultiplier || 1) + 0.5;
                 gameState.multiplier = gameState.prestigeMultiplier;
                 playRebirthSound();
-                showEventNotification('👑 Новый уровень престижа!', `Множитель: x${gameState.prestigeMultiplier}`, '👑');
                 updateUI();
                 saveToCloud();
             }
@@ -3543,7 +2963,7 @@
             return Math.floor(1000000000 * Math.pow(2, level));
         }
 
-        // 6. СКИНЫ
+        // ==================== СКИНЫ ====================
         function renderSkins() {
             skinSelector.innerHTML = '';
             Object.keys(skins).forEach(key => {
@@ -3567,10 +2987,7 @@
         function buySkin(key) {
             const skin = skins[key];
             if (skin.unlocked) return;
-            if (gameState.balance < skin.cost) {
-                showEventNotification('⚠️ Недостаточно средств', `Скин стоит ${formatNumber(skin.cost)}$`, '💔');
-                return;
-            }
+            if (gameState.balance < skin.cost) return;
             gameState.balance -= skin.cost;
             gameState.totalSpent += skin.cost;
             skin.unlocked = true;
@@ -3599,7 +3016,7 @@
             document.head.appendChild(style);
         }
 
-        // 7. РЕЙТИНГ
+        // ==================== РЕЙТИНГ ====================
         function updateLeaderboard() {
             if (!firebaseReady || !firebaseDb) return;
             firebaseDb.ref('users').once('value')
@@ -3633,36 +3050,18 @@
                         div.className = 'leaderboard-item';
                         const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
                         div.innerHTML = `
-                                        <span class="lb-rank">${medal}</span>
-                                        <span class="lb-name">${p.name}</span>
-                                        <span class="lb-score">${formatNumber(p.balance)}$</span>
-                                        <span style="font-size:0.7rem; color:#888;">👑${p.prestige}</span>
-                                    `;
+                                    <span class="lb-rank">${medal}</span>
+                                    <span class="lb-name">${p.name}</span>
+                                    <span class="lb-score">${formatNumber(p.balance)}$</span>
+                                    <span style="font-size:0.7rem; color:#888;">👑${p.prestige}</span>
+                                `;
                         leaderboardList.appendChild(div);
                     });
                 })
                 .catch(e => console.error('Leaderboard error:', e));
         }
 
-        // 8. УВЕДОМЛЕНИЯ
-        function showEventNotification(title, desc, icon = '🎉') {
-            const existing = document.querySelector('.event-notification');
-            if (existing) existing.remove();
-
-            const div = document.createElement('div');
-            div.className = 'event-notification';
-            div.innerHTML = `
-                            <span class="event-icon">${icon}</span>
-                            <div class="event-title">${title}</div>
-                            <div class="event-desc">${desc}</div>
-                        `;
-            document.body.appendChild(div);
-            setTimeout(() => {
-                if (div.parentNode) div.parentNode.removeChild(div);
-            }, 3000);
-        }
-
-        // 9. СЛУЧАЙНЫЕ СОБЫТИЯ
+        // ==================== СЛУЧАЙНЫЕ СОБЫТИЯ ====================
         function triggerRandomEvent() {
             if (!currentUser || Math.random() > 0.1) return;
 
@@ -3711,8 +3110,6 @@
 
             const event = events[Math.floor(Math.random() * events.length)];
             event.effect();
-            showEventNotification(event.title, event.desc, event.title.split(' ')[0]);
-            playAchievementSound();
             updateUI();
             debouncedSaveToCloud();
         }
@@ -3731,7 +3128,7 @@
             gameInput.focus();
 
             const oldGuess = guessNumber;
-            guessNumber = function () {
+            guessNumber = function() {
                 if (!miniGameActive || gameWon) return;
                 const guess = parseInt(gameInput.value);
                 if (isNaN(guess) || guess < 1 || guess > 100) {
@@ -3750,14 +3147,12 @@
                     gameInput.disabled = true;
                     gameState.multiplier *= 3;
                     gameState.gamesWon = (gameState.gamesWon || 0) + 1;
-                    showEventNotification('🎯 Бонусная победа!', 'x3 к доходу на 60 секунд!', '🌟');
                     setTimeout(() => {
                         gameState.multiplier /= 3;
                         updateUI();
                     }, 60000);
                     updateUI();
                     debouncedSaveToCloud();
-                    playAchievementSound();
                     setTimeout(() => { closeMiniGame(); }, 3000);
                     return;
                 }
@@ -3838,10 +3233,7 @@
         let pendingRebirthItem = null;
         let saveTimeout = null;
 
-        // Константы для миров
-        const WORLD2_REQUIRED_BALANCE = 100 * 1e18; // 100 Qi
         const WORLD2_ENTRY_COST = 100 * 1e18;
-        const WORLD3_REQUIRED_BALANCE = 1 * 1e21; // 1 Sx
         const WORLD3_ENTRY_COST = 1 * 1e21;
         const WORLD3_REQUIRED_REBIRTHS = 15;
 
@@ -3918,7 +3310,7 @@
             { id: 'rebirth_13', name: 'Перерождение x100', icon: '🔥', cost: 200000000000, type: 'rebirth', value: 100, desc: 'Сброс прогресса. Доход x100' },
         ];
 
-        // ==================== ПРЕДМЕТЫ МИРА 2 (Minecraft) ====================
+        // ==================== ПРЕДМЕТЫ МИРА 2 ====================
         function generateWorld2Items() {
             return [
                 { id: 'w2_wood_pick', name: 'Деревянная кирка', icon: '🪓', cost: 100, type: 'click', value: 5, desc: '+5 к силе клика' },
@@ -3972,16 +3364,15 @@
             ];
         }
 
-        // ==================== ПРЕДМЕТЫ МИРА 3 (Roblox) ====================
+        // ==================== ПРЕДМЕТЫ МИРА 3 (ROBLOX) ====================
         function generateWorld3Items() {
-            // Все предметы в 2 раза дороже и дают в 3 раза больше, чем в Мире 2
             const w2Items = generateWorld2Items();
             return w2Items.map(item => ({
                 ...item,
                 cost: Math.floor(item.cost * 2),
                 value: Math.floor(item.value * 3),
                 id: 'w3_' + item.id,
-                name: item.name + ' (Roblox)',
+                name: item.name.replace('кирка', '🔧 Инструмент').replace('Возрождение', '🔄 Респавн'),
                 desc: item.desc.replace(/\+(\d+)/, (match, num) => `+${Math.floor(parseInt(num) * 3)}`) + ' (x3)',
             }));
         }
@@ -3999,9 +3390,9 @@
         // ==================== АКТИВНЫЕ НАВЫКИ ====================
         const skills = [{
             id: 'speedBoost',
-            name: 'Ускорение',
+            name: '🚀 Ускорение',
             icon: '🚀',
-            desc: 'x2 доход на 10 секунд',
+            desc: 'x2 доход на 10 сек',
             cooldown: 30,
             duration: 10,
             effect: () => {
@@ -4016,7 +3407,7 @@
             condition: () => true
         }, {
             id: 'megaClick',
-            name: 'Мега-клик',
+            name: '⚡ Мега-клик',
             icon: '⚡',
             desc: 'x10 сила клика на 5 кликов',
             cooldown: 20,
@@ -4045,7 +3436,7 @@
             condition: () => true
         }, {
             id: 'goldenTouch',
-            name: 'Золотое касание',
+            name: '✨ Золотое касание',
             icon: '✨👆',
             desc: 'x3 доход от кликов на 15 сек',
             cooldown: 45,
@@ -4063,9 +3454,9 @@
             condition: () => gameState.rebirthCount >= 3
         }, {
             id: 'luckyStrike',
-            name: 'Удача',
+            name: '🍀 Удача',
             icon: '🍀',
-            desc: 'Шанс получить x10 дохода от клика (5 кликов)',
+            desc: 'Шанс x10 дохода (5 кликов)',
             cooldown: 60,
             duration: 5,
             effect: () => {
@@ -4076,7 +3467,6 @@
                         const bonus = gameState.clickPower * 10;
                         gameState.balance += bonus;
                         gameState.totalEarned += bonus;
-                        showEventNotification('🍀 УДАЧА!', `+${formatNumber(bonus)}$`, '🍀');
                     }
                     if (clicks >= 5) {
                         document.getElementById('clickBtn').removeEventListener('click', handler);
@@ -4107,14 +3497,14 @@
                 const activeText = isActive ? '⚡ Активирован!' : '';
 
                 card.innerHTML = `
-                                <div class="skill-icon">${skill.icon}</div>
-                                <div class="skill-name">${skill.name}</div>
-                                <div class="skill-desc">${skill.desc}</div>
-                                <button class="skill-btn" ${!isAvailable ? 'disabled' : ''} onclick="useSkill('${skill.id}')">
-                                    ${isActive ? '⏳ Активен' : isOnCooldown ? `⏳ ${Math.ceil(gameState.skills[skill.id].cooldown)}с` : '▶️ Использовать'}
-                                </button>
-                                <div class="skill-cooldown">${cooldownText || activeText}</div>
-                            `;
+                            <div class="skill-icon">${skill.icon}</div>
+                            <div class="skill-name">${skill.name}</div>
+                            <div class="skill-desc">${skill.desc}</div>
+                            <button class="skill-btn" ${!isAvailable ? 'disabled' : ''} onclick="useSkill('${skill.id}')">
+                                ${isActive ? '⏳ Активен' : isOnCooldown ? `⏳ ${Math.ceil(gameState.skills[skill.id].cooldown)}с` : '▶️ Использовать'}
+                            </button>
+                            <div class="skill-cooldown">${cooldownText || activeText}</div>
+                        `;
                 skillsGrid.appendChild(card);
             });
         }
@@ -4189,8 +3579,7 @@
             { id: 'game_win_10', name: 'Чемпион', icon: '🏆', desc: 'Выиграйте 10 мини-игр', condition: () => (gameState.gamesWon || 0) >= 10 },
             { id: 'prestige_1', name: 'Первый престиж', icon: '👑', desc: 'Достигните 1 уровня престижа', condition: () => (gameState.prestigeLevel || 0) >= 1 },
             { id: 'prestige_5', name: 'Легенда', icon: '⭐', desc: 'Достигните 5 уровня престижа', condition: () => (gameState.prestigeLevel || 0) >= 5 },
-            {
-                id: 'invest_10', name: 'Инвестор', icon: '📊', desc: 'Вложитесь в инвестиции 10 раз', condition: () => {
+            { id: 'invest_10', name: 'Инвестор', icon: '📊', desc: 'Вложитесь в инвестиции 10 раз', condition: () => {
                     let total = 0;
                     if (gameState.investments) {
                         Object.values(gameState.investments).forEach(v => total += v);
@@ -4262,7 +3651,7 @@
             }
         });
 
-        // ==================== ЛОГИН/РЕГИСТРАЦИЯ ====================
+        // ==================== ЛОГИН ====================
         function toggleAuthMode() {
             isLoginMode = !isLoginMode;
             if (isLoginMode) {
@@ -4505,7 +3894,7 @@
                 `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        // ==================== АДМИН ====================
+        // ==================== АДМИН (ИСПРАВЛЕН) ====================
         function checkAdminAccess() {
             if (currentUser.toLowerCase() === 'mikhaigr') {
                 adminToggleBtn.style.display = 'inline-block';
@@ -4525,6 +3914,10 @@
                     return;
                 }
                 const target = targetNick.trim() || currentUser;
+                if (!target) {
+                    reject('Укажите никнейм игрока');
+                    return;
+                }
                 if (!firebaseReady || !firebaseDb) {
                     reject('Firebase не готов');
                     return;
@@ -4553,7 +3946,7 @@
             setTimeout(() => {
                 adminFeedback.textContent = '';
                 adminFeedback.className = 'admin-feedback';
-            }, 4000);
+            }, 5000);
         }
 
         async function adminSetMoney() {
@@ -4562,19 +3955,19 @@
                 showAdminFeedback('❌ Введите корректное число', true);
                 return;
             }
+            const targetNick = adminTargetNick.value.trim();
+            if (!targetNick) {
+                showAdminFeedback('❌ Укажите никнейм игрока в поле "Игрок"', true);
+                return;
+            }
             try {
-                const data = await updateUserData(adminTargetNick.value, d => { d.balance = (d.balance || 0) + amount; });
-                const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) {
-                    gameState = {
-                        ...gameState,
-                        ...data
-                    };
+                const data = await updateUserData(targetNick, d => { d.balance = (d.balance || 0) + amount; });
+                if (targetNick === currentUser) {
+                    gameState = { ...gameState, ...data };
                     updateUI();
                 }
-                showAdminFeedback(`✅ Денег выдано: +$${amount}. Новый баланс: $${data.balance}`);
+                showAdminFeedback(`✅ ${targetNick}: +$${formatNumber(amount)}. Баланс: $${formatNumber(data.balance)}`);
             } catch (err) {
-                console.error(err);
                 showAdminFeedback('❌ Ошибка: ' + err.message, true);
             }
         }
@@ -4585,19 +3978,19 @@
                 showAdminFeedback('❌ Введите корректное число', true);
                 return;
             }
+            const targetNick = adminTargetNick.value.trim();
+            if (!targetNick) {
+                showAdminFeedback('❌ Укажите никнейм игрока в поле "Игрок"', true);
+                return;
+            }
             try {
-                const data = await updateUserData(adminTargetNick.value, d => { d.clickPower = amount; });
-                const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) {
-                    gameState = {
-                        ...gameState,
-                        ...data
-                    };
+                const data = await updateUserData(targetNick, d => { d.clickPower = amount; });
+                if (targetNick === currentUser) {
+                    gameState = { ...gameState, ...data };
                     updateUI();
                 }
-                showAdminFeedback(`✅ Сила клика установлена: ${amount}`);
+                showAdminFeedback(`✅ ${targetNick}: сила клика = ${amount}`);
             } catch (err) {
-                console.error(err);
                 showAdminFeedback('❌ Ошибка: ' + err.message, true);
             }
         }
@@ -4608,24 +4001,47 @@
                 showAdminFeedback('❌ Введите корректное число', true);
                 return;
             }
+            const targetNick = adminTargetNick.value.trim();
+            if (!targetNick) {
+                showAdminFeedback('❌ Укажите никнейм игрока в поле "Игрок"', true);
+                return;
+            }
             try {
-                const data = await updateUserData(adminTargetNick.value, d => { d.incomePerSec = amount; });
-                const target = adminTargetNick.value.trim() || currentUser;
-                if (target === currentUser) {
-                    gameState = {
-                        ...gameState,
-                        ...data
-                    };
+                const data = await updateUserData(targetNick, d => { d.incomePerSec = amount; });
+                if (targetNick === currentUser) {
+                    gameState = { ...gameState, ...data };
                     updateUI();
                 }
-                showAdminFeedback(`✅ Авто-доход установлен: ${amount}$/сек`);
+                showAdminFeedback(`✅ ${targetNick}: доход/сек = ${amount}$`);
             } catch (err) {
-                console.error(err);
                 showAdminFeedback('❌ Ошибка: ' + err.message, true);
             }
         }
 
-        // ==================== ВКЛАДКИ МАГАЗИНА ====================
+        async function adminResetUser() {
+            const targetNick = adminTargetNick.value.trim();
+            if (!targetNick) {
+                showAdminFeedback('❌ Укажите никнейм игрока в поле "Игрок"', true);
+                return;
+            }
+            if (!confirm(`Вы уверены? Весь прогресс игрока ${targetNick} будет удалён!`)) return;
+            try {
+                const data = await updateUserData(targetNick, d => {
+                    const newData = getDefaultGameState();
+                    newData.username = targetNick;
+                    Object.assign(d, newData);
+                });
+                if (targetNick === currentUser) {
+                    gameState = { ...gameState, ...data };
+                    updateUI();
+                }
+                showAdminFeedback(`✅ ${targetNick}: прогресс сброшен`);
+            } catch (err) {
+                showAdminFeedback('❌ Ошибка: ' + err.message, true);
+            }
+        }
+
+        // ==================== МАГАЗИН ====================
         function switchTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.shop-tab').forEach(el => {
@@ -4634,7 +4050,6 @@
             renderShopItems();
         }
 
-        // ==================== СТИЛЬ МИРА ====================
         function applyWorldStyle() {
             const body = document.body;
             body.classList.remove('world-2', 'world-3');
@@ -4643,7 +4058,6 @@
             } else if (gameState.world === 2) {
                 body.classList.add('world-2');
             }
-            // Обновляем иконку мира в заголовке
             const worldLabel = document.querySelector('header h1');
             if (worldLabel) {
                 if (gameState.world === 3) {
@@ -4656,20 +4070,10 @@
             }
         }
 
-        // ==================== ПОКУПКА МИРОВ ====================
         function buyWorld2() {
-            if (gameState.rebirthCount < 5) {
-                showEventNotification('⚠️ Требуется 5 перерождений', 'Совершите ещё перерождения', '💔');
-                return;
-            }
-            if (gameState.balance < WORLD2_ENTRY_COST) {
-                showEventNotification('⚠️ Недостаточно средств', `Нужно ${formatNumber(WORLD2_ENTRY_COST)}$`, '💔');
-                return;
-            }
-            if (gameState.world >= 2) {
-                showEventNotification('⚠️ Вы уже в Мире 2 или выше', 'Продолжайте играть!', '🌍');
-                return;
-            }
+            if (gameState.rebirthCount < 5) return;
+            if (gameState.balance < WORLD2_ENTRY_COST) return;
+            if (gameState.world >= 2) return;
             gameState.world = 2;
             gameState.balance = 0;
             gameState.clickPower = 5;
@@ -4692,26 +4096,13 @@
             initAchievementsDisplay();
             applyWorldStyle();
             saveToCloud();
-            showEventNotification('🎉 Добро пожаловать в Мир 2!', 'Все улучшения теперь в 2 раза дороже и дают в 3 раза больше!', '⛏️');
         }
 
         function buyWorld3() {
-            if (gameState.rebirthCount < WORLD3_REQUIRED_REBIRTHS) {
-                showEventNotification('⚠️ Требуется 15 перерождений', `У вас ${gameState.rebirthCount}/${WORLD3_REQUIRED_REBIRTHS}`, '💔');
-                return;
-            }
-            if (gameState.balance < WORLD3_ENTRY_COST) {
-                showEventNotification('⚠️ Недостаточно средств', `Нужно ${formatNumber(WORLD3_ENTRY_COST)}$`, '💔');
-                return;
-            }
-            if (gameState.world >= 3) {
-                showEventNotification('⚠️ Вы уже в Мире 3', 'Продолжайте играть!', '🎮');
-                return;
-            }
-            if (gameState.world < 2) {
-                showEventNotification('⚠️ Сначала достигните Мира 2', 'Перейдите в Мир 2, затем в Мир 3', '🌍');
-                return;
-            }
+            if (gameState.rebirthCount < WORLD3_REQUIRED_REBIRTHS) return;
+            if (gameState.balance < WORLD3_ENTRY_COST) return;
+            if (gameState.world >= 3) return;
+            if (gameState.world < 2) return;
             gameState.world = 3;
             gameState.balance = 0;
             gameState.clickPower = 50;
@@ -4734,7 +4125,6 @@
             initAchievementsDisplay();
             applyWorldStyle();
             saveToCloud();
-            showEventNotification('🎮 Добро пожаловать в Мир 3 (Roblox)!', 'Все улучшения теперь в 2 раза дороже и дают в 3 раза больше, чем в Мире 2!', '🎮');
         }
 
         // ==================== GAME LOGIC ====================
@@ -4753,7 +4143,6 @@
             while (gameState.experience >= gameState.experienceToNextLevel) levelUp();
         }
 
-        // ===== ОБНОВЛЁННАЯ ФУНКЦИЯ levelUp (ТОСТ УДАЛЁН) =====
         function levelUp() {
             gameState.experience -= gameState.experienceToNextLevel;
             gameState.level++;
@@ -4770,7 +4159,6 @@
             }
             gameState.clickPower += reward;
 
-            // Обновляем модалку
             document.getElementById('levelUpReward').textContent = `+${reward} к силе клика`;
             document.getElementById('levelUpBonus').textContent = bonusText || 'Продолжайте прокачиваться!';
             document.getElementById('levelUpNumber').textContent = gameState.level;
@@ -4779,7 +4167,6 @@
             document.getElementById('lvlMultiplier').textContent = 'x' + (gameState.multiplier * luckBonusMultiplier).toFixed(1);
             document.getElementById('lvlRebirths').textContent = gameState.rebirthCount;
 
-            // Показываем модалку
             levelUpModal.classList.remove('hidden');
             playLevelUpSound();
             updateUI();
@@ -4789,7 +4176,7 @@
             levelUpModal.classList.add('hidden');
         }
 
-        // ==================== АНИМАЦИЯ КЛИКА ====================
+        // ==================== КЛИК ====================
         document.getElementById('clickBtn').addEventListener('click', (e) => {
             if (!currentUser) return;
 
@@ -4808,10 +4195,8 @@
 
             gainExperience(Math.max(1, Math.floor(earned / 10)));
 
-            // Специальная анимация для Мира 3
             if (gameState.world === 3) {
                 playClickSound();
-                // Roblox-стиль эффект
                 createRobloxParticle(e.clientX, e.clientY, `+${earned}$`);
             } else if (gameState.world === 2) {
                 playPickaxeSound();
@@ -4839,67 +4224,30 @@
             p.textContent = text;
             p.style.left = x + 'px';
             p.style.top = (y - 50) + 'px';
-            p.style.color = '#4a90d9';
-            p.style.textShadow = '0 0 20px rgba(74,144,217,0.5), 0 4px 8px rgba(0,0,0,0.5)';
+            p.style.color = '#00bfff';
+            p.style.textShadow = '0 0 30px rgba(0,191,255,0.4), 0 4px 8px rgba(0,0,0,0.5)';
             p.style.fontFamily = '"Comic Sans MS", cursive';
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 1000);
-
-            // Дополнительные искры в стиле Roblox
-            for (let i = 0; i < 5; i++) {
-                const spark = document.createElement('div');
-                spark.className = 'click-effect';
-                spark.textContent = ['⭐', '✨', '💫', '🌟', '🎮'][i];
-                spark.style.left = (x + (Math.random() - 0.5) * 80) + 'px';
-                spark.style.top = (y - 30 + (Math.random() - 0.5) * 80) + 'px';
-                spark.style.fontSize = '1.2rem';
-                spark.style.color = '#ffd700';
-                document.body.appendChild(spark);
-                setTimeout(() => spark.remove(), 800);
-            }
         }
 
         function createPickaxeEffect(x, y) {
             if (!animationsEnabled) return;
             const container = document.createElement('div');
-            container.className = 'pickaxe-container';
-            container.style.left = x + 'px';
-            container.style.top = y + 'px';
+            container.style.cssText = 'position:fixed; left:' + x + 'px; top:' + y + 'px; pointer-events:none; z-index:999;';
             document.body.appendChild(container);
-
-            const pickaxe = document.createElement('div');
-            pickaxe.className = 'pickaxe';
-            pickaxe.textContent = '⛏️';
-            container.appendChild(pickaxe);
-
-            const crystalColors = ['#f5e56b', '#a8e6cf', '#ff8b94', '#b8d8f8', '#d4a5ff', '#ffeaa7', '#ffd700', '#7ec8e3'];
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < 6; i++) {
                 const shard = document.createElement('div');
-                shard.className = 'crystal-shard';
-                shard.textContent = ['💎', '✨', '💠', '🔹', '🔸', '💠'][Math.floor(Math.random() * 6)];
-                const angle = (Math.PI * 2 * i) / 12 + Math.random() * 0.5;
-                const distance = 40 + Math.random() * 80;
-                shard.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
-                shard.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
+                shard.textContent = '💎';
+                shard.style.cssText = 'position:absolute; font-size:1.2rem; animation: shardFly 0.8s ease-out forwards;';
+                const angle = (Math.PI * 2 * i) / 6;
+                const dist = 40 + Math.random() * 60;
+                shard.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                shard.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
                 shard.style.animationDelay = Math.random() * 0.2 + 's';
                 container.appendChild(shard);
             }
-
-            for (let i = 0; i < 20; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'crystal-sparkle';
-                const angle = Math.random() * Math.PI * 2;
-                const distance = 20 + Math.random() * 60;
-                sparkle.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
-                sparkle.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
-                sparkle.style.animationDelay = Math.random() * 0.15 + 's';
-                sparkle.style.backgroundColor = crystalColors[Math.floor(Math.random() * crystalColors.length)];
-                container.appendChild(sparkle);
-            }
-
-            setTimeout(() => {
-                if (container.parentNode) container.parentNode.removeChild(container);
-            }, 1000);
+            setTimeout(() => container.remove(), 1000);
         }
 
         function createParticle(x, y, text) {
@@ -4920,9 +4268,7 @@
             const isWorld3 = gameState.world === 3;
             shopGrid.innerHTML = '';
 
-            // Показываем кнопки перехода в миры
             if (!isWorld2 && !isWorld3) {
-                // Мир 2
                 const conditionsMet2 = gameState.rebirthCount >= 5 && gameState.balance >= WORLD2_ENTRY_COST;
                 const wrapper2 = document.createElement('div');
                 wrapper2.className = 'world2-entry-wrapper';
@@ -4934,12 +4280,11 @@
                 wrapper2.appendChild(btn2);
                 const hint2 = document.createElement('div');
                 hint2.className = 'hint ' + (conditionsMet2 ? 'success' : 'error');
-                hint2.textContent = conditionsMet2 ? '✅ Все условия выполнены! Нажмите кнопку чтобы перейти в Мир 2' :
+                hint2.textContent = conditionsMet2 ? '✅ Все условия выполнены!' :
                     `❌ Требуется: 5 перерождений (${gameState.rebirthCount}/5) и ${formatNumber(WORLD2_ENTRY_COST)}$ (${formatNumber(gameState.balance)}$)`;
                 wrapper2.appendChild(hint2);
                 shopGrid.appendChild(wrapper2);
             } else if (isWorld2 && gameState.world < 3) {
-                // Мир 3
                 const conditionsMet3 = gameState.rebirthCount >= WORLD3_REQUIRED_REBIRTHS && gameState.balance >= WORLD3_ENTRY_COST;
                 const wrapper3 = document.createElement('div');
                 wrapper3.className = 'world2-entry-wrapper';
@@ -4951,13 +4296,12 @@
                 wrapper3.appendChild(btn3);
                 const hint3 = document.createElement('div');
                 hint3.className = 'hint ' + (conditionsMet3 ? 'success' : 'error');
-                hint3.textContent = conditionsMet3 ? '✅ Все условия выполнены! Нажмите кнопку чтобы перейти в Мир 3 (Roblox)' :
+                hint3.textContent = conditionsMet3 ? '✅ Все условия выполнены!' :
                     `❌ Требуется: ${WORLD3_REQUIRED_REBIRTHS} перерождений (${gameState.rebirthCount}/${WORLD3_REQUIRED_REBIRTHS}) и ${formatNumber(WORLD3_ENTRY_COST)}$ (${formatNumber(gameState.balance)}$)`;
                 wrapper3.appendChild(hint3);
                 shopGrid.appendChild(wrapper3);
             }
 
-            // Фильтруем и показываем предметы
             items.forEach(item => {
                 if (currentTab !== 'all') {
                     if (currentTab === 'click' && item.type !== 'click') return;
@@ -5034,10 +4378,7 @@
             if (!item || gameState.balance < item.cost) return;
             pendingRebirthItem = item;
             const newMultiplier = gameState.multiplier * item.value;
-            if (newMultiplier > 1e308) {
-                showEventNotification('⚠️ Слишком большой множитель!', 'Попробуйте другое перерождение', '💔');
-                return;
-            }
+            if (newMultiplier > 1e308) return;
             document.getElementById('rebirthMultiplier').textContent = newMultiplier.toLocaleString();
             rebirthModal.classList.add('active');
         }
@@ -5085,7 +4426,6 @@
             multiplierDisplay.textContent = 'x' + effectiveMultiplier.toFixed(1);
             rebirthCountDisplay.textContent = formatNumber(gameState.rebirthCount);
 
-            // Прогресс к Миру 2 и 3
             const world2ProgressText = (gameState.world >= 2) ? '✅ Достигнут' :
                 `${formatNumber(gameState.balance)} / ${formatNumber(WORLD2_ENTRY_COST)} (${Math.min(100, (gameState.balance / WORLD2_ENTRY_COST) * 100).toFixed(1)}%)`;
             world2Progress.textContent = world2ProgressText;
@@ -5143,8 +4483,6 @@
                     div.innerHTML =
                         `<div class="achievement-icon">${ach.icon}</div><div class="achievement-info"><h4>${ach.name}</h4><p>${ach.desc}</p></div>`;
                     achievementsList.prepend(div);
-                    showEventNotification('🏆 Достижение разблокировано!', ach.name, ach.icon);
-                    playAchievementSound();
                 }
             });
             if (newUnlock) {
@@ -5183,7 +4521,6 @@
 
         // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         async function init() {
-            // Создаём админа
             if (firebaseReady && firebaseDb) {
                 try {
                     const adminKey = sanitizeKey('mikhaigr');
@@ -5223,7 +4560,6 @@
             setInterval(checkAchievements, 2000);
             setInterval(() => { if (currentUser) triggerRandomEvent(); }, 30000);
 
-            // Кнопка для мини-игры
             const miniGameBtn = document.createElement('button');
             miniGameBtn.textContent = '🎯 Мини-игра';
             miniGameBtn.style.cssText =
@@ -5244,11 +4580,25 @@
                 }
             });
 
-            // Обновление таймера удачи
             luckTime.textContent = 'Обновится через: 23:59:59';
         }
 
         init();
+
+        // ==================== ДОБАВЛЯЕМ СТИЛИ ДЛЯ АНИМАЦИЙ ШАРДОВ ====================
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+                    @keyframes shardFly {
+                        0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+                        100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(720deg); opacity: 0; }
+                    }
+                    .crystal-shard {
+                        position: absolute;
+                        font-size: 1.2rem;
+                        animation: shardFly 0.8s ease-out forwards;
+                    }
+                `;
+        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html>
