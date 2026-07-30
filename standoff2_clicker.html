@@ -1158,12 +1158,6 @@
             margin-right: 10px;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
         .admin-panel-container {
             position: fixed;
             top: 50%;
@@ -3022,15 +3016,23 @@
         }, 1000);
 
         // ==================== МИНИ-ИГРА ====================
+        let miniGameConfig = null;
+
         function startMiniGame() {
             if (miniGameActive) return;
-            gameSecretNumber = Math.floor(Math.random() * 100) + 1;
-            gameAttemptsLeft = 7;
-            gameWon = false;
+            miniGameConfig = {
+                secretNumber: Math.floor(Math.random() * 100) + 1,
+                attemptsLeft: 7,
+                maxAttempts: 7,
+                won: false,
+                bonusMultiplier: 2,
+                bonusDuration: 30000,
+                bonusText: 'x2 к доходу на 30 сек'
+            };
             miniGameActive = true;
             gameFeedback.textContent = '🎯 Угадай число от 1 до 100!';
             gameFeedback.style.color = '#aaa';
-            gameAttempts.textContent = `Попыток: 0/7`;
+            gameAttempts.textContent = `Попыток: 0/${miniGameConfig.maxAttempts}`;
             gameInput.value = '';
             gameInput.disabled = false;
             miniGameModal.classList.add('active');
@@ -3038,7 +3040,7 @@
         }
 
         function guessNumber() {
-            if (!miniGameActive || gameWon) return;
+            if (!miniGameActive || !miniGameConfig || miniGameConfig.won) return;
             const guess = parseInt(gameInput.value);
             if (isNaN(guess) || guess < 1 || guess > 100) {
                 gameFeedback.textContent = '⚠️ Введите число от 1 до 100!';
@@ -3046,36 +3048,36 @@
                 return;
             }
 
-            gameAttemptsLeft--;
-            gameAttempts.textContent = `Попыток: ${7 - gameAttemptsLeft}/7`;
+            miniGameConfig.attemptsLeft--;
+            gameAttempts.textContent = `Попыток: ${miniGameConfig.maxAttempts - miniGameConfig.attemptsLeft}/${miniGameConfig.maxAttempts}`;
 
-            if (guess === gameSecretNumber) {
-                gameWon = true;
-                gameFeedback.textContent = `🎉 ПРАВИЛЬНО! Число было ${gameSecretNumber}!`;
+            if (guess === miniGameConfig.secretNumber) {
+                miniGameConfig.won = true;
+                gameFeedback.textContent = `🎉 ПРАВИЛЬНО! Число было ${miniGameConfig.secretNumber}!`;
                 gameFeedback.style.color = '#4ade80';
                 gameInput.disabled = true;
-                gameState.multiplier *= 2;
+                gameState.multiplier *= miniGameConfig.bonusMultiplier;
                 gameState.gamesWon = (gameState.gamesWon || 0) + 1;
                 setTimeout(() => {
-                    gameState.multiplier /= 2;
+                    gameState.multiplier /= miniGameConfig.bonusMultiplier;
                     updateUI();
-                }, 30000);
+                }, miniGameConfig.bonusDuration);
                 updateUI();
                 debouncedSaveToCloud();
                 setTimeout(() => { closeMiniGame(); }, 3000);
                 return;
             }
 
-            if (gameAttemptsLeft <= 0) {
-                gameFeedback.textContent = `😢 Проигрыш! Число было ${gameSecretNumber}. Попробуйте снова!`;
+            if (miniGameConfig.attemptsLeft <= 0) {
+                gameFeedback.textContent = `😢 Проигрыш! Число было ${miniGameConfig.secretNumber}. Попробуйте снова!`;
                 gameFeedback.style.color = '#ff6b6b';
                 gameInput.disabled = true;
                 setTimeout(() => { closeMiniGame(); }, 2000);
                 return;
             }
 
-            const hint = guess < gameSecretNumber ? '📈 Больше' : '📉 Меньше';
-            gameFeedback.textContent = `${guess}? ${hint}. Осталось попыток: ${gameAttemptsLeft}`;
+            const hint = guess < miniGameConfig.secretNumber ? '📈 Больше' : '📉 Меньше';
+            gameFeedback.textContent = `${guess}? ${hint}. Осталось попыток: ${miniGameConfig.attemptsLeft}`;
             gameFeedback.style.color = '#ffd700';
             gameInput.value = '';
             gameInput.focus();
@@ -3319,62 +3321,24 @@
         }
 
         function startMiniGameWithBonus() {
-            gameSecretNumber = Math.floor(Math.random() * 100) + 1;
-            gameAttemptsLeft = 10;
-            gameWon = false;
+            if (miniGameActive) return;
+            miniGameConfig = {
+                secretNumber: Math.floor(Math.random() * 100) + 1,
+                attemptsLeft: 10,
+                maxAttempts: 10,
+                won: false,
+                bonusMultiplier: 3,
+                bonusDuration: 60000,
+                bonusText: 'x3 доход на 60 сек'
+            };
             miniGameActive = true;
             gameFeedback.textContent = '🎯 Угадай число от 1 до 100! Приз: x3 доход на 60 сек!';
             gameFeedback.style.color = '#ffd700';
-            gameAttempts.textContent = `Попыток: 0/10`;
+            gameAttempts.textContent = `Попыток: 0/${miniGameConfig.maxAttempts}`;
             gameInput.value = '';
             gameInput.disabled = false;
             miniGameModal.classList.add('active');
             gameInput.focus();
-
-            const oldGuess = guessNumber;
-            guessNumber = function () {
-                if (!miniGameActive || gameWon) return;
-                const guess = parseInt(gameInput.value);
-                if (isNaN(guess) || guess < 1 || guess > 100) {
-                    gameFeedback.textContent = '⚠️ Введите число от 1 до 100!';
-                    gameFeedback.style.color = '#ff6b6b';
-                    return;
-                }
-
-                gameAttemptsLeft--;
-                gameAttempts.textContent = `Попыток: ${10 - gameAttemptsLeft}/10`;
-
-                if (guess === gameSecretNumber) {
-                    gameWon = true;
-                    gameFeedback.textContent = `🎉 ПРАВИЛЬНО! x3 доход на 60 сек!`;
-                    gameFeedback.style.color = '#4ade80';
-                    gameInput.disabled = true;
-                    gameState.multiplier *= 3;
-                    gameState.gamesWon = (gameState.gamesWon || 0) + 1;
-                    setTimeout(() => {
-                        gameState.multiplier /= 3;
-                        updateUI();
-                    }, 60000);
-                    updateUI();
-                    debouncedSaveToCloud();
-                    setTimeout(() => { closeMiniGame(); }, 3000);
-                    return;
-                }
-
-                if (gameAttemptsLeft <= 0) {
-                    gameFeedback.textContent = `😢 Проигрыш! Число было ${gameSecretNumber}.`;
-                    gameFeedback.style.color = '#ff6b6b';
-                    gameInput.disabled = true;
-                    setTimeout(() => { closeMiniGame(); }, 2000);
-                    return;
-                }
-
-                const hint = guess < gameSecretNumber ? '📈 Больше' : '📉 Меньше';
-                gameFeedback.textContent = `${guess}? ${hint}. Осталось попыток: ${gameAttemptsLeft}`;
-                gameFeedback.style.color = '#ffd700';
-                gameInput.value = '';
-                gameInput.focus();
-            };
         }
 
         // ==================== ОСТАЛЬНАЯ ЛОГИКА ====================
@@ -3420,7 +3384,9 @@
                 playTimeSeconds: 0,
                 skills: {
                     speedBoost: { cooldown: 0, active: false, remaining: 0 },
-                    megaClick: { cooldown: 0, active: false, remaining: 0 }
+                    megaClick: { cooldown: 0, active: false, remaining: 0 },
+                    goldenTouch: { cooldown: 0, active: false, remaining: 0 },
+                    luckyStrike: { cooldown: 0, active: false, remaining: 0 }
                 },
                 chestsOpened: 0,
                 gamesWon: 0,
@@ -3689,9 +3655,12 @@
             skills.forEach(skill => {
                 const card = document.createElement('div');
                 card.className = 'skill-card';
-                const isAvailable = skill.condition() && (!gameState.skills[skill.id] || gameState.skills[skill.id].cooldown <= 0);
-                const isOnCooldown = gameState.skills[skill.id] && gameState.skills[skill.id].cooldown > 0;
-                const isActive = gameState.skills[skill.id] && gameState.skills[skill.id].active;
+                if (!gameState.skills[skill.id]) {
+                    gameState.skills[skill.id] = { cooldown: 0, active: false, remaining: 0 };
+                }
+                const isAvailable = skill.condition() && gameState.skills[skill.id].cooldown <= 0;
+                const isOnCooldown = gameState.skills[skill.id].cooldown > 0;
+                const isActive = gameState.skills[skill.id].active;
 
                 if (isAvailable) card.classList.add('available');
                 if (isOnCooldown) card.classList.add('cooldown');
@@ -3716,6 +3685,9 @@
         function useSkill(skillId) {
             const skill = skills.find(s => s.id === skillId);
             if (!skill) return;
+            if (!gameState.skills[skillId]) {
+                gameState.skills[skillId] = { cooldown: 0, active: false, remaining: 0 };
+            }
             if (gameState.skills[skillId].cooldown > 0) return;
             if (gameState.skills[skillId].active) return;
 
