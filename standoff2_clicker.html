@@ -6,14 +6,11 @@
     <title>🧩 Standoff 2 Clicker • Мир 4 (Tetris)</title>
 
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js">
-    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <style>
         /* ===== БАЗОВЫЕ СТИЛИ ===== */
@@ -1558,7 +1555,6 @@
             z-index: 1;
         }
 
-        /* Модальное окно уровня - скрыто навсегда */
         .level-up-modal {
             display: none !important;
         }
@@ -1849,7 +1845,6 @@
                     color: #ff6b6b;
                 }
 
-        /* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ===== */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -2155,7 +2150,6 @@
                 font-size: 0.9rem;
             }
 
-        /* ===== КОМБО И СУНДУК ===== */
         .combo-display {
             position: fixed;
             bottom: 100px;
@@ -2323,7 +2317,6 @@
                 color: #888;
             }
 
-        /* ===== ЛОГИН ===== */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -2875,7 +2868,6 @@
             }
         }
 
-        /* Скрываем блок удачи (он больше не используется) */
         .luck-timer {
             display: none !important;
         }
@@ -2960,7 +2952,6 @@
 
         <!-- КНОПКА СУНДУКА -->
         <div class="chest-btn" id="chestBtn" onclick="openChest()">🎁</div>
-        <!-- Блок удачи убран -->
         <!-- КОМБО-СЧЁТЧИК -->
         <div class="combo-display" id="comboDisplay">
             🔥 <span class="combo-count" id="comboCount">0</span>x комбо!
@@ -3086,6 +3077,8 @@
             appId: "1:263928872221:web:f659b69d523ab50c9df5f4",
             measurementId: "G-R525VXEN82"
         };
+
+        const ADMIN_USERNAME = 'mikhaigr';
 
         // ==================== КОНСТАНТЫ МИРОВ ====================
         const WORLD2_ENTRY_COST = 100 * 1e18; // 100 Qi
@@ -3520,6 +3513,8 @@
             miniGameActive = false;
             miniGameModal.classList.remove('active');
             gameInput.disabled = true;
+            gameInput.value = '';
+            gameFeedback.textContent = '';
         }
 
         // ==================== ИНВЕСТИЦИИ ====================
@@ -3542,15 +3537,15 @@
                 const div = document.createElement('div');
                 div.className = 'investment-item';
                 div.innerHTML = `
-                                <div class="inv-info">
-                                    <div class="inv-name">${inv.name}</div>
-                                    <div class="inv-desc">${inv.desc} | +${inv.incomePerLevel}$/сек за уровень</div>
-                                </div>
-                                <div class="inv-level">Ур. ${level}/${inv.maxLevel}</div>
-                                <button class="inv-btn" ${!canBuy ? 'disabled' : ''} onclick="buyInvestment('${inv.id}')">
-                                    Купить $${formatNumber(cost)}
-                                </button>
-                            `;
+                                    <div class="inv-info">
+                                        <div class="inv-name">${inv.name}</div>
+                                        <div class="inv-desc">${inv.desc} | +${inv.incomePerLevel}$/сек за уровень</div>
+                                    </div>
+                                    <div class="inv-level">Ур. ${level}/${inv.maxLevel}</div>
+                                    <button class="inv-btn" ${!canBuy ? 'disabled' : ''} onclick="buyInvestment('${inv.id}')">
+                                        Купить $${formatNumber(cost)}
+                                    </button>
+                                `;
                 investmentsList.appendChild(div);
             });
         }
@@ -3689,11 +3684,11 @@
                         div.className = 'leaderboard-item';
                         const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
                         div.innerHTML = `
-                                        <span class="lb-rank">${medal}</span>
-                                        <span class="lb-name">${p.name}</span>
-                                        <span class="lb-score">${formatNumber(p.balance)}$</span>
-                                        <span style="font-size:0.7rem; color:#888;">👑${p.prestige}</span>
-                                    `;
+                                            <span class="lb-rank">${medal}</span>
+                                            <span class="lb-name">${p.name}</span>
+                                            <span class="lb-score">${formatNumber(p.balance)}$</span>
+                                            <span style="font-size:0.7rem; color:#888;">👑${p.prestige}</span>
+                                        `;
                         leaderboardList.appendChild(div);
                     });
                 })
@@ -3739,77 +3734,12 @@
                         renderSkins();
                     }
                 }
-            }, {
-                title: '🎯 Бонусная мини-игра!',
-                desc: 'Угадай число и получи x3 доход на 60 сек!',
-                effect: () => {
-                    startMiniGameWithBonus();
-                }
             }];
 
             const event = events[Math.floor(Math.random() * events.length)];
             event.effect();
             updateUI();
             debouncedSaveToCloud();
-        }
-
-        function startMiniGameWithBonus() {
-            gameSecretNumber = Math.floor(Math.random() * 100) + 1;
-            gameAttemptsLeft = 10;
-            gameWon = false;
-            miniGameActive = true;
-            gameFeedback.textContent = '🎯 Угадай число от 1 до 100! Приз: x3 доход на 60 сек!';
-            gameFeedback.style.color = '#ffd700';
-            gameAttempts.textContent = `Попыток: 0/10`;
-            gameInput.value = '';
-            gameInput.disabled = false;
-            miniGameModal.classList.add('active');
-            gameInput.focus();
-
-            const oldGuess = guessNumber;
-            guessNumber = function () {
-                if (!miniGameActive || gameWon) return;
-                const guess = parseInt(gameInput.value);
-                if (isNaN(guess) || guess < 1 || guess > 100) {
-                    gameFeedback.textContent = '⚠️ Введите число от 1 до 100!';
-                    gameFeedback.style.color = '#ff6b6b';
-                    return;
-                }
-
-                gameAttemptsLeft--;
-                gameAttempts.textContent = `Попыток: ${10 - gameAttemptsLeft}/10`;
-
-                if (guess === gameSecretNumber) {
-                    gameWon = true;
-                    gameFeedback.textContent = `🎉 ПРАВИЛЬНО! x3 доход на 60 сек!`;
-                    gameFeedback.style.color = '#4ade80';
-                    gameInput.disabled = true;
-                    gameState.multiplier *= 3;
-                    gameState.gamesWon = (gameState.gamesWon || 0) + 1;
-                    setTimeout(() => {
-                        gameState.multiplier /= 3;
-                        updateUI();
-                    }, 60000);
-                    updateUI();
-                    debouncedSaveToCloud();
-                    setTimeout(() => { closeMiniGame(); }, 3000);
-                    return;
-                }
-
-                if (gameAttemptsLeft <= 0) {
-                    gameFeedback.textContent = `😢 Проигрыш! Число было ${gameSecretNumber}.`;
-                    gameFeedback.style.color = '#ff6b6b';
-                    gameInput.disabled = true;
-                    setTimeout(() => { closeMiniGame(); }, 2000);
-                    return;
-                }
-
-                const hint = guess < gameSecretNumber ? '📈 Больше' : '📉 Меньше';
-                gameFeedback.textContent = `${guess}? ${hint}. Осталось попыток: ${gameAttemptsLeft}`;
-                gameFeedback.style.color = '#ffd700';
-                gameInput.value = '';
-                gameInput.focus();
-            };
         }
 
         // ==================== ОСТАЛЬНАЯ ЛОГИКА ====================
@@ -3821,17 +3751,47 @@
 
         let firebaseApp, firebaseDb, firebaseAnalytics = null,
             firebaseReady = false;
-        try {
-            firebaseApp = firebase.initializeApp(firebaseConfig);
-            firebaseDb = firebase.database();
-            if (firebase.analytics && firebase.analytics.isSupported()) firebaseAnalytics = firebase.analytics();
-            firebaseReady = true;
-            updateSyncStatus('syncing', 'Подключение...');
-        } catch (e) {
-            console.error(e);
-            updateSyncStatus('offline', 'Ошибка подключения');
-            firebaseReady = false;
+
+        function initFirebase() {
+            try {
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                firebaseDb = firebase.database();
+                if (firebase.analytics && firebase.analytics.isSupported()) firebaseAnalytics = firebase.analytics();
+                firebaseReady = true;
+                updateSyncStatus('syncing', 'Подключение...');
+                ensureAdminExists();
+            } catch (e) {
+                console.error('Firebase init error:', e);
+                updateSyncStatus('offline', 'Ошибка подключения');
+                firebaseReady = false;
+            }
         }
+
+        async function ensureAdminExists() {
+            if (!firebaseReady || !firebaseDb) return;
+            try {
+                const adminKey = sanitizeKey(ADMIN_USERNAME);
+                const snapshot = await firebaseDb.ref('users/' + adminKey).once('value');
+                if (!snapshot.exists()) {
+                    const adminData = getDefaultGameState();
+                    adminData.username = ADMIN_USERNAME;
+                    adminData.password = '27102015';
+                    await firebaseDb.ref('users/' + adminKey).set(adminData);
+                    console.log('✅ Администратор создан: ' + ADMIN_USERNAME);
+                } else {
+                    const data = snapshot.val();
+                    if (!data.password) {
+                        await firebaseDb.ref('users/' + adminKey + '/password').set('27102015');
+                        console.log('✅ Пароль добавлен для ' + ADMIN_USERNAME);
+                    }
+                }
+            } catch (e) {
+                console.error('Ошибка создания админа:', e);
+            }
+        }
+
+        // Firebase инициализация
+        initFirebase();
 
         function getDefaultGameState() {
             return {
@@ -3855,7 +3815,9 @@
                 playTimeSeconds: 0,
                 skills: {
                     speedBoost: { cooldown: 0, active: false, remaining: 0 },
-                    megaClick: { cooldown: 0, active: false, remaining: 0 }
+                    megaClick: { cooldown: 0, active: false, remaining: 0 },
+                    goldenTouch: { cooldown: 0, active: false, remaining: 0 },
+                    luckyStrike: { cooldown: 0, active: false, remaining: 0 }
                 },
                 chestsOpened: 0,
                 gamesWon: 0,
@@ -4088,69 +4050,23 @@
                 desc: `+${Math.floor(5 * Math.pow(1.5, idx) * 3)}$/сек (x9)`,
             }));
 
-            // Добавляем перерождения (копируем из мира 3, умножаем цены на 2, значения оставляем как у мира 3 * 3?)
-            // Но перерождения обычно не умножают value, оставляем как есть
+            // Добавляем перерождения
             const rebirthItems = [
-                {
-                    id: 'w4_rebirth_2', name: 'Респавн x2', icon: '🔄', cost: 2000 * 2, type: 'rebirth', value: 2,
-                    desc: 'Сброс прогресса. Доход x2'
-                },
-                {
-                    id: 'w4_rebirth_3', name: 'Респавн x3', icon: '🌀', cost: 8000 * 2, type: 'rebirth', value: 3,
-                    desc: 'Сброс прогресса. Доход x3'
-                },
-                {
-                    id: 'w4_rebirth_4', name: 'Респавн x4', icon: '⚡', cost: 35000 * 2, type: 'rebirth', value: 4,
-                    desc: 'Сброс прогресса. Доход x4'
-                },
-                {
-                    id: 'w4_rebirth_5', name: 'Респавн x5', icon: '💎', cost: 150000 * 2, type: 'rebirth', value: 5,
-                    desc: 'Сброс прогресса. Доход x5'
-                },
-                {
-                    id: 'w4_rebirth_6', name: 'Респавн x6', icon: '🔮', cost: 800000 * 2, type: 'rebirth', value: 6,
-                    desc: 'Сброс прогресса. Доход x6'
-                },
-                {
-                    id: 'w4_rebirth_8', name: 'Респавн x8', icon: '🌟', cost: 3500000 * 2, type: 'rebirth', value: 8,
-                    desc: 'Сброс прогресса. Доход x8'
-                },
-                {
-                    id: 'w4_rebirth_10', name: 'Респавн x10', icon: '💫', cost: 15000000 * 2, type: 'rebirth', value: 10,
-                    desc: 'Сброс прогресса. Доход x10'
-                },
-                {
-                    id: 'w4_rebirth_15', name: 'Респавн x15', icon: '🌠', cost: 70000000 * 2, type: 'rebirth', value: 15,
-                    desc: 'Сброс прогресса. Доход x15'
-                },
-                {
-                    id: 'w4_rebirth_20', name: 'Респавн x20', icon: '🎆', cost: 300000000 * 2, type: 'rebirth', value: 20,
-                    desc: 'Сброс прогресса. Доход x20'
-                },
-                {
-                    id: 'w4_rebirth_30', name: 'Респавн x30', icon: '🎇', cost: 1500000000 * 2, type: 'rebirth', value: 30,
-                    desc: 'Сброс прогресса. Доход x30'
-                },
-                {
-                    id: 'w4_rebirth_50', name: 'Респавн x50', icon: '✨', cost: 8000000000 * 2, type: 'rebirth', value: 50,
-                    desc: 'Сброс прогресса. Доход x50'
-                },
-                {
-                    id: 'w4_rebirth_75', name: 'Респавн x75', icon: '💥', cost: 40000000000 * 2, type: 'rebirth', value: 75,
-                    desc: 'Сброс прогресса. Доход x75'
-                },
-                {
-                    id: 'w4_rebirth_100', name: 'Респавн x100', icon: '🔥', cost: 250000000000 * 2, type: 'rebirth',
-                    value: 100, desc: 'Сброс прогресса. Доход x100'
-                },
-                {
-                    id: 'w4_rebirth_150', name: 'Респавн x150', icon: '⚡', cost: 1000000000000 * 2, type: 'rebirth',
-                    value: 150, desc: 'Сброс прогресса. Доход x150'
-                },
-                {
-                    id: 'w4_rebirth_200', name: 'Респавн x200', icon: '💎', cost: 5000000000000 * 2, type: 'rebirth',
-                    value: 200, desc: 'Сброс прогресса. Доход x200'
-                },
+                { id: 'w4_rebirth_2', name: 'Респавн x2', icon: '🔄', cost: 2000 * 2, type: 'rebirth', value: 2, desc: 'Сброс прогресса. Доход x2' },
+                { id: 'w4_rebirth_3', name: 'Респавн x3', icon: '🌀', cost: 8000 * 2, type: 'rebirth', value: 3, desc: 'Сброс прогресса. Доход x3' },
+                { id: 'w4_rebirth_4', name: 'Респавн x4', icon: '⚡', cost: 35000 * 2, type: 'rebirth', value: 4, desc: 'Сброс прогресса. Доход x4' },
+                { id: 'w4_rebirth_5', name: 'Респавн x5', icon: '💎', cost: 150000 * 2, type: 'rebirth', value: 5, desc: 'Сброс прогресса. Доход x5' },
+                { id: 'w4_rebirth_6', name: 'Респавн x6', icon: '🔮', cost: 800000 * 2, type: 'rebirth', value: 6, desc: 'Сброс прогресса. Доход x6' },
+                { id: 'w4_rebirth_8', name: 'Респавн x8', icon: '🌟', cost: 3500000 * 2, type: 'rebirth', value: 8, desc: 'Сброс прогресса. Доход x8' },
+                { id: 'w4_rebirth_10', name: 'Респавн x10', icon: '💫', cost: 15000000 * 2, type: 'rebirth', value: 10, desc: 'Сброс прогресса. Доход x10' },
+                { id: 'w4_rebirth_15', name: 'Респавн x15', icon: '🌠', cost: 70000000 * 2, type: 'rebirth', value: 15, desc: 'Сброс прогресса. Доход x15' },
+                { id: 'w4_rebirth_20', name: 'Респавн x20', icon: '🎆', cost: 300000000 * 2, type: 'rebirth', value: 20, desc: 'Сброс прогресса. Доход x20' },
+                { id: 'w4_rebirth_30', name: 'Респавн x30', icon: '🎇', cost: 1500000000 * 2, type: 'rebirth', value: 30, desc: 'Сброс прогресса. Доход x30' },
+                { id: 'w4_rebirth_50', name: 'Респавн x50', icon: '✨', cost: 8000000000 * 2, type: 'rebirth', value: 50, desc: 'Сброс прогресса. Доход x50' },
+                { id: 'w4_rebirth_75', name: 'Респавн x75', icon: '💥', cost: 40000000000 * 2, type: 'rebirth', value: 75, desc: 'Сброс прогресса. Доход x75' },
+                { id: 'w4_rebirth_100', name: 'Респавн x100', icon: '🔥', cost: 250000000000 * 2, type: 'rebirth', value: 100, desc: 'Сброс прогресса. Доход x100' },
+                { id: 'w4_rebirth_150', name: 'Респавн x150', icon: '⚡', cost: 1000000000000 * 2, type: 'rebirth', value: 150, desc: 'Сброс прогресса. Доход x150' },
+                { id: 'w4_rebirth_200', name: 'Респавн x200', icon: '💎', cost: 5000000000000 * 2, type: 'rebirth', value: 200, desc: 'Сброс прогресса. Доход x200' },
             ];
 
             return [...clickItems, ...incomeItems, ...rebirthItems];
@@ -4190,12 +4106,12 @@
             duration: 5,
             effect: () => {
                 let clicks = 0;
-                const originalPower = gameState.clickPower;
-                gameState.clickPower *= 10;
+                const boost = gameState.clickPower * 9;
+                gameState.clickPower += boost;
                 const handler = () => {
                     clicks++;
                     if (clicks >= 5) {
-                        gameState.clickPower = originalPower;
+                        gameState.clickPower = Math.max(1, gameState.clickPower - boost);
                         document.getElementById('clickBtn').removeEventListener('click', handler);
                         updateUI();
                     }
@@ -4203,7 +4119,7 @@
                 document.getElementById('clickBtn').addEventListener('click', handler);
                 setTimeout(() => {
                     if (clicks < 5) {
-                        gameState.clickPower = originalPower;
+                        gameState.clickPower = Math.max(1, gameState.clickPower - boost);
                         document.getElementById('clickBtn').removeEventListener('click', handler);
                         updateUI();
                     }
@@ -4218,11 +4134,10 @@
             cooldown: 45,
             duration: 15,
             effect: () => {
-                const originalMultiplier = gameState.multiplier;
                 gameState.multiplier *= 3;
                 multiplierBadge.classList.add('active-skill');
                 setTimeout(() => {
-                    gameState.multiplier = originalMultiplier;
+                    gameState.multiplier /= 3;
                     multiplierBadge.classList.remove('active-skill');
                     updateUI();
                 }, 15000);
@@ -4259,11 +4174,15 @@
         function renderSkills() {
             skillsGrid.innerHTML = '';
             skills.forEach(skill => {
+                if (!gameState.skills) gameState.skills = {};
+                if (!gameState.skills[skill.id]) {
+                    gameState.skills[skill.id] = { cooldown: 0, active: false, remaining: 0 };
+                }
                 const card = document.createElement('div');
                 card.className = 'skill-card';
-                const isAvailable = skill.condition() && (!gameState.skills[skill.id] || gameState.skills[skill.id].cooldown <= 0);
-                const isOnCooldown = gameState.skills[skill.id] && gameState.skills[skill.id].cooldown > 0;
-                const isActive = gameState.skills[skill.id] && gameState.skills[skill.id].active;
+                const isAvailable = skill.condition() && (gameState.skills[skill.id].cooldown <= 0);
+                const isOnCooldown = gameState.skills[skill.id].cooldown > 0;
+                const isActive = gameState.skills[skill.id].active;
 
                 if (isAvailable) card.classList.add('available');
                 if (isOnCooldown) card.classList.add('cooldown');
@@ -4273,14 +4192,14 @@
                 const activeText = isActive ? '⚡ Активирован!' : '';
 
                 card.innerHTML = `
-                                <div class="skill-icon">${skill.icon}</div>
-                                <div class="skill-name">${skill.name}</div>
-                                <div class="skill-desc">${skill.desc}</div>
-                                <button class="skill-btn" ${!isAvailable ? 'disabled' : ''} onclick="useSkill('${skill.id}')">
-                                    ${isActive ? '⏳ Активен' : isOnCooldown ? `⏳ ${Math.ceil(gameState.skills[skill.id].cooldown)}с` : '▶️ Использовать'}
-                                </button>
-                                <div class="skill-cooldown">${cooldownText || activeText}</div>
-                            `;
+                                    <div class="skill-icon">${skill.icon}</div>
+                                    <div class="skill-name">${skill.name}</div>
+                                    <div class="skill-desc">${skill.desc}</div>
+                                    <button class="skill-btn" ${!isAvailable ? 'disabled' : ''} onclick="useSkill('${skill.id}')">
+                                        ${isActive ? '⏳ Активен' : isOnCooldown ? `⏳ ${Math.ceil(gameState.skills[skill.id].cooldown)}с` : '▶️ Использовать'}
+                                    </button>
+                                    <div class="skill-cooldown">${cooldownText || activeText}</div>
+                                `;
                 skillsGrid.appendChild(card);
             });
         }
@@ -4288,6 +4207,10 @@
         function useSkill(skillId) {
             const skill = skills.find(s => s.id === skillId);
             if (!skill) return;
+            if (!gameState.skills) gameState.skills = {};
+            if (!gameState.skills[skillId]) {
+                gameState.skills[skillId] = { cooldown: 0, active: false, remaining: 0 };
+            }
             if (gameState.skills[skillId].cooldown > 0) return;
             if (gameState.skills[skillId].active) return;
 
@@ -4454,6 +4377,17 @@
         }
 
         async function handleLogin() {
+            // Wait for Firebase if not ready
+            let attempts = 0;
+            while (!firebaseReady && attempts < 50) {
+                await new Promise(r => setTimeout(r, 100));
+                attempts++;
+            }
+            if (!firebaseReady || !firebaseDb) {
+                loginError.textContent = 'Сервер недоступен, попробуйте позже';
+                return;
+            }
+
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
@@ -4588,7 +4522,15 @@
 
         async function tryAutoLogin() {
             const lastUser = localStorage.getItem('lastUsername');
-            if (!lastUser || !firebaseReady || !firebaseDb) return false;
+            if (!lastUser) return false;
+
+            // Wait for Firebase to be ready
+            let attempts = 0;
+            while (!firebaseReady && attempts < 50) {
+                await new Promise(r => setTimeout(r, 100));
+                attempts++;
+            }
+            if (!firebaseReady || !firebaseDb) return false;
 
             try {
                 const key = sanitizeKey(lastUser);
@@ -4632,6 +4574,11 @@
         function logout() {
             if (currentUser && firebaseReady) saveToCloud();
             if (playTimeInterval) clearInterval(playTimeInterval);
+            if (chestTimer) clearInterval(chestTimer);
+            if (skillTimers) {
+                Object.values(skillTimers).forEach(t => clearInterval(t));
+                skillTimers = {};
+            }
             currentUser = '';
             gameState = getDefaultGameState();
             pendingRebirthItem = null;
@@ -4713,7 +4660,6 @@
                         if (data.password === undefined) {
                             data.password = 'temp123';
                         }
-                        console.log('Обновление данных для', target, data);
                         return firebaseDb.ref('users/' + key).set(data)
                             .then(() => { resolve(data); })
                             .catch(err => { reject('Ошибка записи: ' + err.message); });
@@ -4732,6 +4678,10 @@
         }
 
         async function adminSetMoney() {
+            if (!firebaseReady || !firebaseDb) {
+                showAdminFeedback('❌ Сервер недоступен', true);
+                return;
+            }
             const amount = parseInt(adminMoneyAmount.value, 10);
             if (isNaN(amount) || amount < 0) {
                 showAdminFeedback('❌ Введите корректное число', true);
@@ -4757,6 +4707,10 @@
         }
 
         async function adminSetClickPower() {
+            if (!firebaseReady || !firebaseDb) {
+                showAdminFeedback('❌ Сервер недоступен', true);
+                return;
+            }
             const amount = parseInt(adminClickPowerAmount.value, 10);
             if (isNaN(amount) || amount < 0) {
                 showAdminFeedback('❌ Введите корректное число', true);
@@ -4782,6 +4736,10 @@
         }
 
         async function adminSetIncome() {
+            if (!firebaseReady || !firebaseDb) {
+                showAdminFeedback('❌ Сервер недоступен', true);
+                return;
+            }
             const amount = parseInt(adminIncomeAmount.value, 10);
             if (isNaN(amount) || amount < 0) {
                 showAdminFeedback('❌ Введите корректное число', true);
@@ -4807,6 +4765,10 @@
         }
 
         async function adminResetUser() {
+            if (!firebaseReady || !firebaseDb) {
+                showAdminFeedback('❌ Сервер недоступен', true);
+                return;
+            }
             const targetNick = adminTargetNick.value.trim();
             if (!targetNick) {
                 showAdminFeedback('❌ Укажите никнейм игрока в поле "Игрок"', true);
@@ -5394,28 +5356,6 @@
 
         // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         async function init() {
-            if (firebaseReady && firebaseDb) {
-                try {
-                    const adminKey = sanitizeKey('mikhaigr');
-                    const snapshot = await firebaseDb.ref('users/' + adminKey).once('value');
-                    if (!snapshot.exists()) {
-                        const adminData = getDefaultGameState();
-                        adminData.username = 'mikhaigr';
-                        adminData.password = '27102015';
-                        await firebaseDb.ref('users/' + adminKey).set(adminData);
-                        console.log('✅ Администратор создан: mikhaigr');
-                    } else {
-                        const data = snapshot.val();
-                        if (!data.password) {
-                            await firebaseDb.ref('users/' + adminKey + '/password').set('27102015');
-                            console.log('✅ Пароль добавлен для mikhaigr');
-                        }
-                    }
-                } catch (e) {
-                    console.error('Ошибка создания админа:', e);
-                }
-            }
-
             const autoLogged = await tryAutoLogin();
             if (!autoLogged) {
                 loginOverlay.style.display = 'flex';
@@ -5452,8 +5392,6 @@
                     if (miniGameActive) closeMiniGame();
                 }
             });
-
-            // Удаляем блок удачи из DOM (он скрыт CSS)
         }
 
         init();
@@ -5461,16 +5399,16 @@
         // ==================== ДОБАВЛЯЕМ СТИЛИ ДЛЯ АНИМАЦИЙ ШАРДОВ ====================
         const styleSheet = document.createElement('style');
         styleSheet.textContent = `
-                        @keyframes shardFly {
-                            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
-                            100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(720deg); opacity: 0; }
-                        }
-                        .crystal-shard {
-                            position: absolute;
-                            font-size: 1.2rem;
-                            animation: shardFly 0.8s ease-out forwards;
-                        }
-                    `;
+                            @keyframes shardFly {
+                                0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+                                100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(720deg); opacity: 0; }
+                            }
+                            .crystal-shard {
+                                position: absolute;
+                                font-size: 1.2rem;
+                                animation: shardFly 0.8s ease-out forwards;
+                            }
+                        `;
         document.head.appendChild(styleSheet);
     </script>
 </body>
