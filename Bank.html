@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Торговая платформа — Firebase</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <style>
+        /* ===== Базовые переменные ===== */
+        :root {
+            --bg-primary: #f6f9fc;
+            --bg-secondary: #e9f1f8;
+            --bg-card: rgba(255, 255, 255, 0.75);
+            --bg-card-hover: rgba(255, 255, 255, 0.9);
+            --text-primary: #0b1c2b;
+            --text-secondary: #4a5c6b;
+            --text-muted: #5f7385;
+            --border-color: rgba(180, 200, 215, 0.3);
+            --shadow-color: rgba(0, 20, 30, 0.15);
+            --accent: #1a3b56;
+            --accent-hover: #0f2a3f;
+            --success: #1f8b4c;
+            --success-hover: #166a39;
+            --danger: #b13e3e;
+            --danger-hover: #8f2f2f;
+            --warning: #e6a020;
+            --warning-hover: #c98a1a;
+            --radius: 2.5rem;
+            --radius-sm: 1.5rem;
+            --font-size: 16px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --transition: all 0.25s ease;
+        }
+
+        /* ===== Тёмная тема ===== */
+        [data-theme="dark"] {
+            --bg-primary: #0d1b2a;
+            --bg-secondary: #1b2d3f;
+            --bg-card: rgba(25, 45, 65, 0.85);
+            --bg-card-hover: rgba(35, 55, 80, 0.9);
+            --text-primary: #e8edf2;
+            --text-secondary: #a0b8cc;
+            --text-muted: #7a8fa0;
+            --border-color: rgba(100, 140, 180, 0.25);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --accent: #3a7ca5;
+            --accent-hover: #4a8cb5;
+        }
+
+        [data-theme="dark"] .balance-block {
+            background: linear-gradient(135deg, #1a3b56 0%, #0a1a2a 100%);
+        }
+
+        [data-theme="dark"] .stock-item {
+            border-color: rgba(100, 140, 180, 0.15);
+        }
+
+        [data-theme="dark"] .history-list li {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(100, 140, 180, 0.1);
+        }
+
+        [data-theme="dark"] .shop-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(100, 140, 180, 0.15);
+        }
+
+        [data-theme="dark"] .input-group input {
+            background: rgba(255, 255, 255, 0.08);
+            color: #e8edf2;
+            border-color: rgba(100, 140, 180, 0.3);
+        }
+
+        [data-theme="dark"] .input-group input:focus {
+            border-color: #3a7ca5;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        [data-theme="dark"] .submit-btn.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #e8edf2;
+            border-color: rgba(100, 140, 180, 0.2);
+        }
+
+        [data-theme="dark"] .submit-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .tabs {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        [data-theme="dark"] .tab-btn {
+            color: #a0b8cc;
+        }
+
+        [data-theme="dark"] .tab-btn.active {
+            background: rgba(255, 255, 255, 0.12);
+            color: #e8edf2;
+        }
+
+        /* ===== Общие стили ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-family);
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            padding: 1.5rem;
+            font-size: var(--font-size);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ===== Карточки ===== */
+        .auth-card, .dashboard-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: 0 25px 50px -12px var(--shadow-color),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 520px;
+            padding: 2rem 2rem 2.5rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .dashboard-card {
+            max-width: 620px;
+        }
+
+        /* ===== Заголовки ===== */
+        .auth-header, .dashboard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h1, .dashboard-header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .auth-header p, .dashboard-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        /* ===== Вкладки ===== */
+        .tabs {
+            display: flex;
+            background: rgba(220, 235, 245, 0.3);
+            border-radius: 3rem;
+            padding: 0.35rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.7rem 0.5rem;
+            border-radius: 2.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.01em;
+        }
+
+        .tab-btn.active {
+            background: var(--bg-card-hover);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            color: var(--text-primary);
+        }
+
+        .tab-btn:not(.active):hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ===== Формы ===== */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .auth-form.hidden {
+            display: none;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.02em;
+            margin-left: 0.25rem;
+        }
+
+        .input-group input {
+            padding: 0.9rem 1.2rem;
+            border-radius: 2.2rem;
+            border: 1.5px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-size: 1rem;
+            transition: var(--transition);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+            box-shadow: 0 4px 12px rgba(43, 111, 158, 0.08);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.95rem;
+        }
+
+        /* ===== Кнопки ===== */
+        .submit-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 3rem;
+            padding: 0.95rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 0.5rem;
+            box-shadow: 0 8px 20px -8px var(--shadow-color);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -10px var(--shadow-color);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn.secondary {
+            background: rgba(220, 235, 245, 0.4);
+            color: var(--text-primary);
+            box-shadow: none;
+            border: 1px solid var(--border-color);
+        }
+
+        .submit-btn.secondary:hover {
+            background: rgba(220, 235, 245, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn.success {
+            background: var(--success);
+            box-shadow: 0 8px 20px -8px rgba(31, 139, 76, 0.3);
+        }
+
+        .submit-btn.success:hover {
+            background: var(--success-hover);
+        }
+
+        .submit-btn.danger {
+            background: var(--danger);
+            box-shadow: 0 8px 20px -8px rgba(177, 62, 62, 0.3);
+        }
+
+        .submit-btn.danger:hover {
+            background: var(--danger-hover);
+        }
+
+        .submit-btn.warning {
+            background: var(--warning);
+            box-shadow: 0 8px 20px -8px rgba(230, 160, 32, 0.3);
+            color: #1a2a3a;
+        }
+
+        .submit-btn.warning:hover {
+            background: var(--warning-hover);
+        }
+
+        .submit-btn.small {
+            padding: 0.35rem 1rem;
+            font-size: 0.75rem;
+            margin-top: 0;
+            border-radius: 2rem;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ===== Футер форм ===== */
+        .form-footer {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .form-footer span {
+            color: var(--accent);
+            font-weight: 500;
+            cursor: default;
+        }
+
+        .form-footer .hint {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== Dashboard ===== */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .user-greeting {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            background: var(--bg-card-hover);
+            padding: 0.4rem 1.2rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .connection-status {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            background: var(--success);
+            color: white;
+        }
+
+        .connection-status.offline {
+            background: var(--danger);
+        }
+
+        /* ===== Баланс ===== */
+        .balance-block {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem 2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 24px var(--shadow-color);
+        }
+
+        .balance-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .balance-amount {
+            font-size: 2.6rem;
+            font-weight: 700;
+            margin-top: 0.2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .balance-amount small {
+            font-size: 1.2rem;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-left: 0.2rem;
+        }
+
+        /* ===== Кредитная строка ===== */
+        .credit-row {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .credit-row .submit-btn {
+            flex: 1;
+            padding: 0.75rem;
+            font-size: 0.95rem;
+            margin-top: 0;
+        }
+
+        /* ===== Магазин акций ===== */
+        .shop-section {
+            background: var(--bg-card-hover);
+            border-radius: var(--radius-sm);
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .shop-section::-webkit-scrollbar {
+            width: 4px;
+        }
+        .shop-section::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+        .shop-section::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 10px;
+        }
+
+        .shop-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.02em;
+        }
+
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stock-item:last-child {
+            border-bottom: none;
+        }
+
+        .stock-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 80px;
+        }
+
+        .stock-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .stock-price-info {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .stock-price-info .cheap { color: var(--success); }
+        .stock-price-info .expensive { color: var(--danger); }
+        .stock-price-info .neutral { color: var(--warning); }
+
+        .stock-actions {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .stock-count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        /* ===== История ===== */
+        .history-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.02em;
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+        .history-list::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 10px;
+        }
+
+        .history-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 1.2rem;
+            background: var(--bg-card-hover);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .history-list li:last-child {
+            border-bottom: none;
+        }
+
+        .history-list .date {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        .history-list .amount.positive {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .history-list .amount.negative {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .history-list .amount.credit {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        /* ===== Кнопки управления ===== */
+        .logout-btn, .settings-toggle {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1.5rem;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .logout-btn:hover, .settings-toggle:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .logout-btn:hover,
+        [data-theme="dark"] .settings-toggle:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ===== Настройки ===== */
+        .settings-panel {
+            background: var(--bg-card-hover);
+            border-radius: var(--radius-sm);
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .settings-panel.open {
+            display: block;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .settings-row label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            min-width: 100px;
+        }
+
+        .settings-row select,
+        .settings-row input[type="range"] {
+            padding: 0.4rem 0.8rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .settings-row select:focus,
+        .settings-row input[type="range"]:focus {
+            border-color: var(--accent);
+        }
+
+        .settings-row input[type="range"] {
+            flex: 1;
+            min-width: 150px;
+            padding: 0;
+            background: transparent;
+            accent-color: var(--accent);
+        }
+
+        .settings-row .range-value {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            min-width: 40px;
+        }
+
+        /* ===== Адаптив ===== */
+        @media (max-width: 480px) {
+            .auth-card, .dashboard-card {
+                padding: 1.5rem 1.25rem 2rem;
+                border-radius: 2rem;
+            }
+            .auth-header h1, .dashboard-header h1 {
+                font-size: 1.6rem;
+            }
+            .tab-btn {
+                font-size: 0.9rem;
+                padding: 0.6rem 0.3rem;
+            }
+            .balance-amount {
+                font-size: 2rem;
+            }
+            .stock-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.4rem;
+            }
+            .stock-actions {
+                justify-content: flex-end;
+            }
+            .credit-row {
+                flex-direction: column;
+            }
+            .settings-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .settings-row label {
+                min-width: auto;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .header-right {
+                justify-content: center;
+            }
+        }
+
+        .auth-card, .dashboard-card {
+            animation: fadeUp 0.5s ease;
+        }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden-page {
+            display: none !important;
+        }
+
+        /* ===== Скроллбар ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.03);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+
+        /* ===== Загрузка ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+        }
+
+        .loading-spinner {
+            background: white;
+            padding: 2rem 3rem;
+            border-radius: 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .loading-spinner .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            margin-right: 0.8rem;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== ЗАГРУЗКА ===== -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <span class="spinner">🔄</span> Подключение к Firebase...
+        </div>
+    </div>
+
+    <!-- ===== ОКНО АВТОРИЗАЦИИ ===== -->
+    <div class="auth-card" id="authPage">
+        <div class="auth-header">
+            <h1>Добро пожаловать</h1>
+            <p>Войдите или создайте аккаунт</p>
+        </div>
+
+        <div class="tabs" role="tablist">
+            <button class="tab-btn active" id="tabLogin" data-form="login">Вход</button>
+            <button class="tab-btn" id="tabRegister" data-form="register">Регистрация</button>
+        </div>
+
+        <div class="form-container">
+            <form class="auth-form" id="loginForm" autocomplete="off">
+                <div class="input-group">
+                    <label for="loginEmail">Электронная почта</label>
+                    <input type="email" id="loginEmail" placeholder="example@mail.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="submit-btn" id="loginBtn">Войти</button>
+                <div class="form-footer">
+                    <span>Нет аккаунта?</span> Перейдите на вкладку «Регистрация»
+                    <span class="hint">🔒 Данные хранятся в Firebase</span>
+                </div>
+            </form>
+
+            <form class="auth-form hidden" id="registerForm" autocomplete="off">
+                <div class="input-group">
+                    <label for="regName">Имя пользователя</label>
+                    <input type="text" id="regName" placeholder="Алексей" required>
+                </div>
+                <div class="input-group">
+                    <label for="regEmail">Электронная почта</label>
+                    <input type="email" id="regEmail" placeholder="example@mail.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="regPassword">Пароль</label>
+                    <input type="password" id="regPassword" placeholder="Не менее 6 символов" required minlength="6">
+                </div>
+                <button type="submit" class="submit-btn" id="registerBtn">Создать аккаунт</button>
+                <div class="form-footer">
+                    <span>Уже зарегистрированы?</span> Перейдите на вкладку «Вход»
+                    <span class="hint">🔒 Данные хранятся в Firebase</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== ПАНЕЛЬ УПРАВЛЕНИЯ ===== -->
+    <div class="dashboard-card hidden-page" id="dashboardPage">
+        <div class="dashboard-header">
+            <h1>📈 Торги</h1>
+            <div class="header-right">
+                <span class="user-greeting" id="userNameDisplay">Алексей</span>
+                <span class="connection-status" id="connectionStatus">● Online</span>
+                <button class="settings-toggle" id="settingsToggle">⚙️</button>
+                <button class="logout-btn" id="logoutBtn">Выйти</button>
+            </div>
+        </div>
+
+        <!-- Настройки -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-row">
+                <label>Тема</label>
+                <select id="themeSelect">
+                    <option value="light">☀️ Светлая</option>
+                    <option value="dark">🌙 Тёмная</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <label>Размер шрифта</label>
+                <input type="range" id="fontSizeRange" min="12" max="22" value="16" step="1">
+                <span class="range-value" id="fontSizeValue">16px</span>
+            </div>
+            <div class="settings-row">
+                <label>Валюта</label>
+                <select id="currencySelect">
+                    <option value="$">$ USD</option>
+                    <option value="€">€ EUR</option>
+                    <option value="£">£ GBP</option>
+                    <option value="₽">₽ RUB</option>
+                    <option value="¥">¥ JPY</option>
+                </select>
+            </div>
+            <div class="settings-row" style="border-top:1px solid var(--border-color); padding-top:0.8rem; margin-top:0.3rem;">
+                <button class="submit-btn secondary small" id="resetDataBtn" style="margin:0;">🔄 Сбросить данные</button>
+                <span style="font-size:0.75rem; color:var(--text-muted);">(удалит ваши данные из Firebase)</span>
+            </div>
+        </div>
+
+        <!-- Баланс -->
+        <div class="balance-block">
+            <div class="balance-label">💰 Баланс</div>
+            <div class="balance-amount" id="balanceDisplay">0 <small>$</small></div>
+        </div>
+
+        <!-- Кредит -->
+        <div class="credit-row">
+            <button class="submit-btn warning" id="takeCreditBtn">🏦 Взять кредит</button>
+            <button class="submit-btn secondary" id="repayCreditBtn">📤 Погасить кредит</button>
+        </div>
+
+        <!-- Магазин акций -->
+        <div class="shop-section">
+            <div class="shop-title">📊 Магазин акций (<span id="stockCount">0</span>)</div>
+            <div id="stocksContainer"></div>
+        </div>
+
+        <!-- История -->
+        <div class="history-title">📋 История операций</div>
+        <ul class="history-list" id="historyList">
+            <li><span>Загрузка данных...</span> <span class="amount positive">+0 $</span> <span class="date">сейчас</span></li>
+        </ul>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            // ===== КОНФИГУРАЦИЯ FIREBASE =====
+            const firebaseConfig = {
+                databaseURL: "https://bank-7766b-default-rtdb.europe-west1.firebasedatabase.app/"
+            };
+
+            // Инициализация Firebase
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const database = firebase.database();
+
+            // ===== МНОГО АКЦИЙ =====
+            const STOCK_NAMES = [
+                'AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'NVDA', 'META', 'NFLX',
+                'AMD', 'INTC', 'IBM', 'ORCL', 'CSCO', 'ADBE', 'CRM', 'QCOM',
+                'TXN', 'AVGO', 'ASML', 'SNPS', 'CDNS', 'KLAC', 'LRCX', 'MU',
+                'SWKS', 'QRVO', 'NXPI', 'STX', 'WDC', 'MRVL', 'ADI', 'MCHP',
+                'MPWR', 'ON', 'TER', 'AMAT', 'ENTG', 'LAM', 'VSH', 'SSTI'
+            ];
+
+            const STOCK_CONFIG = STOCK_NAMES.map((name, i) => ({
+                name: name,
+                startPrice: Math.round((Math.random() * 20 + 2) * 100) / 100
+            }));
+
+            // ===== Элементы =====
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const authPage = document.getElementById('authPage');
+            const dashboardPage = document.getElementById('dashboardPage');
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            const historyList = document.getElementById('historyList');
+            const stocksContainer = document.getElementById('stocksContainer');
+            const stockCount = document.getElementById('stockCount');
+            const takeCreditBtn = document.getElementById('takeCreditBtn');
+            const repayCreditBtn = document.getElementById('repayCreditBtn');
+            const connectionStatus = document.getElementById('connectionStatus');
+
+            const settingsToggle = document.getElementById('settingsToggle');
+            const settingsPanel = document.getElementById('settingsPanel');
+            const themeSelect = document.getElementById('themeSelect');
+            const fontSizeRange = document.getElementById('fontSizeRange');
+            const fontSizeValue = document.getElementById('fontSizeValue');
+            const currencySelect = document.getElementById('currencySelect');
+            const resetDataBtn = document.getElementById('resetDataBtn');
+
+            // ===== Состояние =====
+            let balance = 0;
+            let creditDebt = 0;
+            let stocks = [];
+            let priceInterval = null;
+            let isLoggedIn = false;
+            let history = [];
+            let currentUser = null;
+            let isDataLoaded = false;
+            let isSaving = false;
+
+            // Настройки
+            let settings = {
+                theme: 'light',
+                fontSize: 16,
+                currency: '$'
+            };
+
+            // ===== Функции форматирования =====
+            function formatMoney(amount) {
+                const currency = settings.currency || '$';
+                if (Number.isInteger(amount)) {
+                    return amount.toString() + ' ' + currency;
+                }
+                return amount.toFixed(2) + ' ' + currency;
+            }
+
+            function formatMoneyWithSign(amount) {
+                const sign = amount >= 0 ? '+' : '';
+                return sign + formatMoney(amount);
+            }
+
+            // ===== Работа с Firebase =====
+            function getUserRef() {
+                if (!currentUser) return null;
+                return database.ref('users/' + currentUser.uid);
+            }
+
+            function saveDataToFirebase() {
+                if (!currentUser || isSaving) return;
+                isSaving = true;
+
+                const userRef = getUserRef();
+                if (!userRef) {
+                    isSaving = false;
+                    return;
+                }
+
+                const data = {
+                    balance: balance,
+                    creditDebt: creditDebt,
+                    history: history,
+                    stocks: stocks.map(s => ({
+                        name: s.name,
+                        startPrice: s.startPrice || s.price,
+                        count: s.count,
+                        price: s.price
+                    })),
+                    lastUpdated: firebase.database.ServerValue.TIMESTAMP
+                };
+
+                userRef.update(data)
+                    .then(() => {
+                        isSaving = false;
+                        connectionStatus.textContent = '● Online';
+                        connectionStatus.className = 'connection-status';
+                    })
+                    .catch((error) => {
+                        isSaving = false;
+                        console.error('Ошибка сохранения:', error);
+                        connectionStatus.textContent = '⚠ Ошибка';
+                        connectionStatus.className = 'connection-status offline';
+                    });
+            }
+
+            function loadDataFromFirebase(uid) {
+                return new Promise((resolve, reject) => {
+                    const userRef = database.ref('users/' + uid);
+                    userRef.once('value')
+                        .then((snapshot) => {
+                            const data = snapshot.val();
+                            if (data) {
+                                balance = data.balance || 0;
+                                creditDebt = data.creditDebt || 0;
+                                history = data.history || [];
+
+                                if (data.stocks && data.stocks.length > 0) {
+                                    stocks = data.stocks.map(s => ({
+                                        name: s.name,
+                                        price: s.price || s.startPrice || 10,
+                                        startPrice: s.startPrice || s.price || 10,
+                                        count: s.count || 0
+                                    }));
+                                } else {
+                                    stocks = STOCK_CONFIG.map(s => ({
+                                        name: s.name,
+                                        price: s.startPrice,
+                                        startPrice: s.startPrice,
+                                        count: 0
+                                    }));
+                                }
+
+                                resolve(data);
+                            } else {
+                                // Новый пользователь
+                                balance = 0;
+                                creditDebt = 0;
+                                history = [];
+                                stocks = STOCK_CONFIG.map(s => ({
+                                    name: s.name,
+                                    price: s.startPrice,
+                                    startPrice: s.startPrice,
+                                    count: 0
+                                }));
+                                resolve(null);
+                            }
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                });
+            }
+
+            // ===== Функции UI =====
+            function addHistoryItem(text, amount, date = 'только что', type = 'default') {
+                history.push({ text, amount, date, type });
+                renderHistory();
+                saveDataToFirebase();
+            }
+
+            function renderHistory() {
+                historyList.innerHTML = '';
+                const items = [...history].reverse().slice(0, 20);
+                if (items.length === 0) {
+                    historyList.innerHTML = '<li style="justify-content:center; color:var(--text-muted); padding:1.2rem;">История пуста</li>';
+                    return;
+                }
+                items.forEach(item => {
+                    const li = document.createElement('li');
+                    let cls = 'positive';
+                    if (item.type === 'credit') {
+                        cls = 'credit';
+                    } else if (item.amount < 0) {
+                        cls = 'negative';
+                    }
+                    li.innerHTML = `
+                        <span>${item.text}</span>
+                        <span class="amount ${cls}">${formatMoneyWithSign(item.amount)}</span>
+                        <span class="date">${item.date}</span>
+                    `;
+                    historyList.appendChild(li);
+                });
+            }
+
+            function updateBalanceUI() {
+                balanceDisplay.innerHTML = formatMoney(balance);
+            }
+
+            function getStockStatus(price) {
+                if (price < 10) return { text: '▼ очень дешёвая', cls: 'cheap' };
+                if (price < 25) return { text: '▼ дешёвая', cls: 'cheap' };
+                if (price < 60) return { text: '— средняя', cls: 'neutral' };
+                if (price < 150) return { text: '▲ дорогая', cls: 'expensive' };
+                return { text: '▲ очень дорогая', cls: 'expensive' };
+            }
+
+            function renderStocks() {
+                stocksContainer.innerHTML = '';
+                stockCount.textContent = stocks.length;
+                stocks.forEach((stock, index) => {
+                    const status = getStockStatus(stock.price);
+                    const div = document.createElement('div');
+                    div.className = 'stock-item';
+                    div.innerHTML = `
+                        <div class="stock-info">
+                            <span class="stock-name">${stock.name}</span>
+                            <span class="stock-price-info">
+                                ${formatMoney(stock.price)}
+                                <span class="${status.cls}">${status.text}</span>
+                            </span>
+                            <span class="stock-count">в портфеле: ${stock.count} шт.</span>
+                        </div>
+                        <div class="stock-actions">
+                            <button class="submit-btn success small" data-index="${index}" data-action="buy">Купить</button>
+                            <button class="submit-btn danger small" data-index="${index}" data-action="sell">Продать</button>
+                        </div>
+                    `;
+                    stocksContainer.appendChild(div);
+                });
+
+                stocksContainer.querySelectorAll('[data-action="buy"]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        buyStock(parseInt(this.dataset.index));
+                    });
+                });
+                stocksContainer.querySelectorAll('[data-action="sell"]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        sellStock(parseInt(this.dataset.index));
+                    });
+                });
+            }
+
+            function updateStocksUI() {
+                const items = stocksContainer.querySelectorAll('.stock-item');
+                items.forEach((item, index) => {
+                    if (index >= stocks.length) return;
+                    const stock = stocks[index];
+                    const status = getStockStatus(stock.price);
+                    const priceSpan = item.querySelector('.stock-price-info');
+                    const countSpan = item.querySelector('.stock-count');
+                    if (priceSpan) {
+                        priceSpan.innerHTML = `${formatMoney(stock.price)} <span class="${status.cls}">${status.text}</span>`;
+                    }
+                    if (countSpan) {
+                        countSpan.textContent = `в портфеле: ${stock.count} шт.`;
+                    }
+                });
+                saveDataToFirebase();
+            }
+
+            // ===== Генерация цены =====
+            function generateNewPrice(currentPrice) {
+                const change = (Math.random() * 2.3) - 0.8;
+                let newPrice = currentPrice * (1 + change);
+                newPrice = Math.max(0.01, newPrice);
+                return Math.round(newPrice * 100) / 100;
+            }
+
+            function updateAllPrices() {
+                let changed = false;
+                stocks.forEach(stock => {
+                    const newPrice = generateNewPrice(stock.price);
+                    if (newPrice !== stock.price) {
+                        stock.price = newPrice;
+                        changed = true;
+                    }
+                });
+                if (changed) {
+                    updateStocksUI();
+                    const avgPrice = stocks.reduce((sum, s) => sum + s.price, 0) / stocks.length;
+                    addHistoryItem(`Цены обновлены (средняя: ${formatMoney(avgPrice)})`, 0, 'сейчас');
+                }
+            }
+
+            function startPriceTimer() {
+                if (priceInterval) clearInterval(priceInterval);
+                priceInterval = setInterval(updateAllPrices, 3000);
+            }
+
+            function stopPriceTimer() {
+                if (priceInterval) {
+                    clearInterval(priceInterval);
+                    priceInterval = null;
+                }
+            }
+
+            // ===== Торговые операции =====
+            function buyStock(index) {
+                const stock = stocks[index];
+                if (!stock) return;
+                if (balance < stock.price) {
+                    alert(`❌ Недостаточно средств! Баланс: ${formatMoney(balance)}, цена: ${formatMoney(stock.price)}`);
+                    return;
+                }
+                balance -= stock.price;
+                stock.count++;
+                const status = getStockStatus(stock.price);
+                addHistoryItem(`Купил ${stock.name} по ${formatMoney(stock.price)} (${status.text})`, -stock.price, 'сейчас');
+                updateBalanceUI();
+                updateStocksUI();
+                alert(`✅ ${stock.name} куплена! Баланс: ${formatMoney(balance)}, акций: ${stock.count}`);
+            }
+
+            function sellStock(index) {
+                const stock = stocks[index];
+                if (!stock) return;
+                if (stock.count <= 0) {
+                    alert(`❌ У вас нет акций ${stock.name} для продажи!`);
+                    return;
+                }
+                balance += stock.price;
+                stock.count--;
+                addHistoryItem(`Продал ${stock.name} по ${formatMoney(stock.price)}`, stock.price, 'сейчас');
+                updateBalanceUI();
+                updateStocksUI();
+                alert(`✅ ${stock.name} продана! Баланс: ${formatMoney(balance)}, акций: ${stock.count}`);
+            }
+
+            // ===== Кредитные операции =====
+            function takeCredit() {
+                const amount = prompt('Введите сумму кредита (в долларах):', '1000');
+                if (amount === null) return;
+                const num = parseFloat(amount.replace(/\s/g, ''));
+                if (isNaN(num) || num <= 0) {
+                    alert('Пожалуйста, введите положительное число.');
+                    return;
+                }
+                balance += num;
+                creditDebt += num;
+                addHistoryItem(`Взял кредит (${formatMoney(num)})`, num, 'только что', 'credit');
+                updateBalanceUI();
+                alert(`✅ Кредит выдан! Баланс: ${formatMoney(balance)}, долг: ${formatMoney(creditDebt)}`);
+            }
+
+            function repayCredit() {
+                if (creditDebt <= 0) {
+                    alert('❌ У вас нет кредитного долга!');
+                    return;
+                }
+                const maxRepay = Math.min(balance, creditDebt);
+                if (maxRepay <= 0) {
+                    alert(`❌ Недостаточно средств для погашения. Баланс: ${formatMoney(balance)}, долг: ${formatMoney(creditDebt)}`);
+                    return;
+                }
+                const amount = prompt(`Введите сумму для погашения (макс. ${formatMoney(maxRepay)}):`, maxRepay.toString());
+                if (amount === null) return;
+                const num = parseFloat(amount.replace(/\s/g, ''));
+                if (isNaN(num) || num <= 0) {
+                    alert('Пожалуйста, введите положительное число.');
+                    return;
+                }
+                if (num > balance) {
+                    alert(`❌ Недостаточно средств! Баланс: ${formatMoney(balance)}`);
+                    return;
+                }
+                if (num > creditDebt) {
+                    alert(`❌ Сумма превышает долг! Долг: ${formatMoney(creditDebt)}`);
+                    return;
+                }
+                balance -= num;
+                creditDebt -= num;
+                addHistoryItem(`Погасил кредит (${formatMoney(num)})`, -num, 'только что', 'credit');
+                updateBalanceUI();
+                alert(`✅ Кредит погашен! Баланс: ${formatMoney(balance)}, долг: ${formatMoney(creditDebt)}`);
+            }
+
+            // ===== Вход / Выход =====
+            function enterDashboard(user) {
+                currentUser = user;
+                userNameDisplay.textContent = user.displayName || user.email || 'Пользователь';
+                isLoggedIn = true;
+                authPage.classList.add('hidden-page');
+                dashboardPage.classList.remove('hidden-page');
+
+                // Загружаем данные из Firebase
+                loadingOverlay.style.display = 'flex';
+                loadingOverlay.querySelector('.loading-spinner').innerHTML = '<span class="spinner">🔄</span> Загрузка данных...';
+
+                loadDataFromFirebase(user.uid)
+                    .then(() => {
+                        renderStocks();
+                        updateBalanceUI();
+                        renderHistory();
+                        startPriceTimer();
+                        loadingOverlay.style.display = 'none';
+                        isDataLoaded = true;
+                        saveDataToFirebase();
+                    })
+                    .catch((error) => {
+                        console.error('Ошибка загрузки данных:', error);
+                        loadingOverlay.style.display = 'none';
+                        alert('Ошибка загрузки данных. Попробуйте перезагрузить страницу.');
+                    });
+            }
+
+            function logoutUser() {
+                stopPriceTimer();
+                isLoggedIn = false;
+                isDataLoaded = false;
+                currentUser = null;
+                auth.signOut()
+                    .then(() => {
+                        dashboardPage.classList.add('hidden-page');
+                        authPage.classList.remove('hidden-page');
+                        loginForm.reset();
+                        registerForm.reset();
+                        switchTab('login');
+                        connectionStatus.textContent = '● Offline';
+                        connectionStatus.className = 'connection-status offline';
+                    })
+                    .catch((error) => {
+                        console.error('Ошибка выхода:', error);
+                    });
+            }
+
+            // ===== Firebase Auth =====
+            function registerUser(email, password, name) {
+                registerBtn.disabled = true;
+                registerBtn.textContent = '⏳ Создание...';
+
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        return user.updateProfile({ displayName: name })
+                            .then(() => user);
+                    })
+                    .then((user) => {
+                        registerBtn.disabled = false;
+                        registerBtn.textContent = 'Создать аккаунт';
+                        enterDashboard(user);
+                    })
+                    .catch((error) => {
+                        registerBtn.disabled = false;
+                        registerBtn.textContent = 'Создать аккаунт';
+                        alert('Ошибка регистрации: ' + error.message);
+                    });
+            }
+
+            function loginUser(email, password) {
+                loginBtn.disabled = true;
+                loginBtn.textContent = '⏳ Вход...';
+
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        loginBtn.disabled = false;
+                        loginBtn.textContent = 'Войти';
+                        enterDashboard(userCredential.user);
+                    })
+                    .catch((error) => {
+                        loginBtn.disabled = false;
+                        loginBtn.textContent = 'Войти';
+                        alert('Ошибка входа: ' + error.message);
+                    });
+            }
+
+            // ===== Авторизация =====
+            function switchTab(activeTab) {
+                tabLogin.classList.remove('active');
+                tabRegister.classList.remove('active');
+                loginForm.classList.add('hidden');
+                registerForm.classList.add('hidden');
+
+                if (activeTab === 'login') {
+                    tabLogin.classList.add('active');
+                    loginForm.classList.remove('hidden');
+                } else {
+                    tabRegister.classList.add('active');
+                    registerForm.classList.remove('hidden');
+                }
+            }
+
+            // ===== Обработчики событий =====
+            tabLogin.addEventListener('click', e => { e.preventDefault(); switchTab('login'); });
+            tabRegister.addEventListener('click', e => { e.preventDefault(); switchTab('register'); });
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value.trim();
+                if (!email || !password) {
+                    alert('Пожалуйста, заполните все поля.');
+                    return;
+                }
+                loginUser(email, password);
+            });
+
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('regName').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                const password = document.getElementById('regPassword').value.trim();
+                if (!name || !email || !password) {
+                    alert('Пожалуйста, заполните все поля.');
+                    return;
+                }
+                if (password.length < 6) {
+                    alert('Пароль должен содержать не менее 6 символов.');
+                    return;
+                }
+                registerUser(email, password, name);
+            });
+
+            logoutBtn.addEventListener('click', logoutUser);
+
+            // ===== Клик по ссылкам =====
+            document.querySelectorAll('.form-footer span').forEach(el => {
+                if (el.textContent.includes('Нет аккаунта?')) {
+                    el.style.cursor = 'pointer';
+                    el.addEventListener('click', () => switchTab('register'));
+                } else if (el.textContent.includes('Уже зарегистрированы?')) {
+                    el.style.cursor = 'pointer';
+                    el.addEventListener('click', () => switchTab('login'));
+                }
+            });
+
+            // ===== Настройки =====
+            settingsToggle.addEventListener('click', () => {
+                settingsPanel.classList.toggle('open');
+            });
+
+            themeSelect.addEventListener('change', function() {
+                settings.theme = this.value;
+                applySettings();
+            });
+
+            fontSizeRange.addEventListener('input', function() {
+                settings.fontSize = parseInt(this.value);
+                fontSizeValue.textContent = settings.fontSize + 'px';
+                document.documentElement.style.fontSize = settings.fontSize + 'px';
+                saveSettings();
+            });
+
+            currencySelect.addEventListener('change', function() {
+                settings.currency = this.value;
+                applySettings();
+            });
+
+            resetDataBtn.addEventListener('click', function() {
+                if (!currentUser) return;
+                if (confirm('Вы уверены, что хотите сбросить все данные? (баланс, историю, акции)')) {
+                    balance = 0;
+                    creditDebt = 0;
+                    history = [];
+                    stocks = STOCK_CONFIG.map(s => ({
+                        name: s.name,
+                        price: s.startPrice,
+                        startPrice: s.startPrice,
+                        count: 0
+                    }));
+                    renderStocks();
+                    updateBalanceUI();
+                    renderHistory();
+                    addHistoryItem('Данные сброшены', 0, 'сейчас');
+                    saveDataToFirebase();
+                    alert('✅ Данные сброшены!');
+                }
+            });
+
+            // ===== Кнопки кредита =====
+            takeCreditBtn.addEventListener('click', takeCredit);
+            repayCreditBtn.addEventListener('click', repayCredit);
+
+            // ===== Настройки приложения =====
+            function applySettings() {
+                document.documentElement.setAttribute('data-theme', settings.theme);
+                themeSelect.value = settings.theme;
+                document.documentElement.style.fontSize = settings.fontSize + 'px';
+                fontSizeRange.value = settings.fontSize;
+                fontSizeValue.textContent = settings.fontSize + 'px';
+                currencySelect.value = settings.currency;
+                saveSettings();
+                updateBalanceUI();
+                renderHistory();
+                renderStocks();
+            }
+
+            function saveSettings() {
+                try {
+                    localStorage.setItem('trading_settings', JSON.stringify(settings));
+                } catch (e) { /* ignore */ }
+            }
+
+            function loadSettings() {
+                try {
+                    const saved = localStorage.getItem('trading_settings');
+                    if (saved) {
+                        settings = JSON.parse(saved);
+                        applySettings();
+                    }
+                } catch (e) { /* ignore */ }
+            }
+
+            // ===== Проверка состояния авторизации =====
+            auth.onAuthStateChanged((user) => {
+                loadingOverlay.style.display = 'none';
+
+                if (user) {
+                    // Пользователь уже авторизован
+                    enterDashboard(user);
+                } else {
+                    // Показываем форму входа
+                    authPage.classList.remove('hidden-page');
+                    dashboardPage.classList.add('hidden-page');
+                    switchTab('login');
+                    connectionStatus.textContent = '● Offline';
+                    connectionStatus.className = 'connection-status offline';
+                }
+            });
+
+            // ===== Инициализация =====
+            loadSettings();
+
+            // Скрываем загрузку через 5 секунд если Firebase не ответил
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+            }, 5000);
+        })();
+    </script>
+</body>
+</html>
