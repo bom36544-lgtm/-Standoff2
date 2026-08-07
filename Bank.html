@@ -923,29 +923,28 @@
             const database = firebase.database();
 
             // ===== СИСТЕМА СОКРАЩЕНИЯ ЧИСЕЛ =====
-            // K, M, B, T, Qa, Qi, Sx, Sp, Oc, No, Dc, Ud, Dd, Td, Qad, Qid, Sxd, Spd, Od, Nd, Vg
             const SI_SYMBOLS = [
-                { value: 1e63, symbol: 'Vg' },   // Vigintillion
-                { value: 1e60, symbol: 'Nd' },   // Novemdecillion
-                { value: 1e57, symbol: 'Od' },   // Octodecillion
-                { value: 1e54, symbol: 'Spd' },  // Septendecillion
-                { value: 1e51, symbol: 'Sxd' },  // Sexdecillion
-                { value: 1e48, symbol: 'Qid' },  // Quindecillion
-                { value: 1e45, symbol: 'Qad' },  // Quattuordecillion
-                { value: 1e42, symbol: 'Td' },   // Tredecillion
-                { value: 1e39, symbol: 'Dd' },   // Duodecillion
-                { value: 1e36, symbol: 'Ud' },   // Undecillion
-                { value: 1e33, symbol: 'Dc' },   // Decillion
-                { value: 1e30, symbol: 'No' },   // Nonillion
-                { value: 1e27, symbol: 'Oc' },   // Octillion
-                { value: 1e24, symbol: 'Sp' },   // Septillion
-                { value: 1e21, symbol: 'Sx' },   // Sextillion
-                { value: 1e18, symbol: 'Qi' },   // Quintillion
-                { value: 1e15, symbol: 'Qa' },   // Quadrillion
-                { value: 1e12, symbol: 'T' },    // Trillion
-                { value: 1e9, symbol: 'B' },     // Billion
-                { value: 1e6, symbol: 'M' },     // Million
-                { value: 1e3, symbol: 'K' }      // Thousand
+                { value: 1e63, symbol: 'Vg' },
+                { value: 1e60, symbol: 'Nd' },
+                { value: 1e57, symbol: 'Od' },
+                { value: 1e54, symbol: 'Spd' },
+                { value: 1e51, symbol: 'Sxd' },
+                { value: 1e48, symbol: 'Qid' },
+                { value: 1e45, symbol: 'Qad' },
+                { value: 1e42, symbol: 'Td' },
+                { value: 1e39, symbol: 'Dd' },
+                { value: 1e36, symbol: 'Ud' },
+                { value: 1e33, symbol: 'Dc' },
+                { value: 1e30, symbol: 'No' },
+                { value: 1e27, symbol: 'Oc' },
+                { value: 1e24, symbol: 'Sp' },
+                { value: 1e21, symbol: 'Sx' },
+                { value: 1e18, symbol: 'Qi' },
+                { value: 1e15, symbol: 'Qa' },
+                { value: 1e12, symbol: 'T' },
+                { value: 1e9, symbol: 'B' },
+                { value: 1e6, symbol: 'M' },
+                { value: 1e3, symbol: 'K' }
             ];
 
             function formatNumberShort(num, decimals = 1) {
@@ -955,23 +954,19 @@
                 const absNum = Math.abs(num);
                 const sign = num < 0 ? '-' : '';
 
-                // Если число меньше 1000, показываем как есть
                 if (absNum < 1000) {
                     return sign + (Number.isInteger(absNum) ? absNum.toString() : absNum.toFixed(decimals));
                 }
 
-                // Ищем подходящий символ
                 for (const item of SI_SYMBOLS) {
                     if (absNum >= item.value) {
                         const value = absNum / item.value;
                         const formatted = value.toFixed(decimals);
-                        // Убираем лишние нули в конце
                         const clean = formatted.replace(/\.?0+$/, '');
                         return sign + clean + item.symbol;
                     }
                 }
 
-                // Если число очень большое (больше Vg), показываем в экспоненте
                 return sign + absNum.toExponential(2);
             }
 
@@ -1029,6 +1024,7 @@
             let currentUser = null;
             let isDataLoaded = false;
             let isSaving = false;
+            let authInitialized = false;
 
             // Настройки
             let settings = {
@@ -1041,7 +1037,6 @@
             // ===== Функции форматирования =====
             function formatNumber(num) {
                 if (settings.numberFormat === 'full') {
-                    // Полный формат с пробелами
                     const parts = num.toFixed(2).split('.');
                     const intPart = parts[0];
                     const decPart = parts[1];
@@ -1137,7 +1132,6 @@
 
                                 resolve(data);
                             } else {
-                                // Новый пользователь
                                 balance = 0;
                                 creditDebt = 0;
                                 history = [];
@@ -1371,30 +1365,36 @@
 
             // ===== Вход / Выход =====
             function enterDashboard(user) {
+                if (!user) return;
                 currentUser = user;
                 userNameDisplay.textContent = user.displayName || user.email || 'Пользователь';
                 isLoggedIn = true;
+
+                // Показываем дашборд, скрываем авторизацию
                 authPage.classList.add('hidden-page');
                 dashboardPage.classList.remove('hidden-page');
 
-                loadingOverlay.style.display = 'flex';
-                loadingOverlay.querySelector('.loading-spinner').innerHTML = '<span class="spinner">🔄</span> Загрузка данных...';
+                // Загружаем данные только если ещё не загружены
+                if (!isDataLoaded) {
+                    loadingOverlay.style.display = 'flex';
+                    loadingOverlay.querySelector('.loading-spinner').innerHTML = '<span class="spinner">🔄</span> Загрузка данных...';
 
-                loadDataFromFirebase(user.uid)
-                    .then(() => {
-                        renderStocks();
-                        updateBalanceUI();
-                        renderHistory();
-                        startPriceTimer();
-                        loadingOverlay.style.display = 'none';
-                        isDataLoaded = true;
-                        saveDataToFirebase();
-                    })
-                    .catch((error) => {
-                        console.error('Ошибка загрузки данных:', error);
-                        loadingOverlay.style.display = 'none';
-                        alert('Ошибка загрузки данных. Попробуйте перезагрузить страницу.');
-                    });
+                    loadDataFromFirebase(user.uid)
+                        .then(() => {
+                            renderStocks();
+                            updateBalanceUI();
+                            renderHistory();
+                            startPriceTimer();
+                            loadingOverlay.style.display = 'none';
+                            isDataLoaded = true;
+                            saveDataToFirebase();
+                        })
+                        .catch((error) => {
+                            console.error('Ошибка загрузки данных:', error);
+                            loadingOverlay.style.display = 'none';
+                            alert('Ошибка загрузки данных. Попробуйте перезагрузить страницу.');
+                        });
+                }
             }
 
             function logoutUser() {
@@ -1402,6 +1402,10 @@
                 isLoggedIn = false;
                 isDataLoaded = false;
                 currentUser = null;
+
+                // Отключаем все Firebase listeners
+                database.ref('users/').off();
+
                 auth.signOut()
                     .then(() => {
                         dashboardPage.classList.add('hidden-page');
@@ -1579,9 +1583,11 @@
                 currencySelect.value = settings.currency;
                 numberFormatSelect.value = settings.numberFormat || 'short';
                 saveSettings();
-                updateBalanceUI();
-                renderHistory();
-                renderStocks();
+                if (isDataLoaded) {
+                    updateBalanceUI();
+                    renderHistory();
+                    renderStocks();
+                }
             }
 
             function saveSettings() {
@@ -1600,27 +1606,34 @@
                 } catch (e) { /* ignore */ }
             }
 
-            // ===== Проверка состояния авторизации =====
-            auth.onAuthStateChanged((user) => {
-                loadingOverlay.style.display = 'none';
+            // ===== Проверка состояния авторизации (только один раз) =====
+            if (!authInitialized) {
+                authInitialized = true;
 
-                if (user) {
-                    enterDashboard(user);
-                } else {
-                    authPage.classList.remove('hidden-page');
-                    dashboardPage.classList.add('hidden-page');
-                    switchTab('login');
-                    connectionStatus.textContent = '● Offline';
-                    connectionStatus.className = 'connection-status offline';
-                }
-            });
+                auth.onAuthStateChanged((user) => {
+                    loadingOverlay.style.display = 'none';
+
+                    if (user) {
+                        // Уже авторизован — сразу загружаем дашборд
+                        enterDashboard(user);
+                    } else {
+                        // Не авторизован — показываем форму входа
+                        authPage.classList.remove('hidden-page');
+                        dashboardPage.classList.add('hidden-page');
+                        switchTab('login');
+                        connectionStatus.textContent = '● Offline';
+                        connectionStatus.className = 'connection-status offline';
+                    }
+                });
+            }
 
             // ===== Инициализация =====
             loadSettings();
 
+            // Таймаут для скрытия загрузки
             setTimeout(() => {
                 loadingOverlay.style.display = 'none';
-            }, 5000);
+            }, 3000);
         })();
     </script>
 </body>
