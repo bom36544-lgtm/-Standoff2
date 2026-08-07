@@ -413,6 +413,7 @@
             font-weight: 700;
             margin-top: 0.2rem;
             letter-spacing: -0.02em;
+            word-break: break-all;
         }
 
         .balance-amount small {
@@ -674,7 +675,7 @@
                 padding: 0.6rem 0.3rem;
             }
             .balance-amount {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             .stock-item {
                 flex-direction: column;
@@ -863,6 +864,13 @@
                     <option value="¥">¥ JPY</option>
                 </select>
             </div>
+            <div class="settings-row">
+                <label>Формат чисел</label>
+                <select id="numberFormatSelect">
+                    <option value="full">Полный (1 234 567)</option>
+                    <option value="short" selected>Краткий (1.23M)</option>
+                </select>
+            </div>
             <div class="settings-row" style="border-top:1px solid var(--border-color); padding-top:0.8rem; margin-top:0.3rem;">
                 <button class="submit-btn secondary small" id="resetDataBtn" style="margin:0;">🔄 Сбросить данные</button>
                 <span style="font-size:0.75rem; color:var(--text-muted);">(удалит ваши данные из Firebase)</span>
@@ -900,13 +908,72 @@
 
             // ===== КОНФИГУРАЦИЯ FIREBASE =====
             const firebaseConfig = {
-                databaseURL: "https://bank-7766b-default-rtdb.europe-west1.firebasedatabase.app/"
+                apiKey: "AIzaSyBLnH1CIUWrqlSKNTYc8WFHisjrQaCd0do",
+                authDomain: "bank-7766b.firebaseapp.com",
+                databaseURL: "https://bank-7766b-default-rtdb.europe-west1.firebasedatabase.app",
+                projectId: "bank-7766b",
+                storageBucket: "bank-7766b.firebasestorage.app",
+                messagingSenderId: "821727807376",
+                appId: "1:821727807376:web:ed52e9d43208e6ea02d515",
+                measurementId: "G-38M6REHSN8"
             };
 
-            // Инициализация Firebase
             firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
             const database = firebase.database();
+
+            // ===== СИСТЕМА СОКРАЩЕНИЯ ЧИСЕЛ =====
+            // K, M, B, T, Qa, Qi, Sx, Sp, Oc, No, Dc, Ud, Dd, Td, Qad, Qid, Sxd, Spd, Od, Nd, Vg
+            const SI_SYMBOLS = [
+                { value: 1e63, symbol: 'Vg' },   // Vigintillion
+                { value: 1e60, symbol: 'Nd' },   // Novemdecillion
+                { value: 1e57, symbol: 'Od' },   // Octodecillion
+                { value: 1e54, symbol: 'Spd' },  // Septendecillion
+                { value: 1e51, symbol: 'Sxd' },  // Sexdecillion
+                { value: 1e48, symbol: 'Qid' },  // Quindecillion
+                { value: 1e45, symbol: 'Qad' },  // Quattuordecillion
+                { value: 1e42, symbol: 'Td' },   // Tredecillion
+                { value: 1e39, symbol: 'Dd' },   // Duodecillion
+                { value: 1e36, symbol: 'Ud' },   // Undecillion
+                { value: 1e33, symbol: 'Dc' },   // Decillion
+                { value: 1e30, symbol: 'No' },   // Nonillion
+                { value: 1e27, symbol: 'Oc' },   // Octillion
+                { value: 1e24, symbol: 'Sp' },   // Septillion
+                { value: 1e21, symbol: 'Sx' },   // Sextillion
+                { value: 1e18, symbol: 'Qi' },   // Quintillion
+                { value: 1e15, symbol: 'Qa' },   // Quadrillion
+                { value: 1e12, symbol: 'T' },    // Trillion
+                { value: 1e9, symbol: 'B' },     // Billion
+                { value: 1e6, symbol: 'M' },     // Million
+                { value: 1e3, symbol: 'K' }      // Thousand
+            ];
+
+            function formatNumberShort(num, decimals = 1) {
+                if (num === undefined || num === null || isNaN(num)) return '0';
+                if (num === 0) return '0';
+
+                const absNum = Math.abs(num);
+                const sign = num < 0 ? '-' : '';
+
+                // Если число меньше 1000, показываем как есть
+                if (absNum < 1000) {
+                    return sign + (Number.isInteger(absNum) ? absNum.toString() : absNum.toFixed(decimals));
+                }
+
+                // Ищем подходящий символ
+                for (const item of SI_SYMBOLS) {
+                    if (absNum >= item.value) {
+                        const value = absNum / item.value;
+                        const formatted = value.toFixed(decimals);
+                        // Убираем лишние нули в конце
+                        const clean = formatted.replace(/\.?0+$/, '');
+                        return sign + clean + item.symbol;
+                    }
+                }
+
+                // Если число очень большое (больше Vg), показываем в экспоненте
+                return sign + absNum.toExponential(2);
+            }
 
             // ===== МНОГО АКЦИЙ =====
             const STOCK_NAMES = [
@@ -949,6 +1016,7 @@
             const fontSizeRange = document.getElementById('fontSizeRange');
             const fontSizeValue = document.getElementById('fontSizeValue');
             const currencySelect = document.getElementById('currencySelect');
+            const numberFormatSelect = document.getElementById('numberFormatSelect');
             const resetDataBtn = document.getElementById('resetDataBtn');
 
             // ===== Состояние =====
@@ -966,16 +1034,30 @@
             let settings = {
                 theme: 'light',
                 fontSize: 16,
-                currency: '$'
+                currency: '$',
+                numberFormat: 'short'
             };
 
             // ===== Функции форматирования =====
+            function formatNumber(num) {
+                if (settings.numberFormat === 'full') {
+                    // Полный формат с пробелами
+                    const parts = num.toFixed(2).split('.');
+                    const intPart = parts[0];
+                    const decPart = parts[1];
+                    const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+                    if (decPart === '00') {
+                        return formattedInt;
+                    }
+                    return formattedInt + '.' + decPart;
+                }
+                return formatNumberShort(num, 1);
+            }
+
             function formatMoney(amount) {
                 const currency = settings.currency || '$';
-                if (Number.isInteger(amount)) {
-                    return amount.toString() + ' ' + currency;
-                }
-                return amount.toFixed(2) + ' ' + currency;
+                if (amount === undefined || amount === null || isNaN(amount)) return '0 ' + currency;
+                return formatNumber(amount) + ' ' + currency;
             }
 
             function formatMoneyWithSign(amount) {
@@ -1295,7 +1377,6 @@
                 authPage.classList.add('hidden-page');
                 dashboardPage.classList.remove('hidden-page');
 
-                // Загружаем данные из Firebase
                 loadingOverlay.style.display = 'flex';
                 loadingOverlay.querySelector('.loading-spinner').innerHTML = '<span class="spinner">🔄</span> Загрузка данных...';
 
@@ -1458,6 +1539,11 @@
                 applySettings();
             });
 
+            numberFormatSelect.addEventListener('change', function() {
+                settings.numberFormat = this.value;
+                applySettings();
+            });
+
             resetDataBtn.addEventListener('click', function() {
                 if (!currentUser) return;
                 if (confirm('Вы уверены, что хотите сбросить все данные? (баланс, историю, акции)')) {
@@ -1491,6 +1577,7 @@
                 fontSizeRange.value = settings.fontSize;
                 fontSizeValue.textContent = settings.fontSize + 'px';
                 currencySelect.value = settings.currency;
+                numberFormatSelect.value = settings.numberFormat || 'short';
                 saveSettings();
                 updateBalanceUI();
                 renderHistory();
@@ -1518,10 +1605,8 @@
                 loadingOverlay.style.display = 'none';
 
                 if (user) {
-                    // Пользователь уже авторизован
                     enterDashboard(user);
                 } else {
-                    // Показываем форму входа
                     authPage.classList.remove('hidden-page');
                     dashboardPage.classList.add('hidden-page');
                     switchTab('login');
@@ -1533,7 +1618,6 @@
             // ===== Инициализация =====
             loadSettings();
 
-            // Скрываем загрузку через 5 секунд если Firebase не ответил
             setTimeout(() => {
                 loadingOverlay.style.display = 'none';
             }, 5000);
